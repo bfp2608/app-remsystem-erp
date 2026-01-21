@@ -19,8 +19,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         // Credenciales de ejemplo (en producción, verificar con backend)
         const validCredentials = [
             { email: 'admin@erp.com', password: 'admin123', role: 'admin' as const },
-            { email: 'usuario@erp.com', password: 'user123', role: 'user' as const },
-            { email: 'gerente@erp.com', password: 'manager123', role: 'manager' as const },
+            // { email: 'usuario@erp.com', password: 'user123', role: 'user' as const },
+            // { email: 'gerente@erp.com', password: 'manager123', role: 'manager' as const },
         ];
 
         const userCredential = validCredentials.find(
@@ -28,7 +28,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         );
 
         if (!userCredential) {
-            throw new Error('Credenciales inválidas. Intenta con admin@erp.com / admin123');
+            throw new Error('Credenciales inválidas.');
         }
 
         // Crear usuario simulado
@@ -86,24 +86,25 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
                 {/* Información de demostración */}
                 <div className="demo-credentials">
-                    <details className="mt-6">
+                    <details className="mt-6" open>
                         <summary className="text-center" style={{
                             color: 'var(--gray-500)',
                             fontSize: '0.875rem',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            pointerEvents: 'none'
                         }}>
                             Credenciales de demostración
                         </summary>
                         <div className="mt-2" style={{
-                            fontSize: '0.75rem',
+                            fontSize: '1rem',
                             color: 'var(--gray-600)',
                             background: 'var(--gray-100)',
                             padding: '0.75rem',
                             borderRadius: 'var(--radius-md)'
                         }}>
-                            <p><strong>Admin:</strong> admin@erp.com / admin123</p>
-                            <p><strong>Usuario:</strong> usuario@erp.com / user123</p>
-                            <p><strong>Gerente:</strong> gerente@erp.com / manager123</p>
+                            <p className='text-center' ><strong>Admin:</strong> admin@erp.com / admin123</p>
+                            {/* <p><strong>Usuario:</strong> usuario@erp.com / user123</p>
+                            <p><strong>Gerente:</strong> gerente@erp.com / manager123</p> */}
                         </div>
                     </details>
                 </div>

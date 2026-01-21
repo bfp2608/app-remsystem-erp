@@ -3,6 +3,7 @@ import { LoginPage } from './pages';
 import type { AppState, User } from './types';
 import { getAuthToken, clearAuthToken } from './utils/validators';
 import './App.css';
+import { LogOut } from 'lucide-react';
 
 const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>({
@@ -85,7 +86,7 @@ const App: React.FC = () => {
         <div className="dashboard">
           <header className="app-header">
             <div className="header-content">
-              <h1>ERP System v1.0</h1>
+              <h1>REMSYSTEM - ERP v1.0</h1>
               <div className="header-info">
                 <span className="welcome-text">
                   Bienvenido, <strong>{appState.user?.name}</strong>
@@ -99,67 +100,18 @@ const App: React.FC = () => {
               onClick={handleLogout}
               className="logout-button"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M16 17L21 12L16 7"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M21 12H9"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <LogOut size={12}/>
               Cerrar Sesión
             </button>
           </header>
 
           <main className="app-main">
             <div className="dashboard-welcome">
-              <div className="welcome-card">
+              {/* <div className="welcome-card">
                 <div className="welcome-icon">
-                  <svg
-                    width="48"
-                    height="48"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
-                      stroke="var(--primary-color)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M9 22V12H15V22"
-                      stroke="var(--primary-color)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  
                 </div>
-                <h2>¡Bienvenido al Sistema ERP!</h2>
+                <h2>¡Bienvenido a REMSYSTEM - ERP!</h2>
                 <p className="welcome-subtitle">
                   Has iniciado sesión como <strong>{appState.user?.role}</strong>
                 </p>
@@ -185,24 +137,24 @@ const App: React.FC = () => {
                     Ver Tutorial
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               <div className="quick-links">
-                <h3>Accesos Rápidos</h3>
+                <h3>Panel principal</h3>
                 <div className="links-grid">
-                  <a href="/ventas" className="quick-link">
+                  <a className="quick-link">
                     <span>📊</span>
                     Ventas
                   </a>
-                  <a href="/inventario" className="quick-link">
+                  <a className="quick-link">
                     <span>📦</span>
                     Inventario
                   </a>
-                  <a href="/clientes" className="quick-link">
+                  <a href="/clientes" className="quick-link Activ">
                     <span>👥</span>
                     Clientes
                   </a>
-                  <a href="/reportes" className="quick-link">
+                  <a className="quick-link">
                     <span>📈</span>
                     Reportes
                   </a>
@@ -212,7 +164,7 @@ const App: React.FC = () => {
           </main>
 
           <footer className="app-footer">
-            <p>Sistema ERP v1.0 © 2024 - {new Date().getFullYear()}</p>
+            <p>REMSYSTEM - ERP v1.0 © 2026</p>
             <div className="footer-links">
               <a href="/help">Ayuda</a>
               <a href="/privacy">Privacidad</a>

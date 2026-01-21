@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import InputField from './InputField';
 import  PasswordField from './PasswordField';
 import { LoginFormProps, LoginFormData, LoginFormErrors } from '../types';
+import { CircleAlert } from 'lucide-react';
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error: generalError }) => {
     const [formData, setFormData] = useState<LoginFormData>({
@@ -72,45 +73,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error: gener
         <form onSubmit={handleSubmit} className="login-form" noValidate>
             {/* Logo y título */}
             <div className="login-header">
-                <div className="login-logo">
+                {/* <div className="login-logo">
                     <span>ERP</span>
-                </div>
-                <h1 className="login-title">Bienvenido al Sistema</h1>
+                </div> */}
+                <h1 className="login-title">Bienvenido a REMSYSTEM - ERP</h1>
                 <p className="login-subtitle">Ingresa tus credenciales para continuar</p>
             </div>
 
             {/* Error general */}
             {(generalError || errors.general) && (
                 <div className="form-error general-error" role="alert">
-                    <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 14 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M7 13C10.3137 13 13 10.3137 13 7C13 3.68629 10.3137 1 7 1C3.68629 1 1 3.68629 1 7C1 10.3137 3.68629 13 7 13Z"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                        <path
-                            d="M7 4V7"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                        <path
-                            d="M7 10H7.005"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
+                    <CircleAlert size={14}/>
                     {generalError || errors.general}
                 </div>
             )}
@@ -144,7 +117,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error: gener
             />
 
             {/* Recordarme y olvidé contraseña */}
-            <div className="remember-forgot">
+            {/* <div className="remember-forgot">
                 <label className="remember-me">
                     <input
                         type="checkbox"
@@ -157,7 +130,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error: gener
                 <a href="/forgot-password" className="forgot-password">
                     ¿Olvidaste tu contraseña?
                 </a>
-            </div>
+            </div> */}
 
             {/* Botón de envío */}
             <button
@@ -176,12 +149,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error: gener
             </button>
 
             {/* Separador */}
-            <div className="login-separator">
+            {/* <div className="login-separator">
                 <span>o</span>
-            </div>
+            </div> */}
 
             {/* Enlace de registro (opcional) */}
-            <div className="login-footer">
+            {/* <div className="login-footer">
                 <p>
                     ¿No tienes una cuenta?{' '}
                     <a href="/register">Solicitar acceso</a>
@@ -189,7 +162,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading, error: gener
                 <p className="mt-2">
                     <a href="/help">¿Necesitas ayuda?</a>
                 </p>
-            </div>
+            </div> */}
         </form>
     );
 };

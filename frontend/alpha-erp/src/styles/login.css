@@ -424,3 +424,17 @@
     color: var(--danger-color);
     margin-left: 0.25rem;
 }
+
+.password-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-normal);
+    color: var(--gray-700); /* gris elegante */
+}
+
+.password-toggle:hover {
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    color: var(--primary-color); /* morado del botón */
+}
