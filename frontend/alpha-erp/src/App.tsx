@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { LoginPage } from './pages';
+import ClientesPage from './pages/ClientesPage';
 import type { AppState, User } from './types';
 import { getAuthToken, clearAuthToken } from './utils/validators';
 import './App.css';
+import './styles/clientes.css';
 import { LogOut } from 'lucide-react';
 
+
 const App: React.FC = () => {
+  // Estado para manejar qué página mostrar
+  const [currentPage, setCurrentPage] = useState<'dashboard' | 'clientes'>('dashboard');
+
   const [appState, setAppState] = useState<AppState>({
     isAuthenticated: false,
     user: null,
-    isLoading: true, // Iniciar con loading para verificar token
+    isLoading: true,
     error: null,
   });
 
@@ -22,9 +28,6 @@ const App: React.FC = () => {
       if (token && userData) {
         try {
           // En una app real, aquí validarías el token con el backend
-          // const response = await validateTokenApi();
-
-          // Por ahora, simulamos validación exitosa
           await new Promise(resolve => setTimeout(resolve, 500));
 
           const user: User = JSON.parse(userData);
@@ -63,12 +66,23 @@ const App: React.FC = () => {
 
   const handleLogout = () => {
     clearAuthToken();
+    setCurrentPage('dashboard'); // Volver al dashboard
     setAppState({
       isAuthenticated: false,
       user: null,
       isLoading: false,
       error: null,
     });
+  };
+
+  // Función para navegar a Clientes
+  const handleNavigateToClientes = () => {
+    setCurrentPage('clientes');
+  };
+
+  // Función para volver al Dashboard
+  const handleBackToDashboard = () => {
+    setCurrentPage('dashboard');
   };
 
   if (appState.isLoading) {
@@ -106,61 +120,40 @@ const App: React.FC = () => {
           </header>
 
           <main className="app-main">
-            <div className="dashboard-welcome">
-              {/* <div className="welcome-card">
-                <div className="welcome-icon">
-                  
-                </div>
-                <h2>¡Bienvenido a REMSYSTEM - ERP!</h2>
-                <p className="welcome-subtitle">
-                  Has iniciado sesión como <strong>{appState.user?.role}</strong>
-                </p>
-                <div className="welcome-stats">
-                  <div className="stat-card">
-                    <span className="stat-number">12</span>
-                    <span className="stat-label">Órdenes Pendientes</span>
+            {/* Mostrar Dashboard o Clientes según el estado */}
+            {currentPage === 'dashboard' && (
+              <div className="dashboard-welcome">
+                <div className="quick-links">
+                  <h3>Panel principal</h3>
+                  <div className="links-grid">
+                    <a className="quick-link">
+                      <span>📊</span>
+                      Ventas
+                    </a>
+                    <a className="quick-link">
+                      <span>📦</span>
+                      Inventario
+                    </a>
+                    <a 
+                      className="quick-link Activ"
+                      onClick={handleNavigateToClientes}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <span>👥</span>
+                      Clientes
+                    </a>
+                    <a className="quick-link">
+                      <span>📈</span>
+                      Reportes
+                    </a>
                   </div>
-                  <div className="stat-card">
-                    <span className="stat-number">5</span>
-                    <span className="stat-label">Notificaciones</span>
-                  </div>
-                  <div className="stat-card">
-                    <span className="stat-number">3</span>
-                    <span className="stat-label">Tareas Urgentes</span>
-                  </div>
-                </div>
-                <div className="welcome-actions">
-                  <button className="primary-action">
-                    Ir al Dashboard
-                  </button>
-                  <button className="secondary-action">
-                    Ver Tutorial
-                  </button>
-                </div>
-              </div> */}
-
-              <div className="quick-links">
-                <h3>Panel principal</h3>
-                <div className="links-grid">
-                  <a className="quick-link">
-                    <span>📊</span>
-                    Ventas
-                  </a>
-                  <a className="quick-link">
-                    <span>📦</span>
-                    Inventario
-                  </a>
-                  <a href="/clientes" className="quick-link Activ">
-                    <span>👥</span>
-                    Clientes
-                  </a>
-                  <a className="quick-link">
-                    <span>📈</span>
-                    Reportes
-                  </a>
                 </div>
               </div>
-            </div>
+            )}
+
+            {currentPage === 'clientes' && (
+              <ClientesPage onBack={handleBackToDashboard} />
+            )}
           </main>
 
           <footer className="app-footer">
