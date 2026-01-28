@@ -3,6 +3,7 @@ package com.remsystem.api_erp.controllers;
 import com.remsystem.api_erp.models.dto.request.LoginRequest;
 import com.remsystem.api_erp.models.dto.response.LoginResponse;
 import com.remsystem.api_erp.services.LoginService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,7 @@ public class AccessController {
     }
 
     @PostMapping("/sign/in")
-    public LoginResponse signIn(LoginRequest loginRequest) {
-        return loginService.login(loginRequest);
+    public ResponseEntity<LoginResponse> signIn(LoginRequest loginRequest) {
+        return ResponseEntity.ok(loginService.login(loginRequest));
     }
 }
