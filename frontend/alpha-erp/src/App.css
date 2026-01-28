@@ -1,3 +1,8 @@
+html,body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 /* Estilos principales de la aplicación */
 .app {
     min-height: 100vh;
@@ -55,7 +60,8 @@
 
 .app-main {
     padding: 2rem;
-    max-width: 1200px;
+    min-width: 60%;
+    max-width: 80%;
     margin: 0 auto;
 }
 
@@ -321,7 +327,7 @@
     align-items: center;
     justify-content: center;
     padding: 1.5rem 1rem;
-    background: var(--gray-50);
+    background: var(--gray-200);
     border-radius: var(--radius-lg);
     text-decoration: none;
     color: var(--gray-700);
@@ -329,7 +335,11 @@
     border: 1px solid transparent;
 }
 
-.quick-link:hover {
+.Activ{
+    background-color: var(--gray-50);
+}
+
+.Activ:hover {
     background: white;
     border-color: var(--primary-color);
     transform: translateY(-2px);

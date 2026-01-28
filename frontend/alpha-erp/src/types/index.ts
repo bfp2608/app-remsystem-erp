@@ -1,31 +1,18 @@
-// Tipos para el formulario de login
-export interface LoginFormData {
-    email: string;
-    password: string;
-    rememberMe: boolean;
-}
+// types/index.ts
 
-export interface LoginFormErrors {
-    email?: string;
-    password?: string;
-    general?: string;
-}
-
+// Tipos existentes
 export interface User {
     id: string;
     email: string;
     name: string;
     role: 'admin' | 'user' | 'manager';
-    avatar?: string;
-    lastLogin?: Date;
+    lastLogin: Date;
 }
 
-// Tipos para la respuesta de la API
-export interface ApiResponse<T = any> {
-    success: boolean;
-    data?: T;
-    message?: string;
-    error?: string;
+export interface LoginFormData {
+    email: string;
+    password: string;
+    rememberMe: boolean;
 }
 
 export interface LoginResponse {
@@ -34,7 +21,6 @@ export interface LoginResponse {
     expiresIn: number;
 }
 
-// Tipos para el estado de la aplicación
 export interface AppState {
     isAuthenticated: boolean;
     user: User | null;
@@ -42,26 +28,42 @@ export interface AppState {
     error: string | null;
 }
 
-// Tipos para los props de componentes
-export interface InputFieldProps {
-    label: string;
-    type: string;
-    name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    placeholder?: string;
+export interface ApiResponse<T = any> {
+    success: boolean;
+    data?: T;
     error?: string;
-    required?: boolean;
-    autoComplete?: string;
+    message?: string;
 }
 
-export interface PasswordFieldProps extends InputFieldProps {
-    showPassword: boolean;
-    onTogglePassword: () => void;
+// ============================================
+// NUEVOS TIPOS PARA MÓDULO DE CLIENTES
+// ============================================
+
+export interface Cliente {
+    id_cliente: number;
+    id_usuario: number; // Por ahora no se usa en el formulario
+    domicilio_fiscal: string | null;
+    distrito: string | null;
+    provincia: string | null;
+    departamento: string | null;
+    pais: string | null;
+    fecha_inicio_actividades: string | null; // Formato: YYYY-MM-DD
+    tipo_cliente: 'Empresa' | 'Persona';
 }
 
-export interface LoginFormProps {
-    onSubmit: (data: LoginFormData) => Promise<void>;
-    isLoading?: boolean;
-    error?: string;
+export interface ClienteFormData {
+    domicilio_fiscal: string;
+    distrito: string;
+    provincia: string;
+    departamento: string;
+    pais: string;
+    fecha_inicio_actividades: string;
+    tipo_cliente: 'Empresa' | 'Persona';
+    // id_usuario se manejará después con el backend
+}
+
+export interface ToastMessage {
+    id: string;
+    message: string;
+    type: 'success' | 'error' | 'info' | 'warning';
 }
