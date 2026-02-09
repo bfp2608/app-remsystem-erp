@@ -83,7 +83,7 @@ public class AdminUpdatePasswordUsuarioService extends AdminService<UpdatePasswo
 
     private void updatePassword(UpdatePasswordDto updateDto){
         Usuario usuario = usuarioDao.findByEmail(updateDto.getEmail()).orElseThrow();
-        usuario.setContrasenia(updateDto.getNewPassword());
+        usuario.setContrasenia(passwordEncoder.encode(updateDto.getNewPassword()));
         usuarioDao.save(usuario);
     }
 

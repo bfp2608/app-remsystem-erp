@@ -1,11 +1,14 @@
 package remsystem.login.service;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import remsystem.login.jwt.JwtService;
 import remsystem.login.model.dto.LoginRequest;
 import remsystem.login.model.dto.LoginResponse;
+import remsystem.login.model.dto.MeData;
 import remsystem.login.model.dto.TokenBody;
 import remsystem.login.model.entities.Usuario;
 import remsystem.login.repository.UsuarioDao;
@@ -74,5 +77,20 @@ public class AuthService{
         loginResponse.setToken(token);
 
         return loginResponse;
+    }
+
+    public MeData getMe() {
+        Authentication auth = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new RuntimeException("No autenticado");
+        }
+
+        Long userId = (Long) auth.getPrincipal();
+
+        return usuarioDao.findMeDataById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 }

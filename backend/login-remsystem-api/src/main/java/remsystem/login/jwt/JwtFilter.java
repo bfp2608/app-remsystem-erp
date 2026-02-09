@@ -4,17 +4,17 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-@Configuration
+@Component
 public class JwtFilter extends OncePerRequestFilter{
 
     private final JwtService jwtService;
@@ -40,9 +40,14 @@ public class JwtFilter extends OncePerRequestFilter{
             Long idUsuario = jwtService.extractUserId(token);
             Integer idRol = jwtService.extractRol(token);
 
+            String role = switch (idRol) {
+                case 1 -> "ROLE_ADMIN";
+                case 2 -> "ROLE_USER";
+                default -> null;
+            };
+
             List<SimpleGrantedAuthority> authorities =
-                    idRol != null ? List.of(new SimpleGrantedAuthority(idRol.toString())) : Collections.emptyList()
-                    ;
+                    role != null ? List.of(new SimpleGrantedAuthority(role)) : Collections.emptyList();
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(idUsuario, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
