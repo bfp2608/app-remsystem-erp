@@ -1,11 +1,11 @@
 package remsystem.admin.form.models.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Response {
     private String message;
     private int status;
