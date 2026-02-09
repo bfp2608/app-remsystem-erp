@@ -1,0 +1,37 @@
+package remsystem.admin.form.models.entities;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import java.time.*;
+
+@Entity
+@Table(name = "usuario")
+@Data
+public class Usuario{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario",nullable = false)
+    private long idUsuario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo_usuario",nullable = false)
+    private TipoUsuario tipoUsuario;
+
+    @Column(name = "nombre_usuario",nullable = false, length = 50)
+    private String nombreUsuario;
+
+    @Email
+    @NotBlank
+    @Column(name = "email",unique = true,nullable = false,length = 100)
+    private String email;
+
+    @Column(name = "contrasenia",nullable = false)
+    private String contrasenia;
+
+    @Column(name = "fecha_registro",nullable = false)
+    private LocalDate fechaRegistro;
+
+    @Column(name = "estado",nullable = false)
+    private boolean estado;
+}
