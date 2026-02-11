@@ -3,6 +3,9 @@ package remsystem.admin.form.models.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.time.*;
 
 @Entity
@@ -34,4 +37,12 @@ public class Usuario{
 
     @Column(name = "estado",nullable = false)
     private boolean estado;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
