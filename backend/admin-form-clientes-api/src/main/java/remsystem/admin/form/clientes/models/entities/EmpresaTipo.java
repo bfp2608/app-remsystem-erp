@@ -15,6 +15,10 @@ public class EmpresaTipo{
     @Column(name = "id_empresa_tipo")
     private long idEmpresaTipo;
 
+    @ManyToOne
+    @JoinColumn(name = "id_empresa")
+    private Empresa empresa;
+
     @Column(name = "tipo")
     private String tipo;
 
