@@ -3,8 +3,8 @@ spring:
     name: admin-form
   datasource:
     url: jdbc:postgresql://localhost:5432/bd_gemini
-    username: beto
-    password: B3t026082006!
+    username: remuser
+    password: Remsystem1212!
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
