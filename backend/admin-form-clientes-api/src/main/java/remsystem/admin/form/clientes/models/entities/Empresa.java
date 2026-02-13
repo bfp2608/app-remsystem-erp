@@ -34,6 +34,16 @@ public class Empresa {
     @JsonIgnore
     private List<EmpresaTipo> tipos;
 
+    //atributos reales
+
+    private String ruc;
+
+    private String razonSocial;
+
+    private String nombreComercial;
+
+    private String celularCorporativo;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
