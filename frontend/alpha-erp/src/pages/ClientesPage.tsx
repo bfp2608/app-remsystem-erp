@@ -1,17 +1,21 @@
 // import {useState} from 'react'
 
-// import {Contacto} from '../AaronTypes'
-// import { mockContactos } from '../AaronUtils/AaronMockDataClientes'
+import { esEmpresa } from '../types/contactos';
+import { mockContactos } from '../utils/mockDataClientes'
 
 import {CirculoAvatar} from '../components/CirculoAvatar'
-
-import {ArrowLeft, ArrowRight, CirclePlus} from 'lucide-react'
 import { CuadroBuscador } from '../components/CuadroBuscador'
 
+import {ArrowLeft, ArrowRight, CirclePlus} from 'lucide-react'
+import { BotonBase } from '../components/BotonBase';
 
 //Función que se manda al buscador para obtener su texto
 const manejarBuscador = (texto:string) =>{
     alert("Buscaste: " + texto)
+}
+
+const botonAnadir = () =>{
+    alert("Presionaste --Añadir--")
 }
 
 export function ClientesPage() {
@@ -24,10 +28,7 @@ export function ClientesPage() {
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
             <div className="flex items-center justify-between mb-4">
-                <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 hover:cursor-pointer text-gray-200 px-3 py-2 rounded font-medium transition-colors">
-                    <CirclePlus/> 
-                    Añadir
-                </button>
+                <BotonBase onPresionar={botonAnadir} texto='Añadir' color='blue' icono={CirclePlus}/>
 
                 <CuadroBuscador buscar={manejarBuscador} />
             </div>
@@ -50,43 +51,40 @@ export function ClientesPage() {
                                 RUC
                             </th>
                             <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                País
+                                Tipo
                             </th>
                         </tr>
                     </thead>
                     
                     <tbody className="divide-y divide-gray-600">
-                        {/* Fila 1 - Empresa */}
-                        <tr className="hover:bg-gray-600 transition-colors divide-x divide-gray-500">
-                            <td className="px-6 py-4 text-white ">
-                                <div className="flex items-center">
+                        {mockContactos.map(contacto => {
+                            const key = esEmpresa(contacto) ? 'empresa-'+contacto.id_empresa : 'persona-'+contacto.id_persona
+                            const nombre = esEmpresa(contacto) ? contacto.razon_social : contacto.nombres_completos
+                            const ruc = esEmpresa(contacto) ? contacto.ruc : ""
+                            const correo = esEmpresa(contacto) ? contacto.correo_corporativo : contacto.correo_personal
+                            const celular = esEmpresa(contacto) ? contacto.celular_corporativo : contacto.celular_personal
+                            const tipo = esEmpresa(contacto) ? "Empresa" : "Persona"
+
+                            return(
+                                <tr key={key} className="hover:bg-gray-600 transition-colors divide-x divide-gray-500">
+                                    <td className="px-6 py-4 text-white ">
+                                        <div className="flex items-center">
 
 
-                                    <CirculoAvatar nombre='ACME SOLUCIONES S.A.C.' />
+                                            <CirculoAvatar nombre={nombre} />
 
 
-                                    ACME SOLUCIONES S.A.C.
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 text-gray-300">info@acme.com</td>
-                            <td className="px-6 py-4 text-gray-300">+51 987 654 321</td>
-                            <td className="px-6 py-4 text-gray-300">20123456789</td>
-                            <td className="px-6 py-4 text-gray-300">Perú</td>
-                        </tr>
+                                            {nombre}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-300">{correo}</td>
+                                    <td className="px-6 py-4 text-gray-300">{celular}</td>
+                                    <td className="px-6 py-4 text-gray-300">{ruc}</td>
+                                    <td className="px-6 py-4 text-gray-300">{tipo}</td>
+                                </tr>
+                            )
+                        })}
                         
-                        {/* Fila 2 - Persona */}
-                        <tr className="hover:bg-gray-600 transition-colors divide-x divide-gray-500">
-                            <td className="px-6 py-4 text-white">
-                                <div className="flex items-center">
-                                    <CirculoAvatar nombre='Juan Pérez' />
-                                    ACME SOLUCIONES S.A.C., Juan Pérez
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 text-gray-300">juan@gmail.com</td>
-                            <td className="px-6 py-4 text-gray-300">+51 912 345 678</td>
-                            <td className="px-6 py-4 text-gray-300">-</td>
-                            <td className="px-6 py-4 text-gray-300">Perú</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

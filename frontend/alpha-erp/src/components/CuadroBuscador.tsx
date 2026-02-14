@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 //COMPONENTE
 
-//Se recibe una función del padre para mandar el texto
+//Se recibe una función del padre que recibe texto
 type PropCuadroBuscador = {
     buscar : (texto:string) => void
 }
