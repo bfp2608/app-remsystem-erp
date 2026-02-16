@@ -56,6 +56,7 @@ export function ClientesPage() {
                         </tr>
                     </thead>
                     
+                    {/*Por el momento con datos mock*/}
                     <tbody className="divide-y divide-gray-600">
                         {mockContactos.map(contacto => {
                             const key = esEmpresa(contacto) ? 'empresa-'+contacto.id_empresa : 'persona-'+contacto.id_persona

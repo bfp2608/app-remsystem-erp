@@ -1,6 +1,13 @@
+//Boton base, permite pasar una funcion vacía, un texto
+//un ícono opcional de lucide react
+//el color es opcional, por defecto está en azul
+//solo permite colores ya creados aqui
+
+
 import { LucideIcon } from "lucide-react"
 
 
+//colores disponibles
 type ColorVariante = 'blue' | 'green' | 'red' | 'teal'
 
 const colores: Record<ColorVariante, string> = {
@@ -10,6 +17,11 @@ const colores: Record<ColorVariante, string> = {
         teal: 'bg-teal-600 hover:bg-teal-700'
     }
 
+//------
+
+
+
+//COMPONENTE
 type PropBotonBase = {
     onPresionar : () => void;
     texto : string;
