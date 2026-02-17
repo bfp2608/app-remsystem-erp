@@ -1,34 +1,43 @@
 // import {useState} from 'react'
 
-// import {Contacto} from '../AaronTypes'
-// import { mockContactos } from '../AaronUtils/AaronMockDataClientes'
+import { esEmpresa } from '../types/contactos';
+import { mockContactos } from '../utils/mockDataClientes'
+
+import {CirculoAvatar} from '../components/CirculoAvatar'
+import { CuadroBuscador } from '../components/CuadroBuscador'
+
+import {ArrowLeft, ArrowRight, CirclePlus} from 'lucide-react'
+import { BotonBase } from '../components/BotonBase';
+
+//Función que se manda al buscador para obtener su texto
+const manejarBuscador = (texto:string) =>{
+    alert("Buscaste: " + texto)
+}
+
+const botonAnadir = () =>{
+    alert("Presionaste --Añadir--")
+}
 
 export function ClientesPage() {
     return (
         <div className="min-h-screen bg-gray-900 p-6">
-            {/* Header con búsqueda */}
+            {/* Header*/}
             <div className="mb-6 flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-white">Contactos</h1>
-                
-                <button className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium">
-                    + Nuevo
-                </button>
             </div>
             
-            {/* Búsqueda */}
-            <div className="mb-4">
-                <input 
-                    type="text" 
-                    placeholder="Buscar..."
-                    className="w-full max-w-md bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-teal-500"
-                />
+            {/* Header con propiedades de clientes, buscador y botón añadir*/}
+            <div className="flex items-center justify-between mb-4">
+                <BotonBase onPresionar={botonAnadir} texto='Añadir' color='blue' icono={CirclePlus}/>
+
+                <CuadroBuscador buscar={manejarBuscador} />
             </div>
             
             {/* Tabla */}
-            <div className="bg-gray-800 rounded-lg overflow-hidden">
+            <div className="bg-gray-700 rounded-lg overflow-hidden">
                 <table className="w-full">
-                    <thead className="bg-gray-700">
-                        <tr>
+                    <thead className="bg-gray-800">
+                        <tr className='divide-x divide-gray-700'>
                             <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
                                 Nombre
                             </th>
@@ -42,45 +51,41 @@ export function ClientesPage() {
                                 RUC
                             </th>
                             <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                País
+                                Tipo
                             </th>
                         </tr>
                     </thead>
                     
-                    <tbody className="divide-y divide-gray-700">
-                        {/* Fila 1 - Empresa */}
-                        <tr className="hover:bg-gray-700 transition-colors">
-                            <td className="px-6 py-4 text-white">
-                                <div className="flex items-center">
-                                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                                        A
-                                    </div>
-                                    ACME SOLUCIONES S.A.C.
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 text-gray-300">info@acme.com</td>
-                            <td className="px-6 py-4 text-gray-300">+51 987 654 321</td>
-                            <td className="px-6 py-4 text-gray-300">20123456789</td>
-                            <td className="px-6 py-4 text-gray-300">Perú</td>
-                        </tr>
+                    {/*Por el momento con datos mock*/}
+                    <tbody className="divide-y divide-gray-600">
+                        {mockContactos.map(contacto => {
+                            const key = esEmpresa(contacto) ? 'empresa-'+contacto.id_empresa : 'persona-'+contacto.id_persona
+                            const nombre = esEmpresa(contacto) ? contacto.razon_social : contacto.nombres_completos
+                            const ruc = esEmpresa(contacto) ? contacto.ruc : ""
+                            const correo = esEmpresa(contacto) ? contacto.correo_corporativo : contacto.correo_personal
+                            const celular = esEmpresa(contacto) ? contacto.celular_corporativo : contacto.celular_personal
+                            const tipo = esEmpresa(contacto) ? "Empresa" : "Persona"
+
+                            return(
+                                <tr key={key} className="hover:bg-gray-600 transition-colors divide-x divide-gray-500">
+                                    <td className="px-6 py-4 text-white ">
+                                        <div className="flex items-center">
+
+
+                                            <CirculoAvatar nombre={nombre} />
+
+
+                                            {nombre}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-300">{correo}</td>
+                                    <td className="px-6 py-4 text-gray-300">{celular}</td>
+                                    <td className="px-6 py-4 text-gray-300">{ruc}</td>
+                                    <td className="px-6 py-4 text-gray-300">{tipo}</td>
+                                </tr>
+                            )
+                        })}
                         
-                        {/* Fila 2 - Persona */}
-                        <tr className="hover:bg-gray-700 transition-colors">
-                            <td className="px-6 py-4 text-white">
-                                <div className="flex items-center">
-                                    <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                                        J
-                                    </div>
-                                    ACME SOLUCIONES S.A.C., Juan Pérez
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 text-gray-300">juan@gmail.com</td>
-                            <td className="px-6 py-4 text-gray-300">+51 912 345 678</td>
-                            <td className="px-6 py-4 text-gray-300">-</td>
-                            <td className="px-6 py-4 text-gray-300">Perú</td>
-                        </tr>
-                        
-                        {/* Duplica más filas para ver cómo se ve llena */}
                     </tbody>
                 </table>
             </div>
@@ -89,11 +94,11 @@ export function ClientesPage() {
             <div className="mt-4 flex items-center justify-between text-gray-400 text-sm">
                 <span>1-80 / 100</span>
                 <div className="flex gap-2">
-                    <button className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded disabled:opacity-50">
-                        ←
+                    <button className="px-3 py-1 bg-gray-800 hover:bg-gray-700 hover:cursor-pointer rounded text-gray-300 transition-colors">
+                        <ArrowLeft/>
                     </button>
-                    <button className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded">
-                        →
+                    <button className="px-3 py-1 bg-gray-800 hover:bg-gray-700 hover:cursor-pointer rounded text-gray-300 transition-colors">
+                        <ArrowRight/>
                     </button>
                 </div>
             </div>
