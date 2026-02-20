@@ -1,9 +1,11 @@
-import { ClientesPage } from "./pages/ClientesPage"
+//
+
+import LoginPage from "./pages/LoginPage";
 
 export function App (){
     return(
         <>
-            <ClientesPage/>
+            <LoginPage />
         </>
     )
     
