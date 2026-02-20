@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import { LoginResponse  } from "./types/login"
 import { saveAuthToken, getAuthToken, clearAuthToken } from "./utils/validators";
 import { ClientesPage } from "./pages/ClientesPage";
+import { EditarClientesPage } from "./pages/EditarClientesPage";
 
 export function App (){
 
