@@ -22,22 +22,37 @@ export function ClientesPage() {
     return (
         <div className="min-h-screen bg-gray-900 p-6">
             {/* Header*/}
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-8 pb-4 flex border-b border-gray-700  items-center justify-between">
                 <h1 className="text-2xl font-bold text-white">Contactos</h1>
             </div>
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between  mb-6">
                 <BotonBase onPresionar={botonAnadir} texto='Añadir' color='blue' icono={CirclePlus}/>
 
                 <CuadroBuscador buscar={manejarBuscador} />
+
+                {/* Paginación */}
+                <div className="flex gap-5 items-center justify-around text-gray-400 text-sm">
+                    <span>1-80 / 100</span>
+                    <div className="flex gap-2">
+                        <button className="px-3 py-1 bg-gray-800 hover:bg-gray-700 hover:cursor-pointer rounded text-gray-300 transition-colors">
+                            <ArrowLeft/>
+                        </button>
+                        <button className="px-3 py-1 bg-gray-800 hover:bg-gray-700 hover:cursor-pointer rounded text-gray-300 transition-colors">
+                            <ArrowRight/>
+                        </button>
+                    </div>
+                </div>
             </div>
             
+            
+            
             {/* Tabla */}
-            <div className="bg-gray-700 rounded-lg overflow-hidden">
+            <div className="bg-gray-700/60 rounded-lg overflow-hidden">
                 <table className="w-full">
-                    <thead className="bg-gray-800">
-                        <tr className='divide-x divide-gray-700'>
+                    <thead className="bg-gray-600/60">
+                        <tr>
                             <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
                                 Nombre
                             </th>
@@ -67,7 +82,7 @@ export function ClientesPage() {
                             const tipo = esEmpresa(contacto) ? "Empresa" : "Persona"
 
                             return(
-                                <tr key={key} className="hover:bg-gray-600 transition-colors divide-x divide-gray-500">
+                                <tr key={key} className="hover:bg-gray-700/80 transition-colors">
                                     <td className="px-6 py-4 text-white ">
                                         <div className="flex items-center">
 
@@ -88,19 +103,6 @@ export function ClientesPage() {
                         
                     </tbody>
                 </table>
-            </div>
-            
-            {/* Paginación */}
-            <div className="mt-4 flex items-center justify-between text-gray-400 text-sm">
-                <span>1-80 / 100</span>
-                <div className="flex gap-2">
-                    <button className="px-3 py-1 bg-gray-800 hover:bg-gray-700 hover:cursor-pointer rounded text-gray-300 transition-colors">
-                        <ArrowLeft/>
-                    </button>
-                    <button className="px-3 py-1 bg-gray-800 hover:bg-gray-700 hover:cursor-pointer rounded text-gray-300 transition-colors">
-                        <ArrowRight/>
-                    </button>
-                </div>
             </div>
         </div>
     )

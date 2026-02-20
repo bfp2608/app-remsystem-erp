@@ -16,7 +16,7 @@ export function CuadroBuscador({buscar}:PropCuadroBuscador) {
     //Solo se envía cuando se presiona el botón buscar
 
     return (
-        <div className='flex items-center w-80 h-10 rounded-r-xl rounded-l-xs bg-gray-800 border border-gray-700 overflow-hidden'>
+        <div className='flex items-center w-2/4 h-10 rounded-r-xl rounded-l-xs bg-gray-800 border border-gray-700 overflow-hidden'>
             <input
                 type="text" 
                 placeholder="Buscar..."
