@@ -8,6 +8,7 @@ import { CuadroBuscador } from '../components/CuadroBuscador'
 
 import {ArrowLeft, ArrowRight, CirclePlus} from 'lucide-react'
 import { BotonBase } from '../components/BotonBase';
+import { FC } from 'react';
 
 //Función que se manda al buscador para obtener su texto
 const manejarBuscador = (texto:string) =>{
@@ -18,12 +19,17 @@ const botonAnadir = () =>{
     alert("Presionaste --Añadir--")
 }
 
-export function ClientesPage() {
+interface ClientesPageProps{
+    onLogout: ()=> void
+}
+
+export const ClientesPage: FC<ClientesPageProps> = ({ onLogout }) =>  {
     return (
         <div className="min-h-screen bg-gray-900 p-6">
             {/* Header*/}
             <div className="mb-6 flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-white">Contactos</h1>
+                <BotonBase onPresionar={onLogout} texto='Cerrar Sesion' color='red'/>
             </div>
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
