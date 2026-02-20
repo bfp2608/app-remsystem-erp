@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: login-remsystem
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bd_gemini
+    username: remuser
+    password: Remsystem1212!
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  port: 8080
+jwt:
+  secret: "XCCH0gQYcPvw2RLXzCrUndXos92Vv9FO3pCEoCChQe+1x8+1VBdSSy9Tezrhl+QPx0dzCs8KLxLfhrHMRq4Fnw=="
