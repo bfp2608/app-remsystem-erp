@@ -113,7 +113,7 @@ export function EditarClientesPage() {
               <input
                 type="text"
                 className="text-3xl bg-transparent border-none outline-none w-full text-white focus:ring-0 font-semibold py-1"
-                placeholder="Nombre de la empresa"
+                placeholder="Razón social"
               />
             </div>
 
@@ -122,7 +122,7 @@ export function EditarClientesPage() {
               <div className="flex items-center gap-3 border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors w-full lg:w-1/2">
                 <span className="text-pink-700">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                   </svg>
                 </span>
                 <input
@@ -155,78 +155,50 @@ export function EditarClientesPage() {
           {/* Columna izquierda: Dirección */}
           <div className="space-y-1 mb-4">
             <div className="flex items-start">
-              <span className="w-32 font-bold text-gray-300 shrink-0 pt-1">Dirección</span>
+              <span className="w-32 font-bold text-gray-300 shrink-0 pt-1">Domicilio Fiscal</span>
               <div className="flex flex-col flex-1 gap-0">
 
                 <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
                   <input
                     className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
-                    placeholder="Nro. Sn a.H. San Martin (Iii Etapa - Cerca a la Municipalidad) Piura Piura"
-                  />
-                </div>
-
-                <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
-                  <input
-                    className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base italic py-1"
-                    placeholder="Calle 2..."
+                    placeholder="JR. ERNESTO MORA NRO. 475 URB. INGENIERIA (2DO PISO)"
                   />
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="w-1/3 border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
-                    <input
-                      className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
-                      placeholder="Piura"
-                    />
+                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
+                      <option className="bg-[#2d333e] text-gray-300">Distrito</option>
+                      <option className="bg-[#2d333e] text-gray-300">Ancon</option>
+                      <option className="bg-[#2d333e] text-gray-300">Carabayllo</option>
+                      <option className="bg-[#2d333e] text-gray-300">Comas</option>
+                    </select>
                   </div>
                   <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
-                    <select className="bg-transparent border-none outline-none w-full font-medium focus:ring-0 text-base appearance-none cursor-pointer py-1">
-                      <option className="bg-[#2d333e] text-gray-300">Piura (PE)</option>
-                      <option className="bg-[#2d333e] text-gray-300">Amazonas (PE)</option>
-                      <option className="bg-[#2d333e] text-gray-300">Ancash (PE)</option>
+                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
+                      <option className="bg-[#2d333e] text-gray-300">Ciudad</option>
+                      <option className="bg-[#2d333e] text-gray-300">Lima</option>
+                      <option className="bg-[#2d333e] text-gray-300">Callao</option>
                     </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-[10px]">▼</div>
                   </div>
-                  <div className="w-1/3 border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
-                    <input
-                      className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
-                      placeholder="Piura"
-                    />
+                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
+                      <option className="bg-[#2d333e] text-gray-300">Provincia</option>
+                      <option className="bg-[#2d333e] text-gray-300">Lima</option>
+                      <option className="bg-[#2d333e] text-gray-300">Trujillo</option>
+                    </select>
                   </div>
                 </div>
-
+                <div className="flex">
                 {/* País con dropdown */}
-                <div className="relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors" ref={countryRef}>
-                  <div className="flex items-center">
-                    <input
-                      type="text"
-                      className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1 cursor-pointer"
-                      placeholder="Perú"
-                      autoComplete="off"
-                      value={countryInput}
-                      onChange={(e) => setCountryInput(e.target.value)}
-                      onFocus={() => setShowCountryDropdown(true)}
-                    />
-                    <div className="text-[10px] pr-2">▼</div>
-                  </div>
-                  {showCountryDropdown && (
-                    <div className="absolute left-0 top-full w-full bg-[#2d333e] border border-gray-700 shadow-2xl z-50 rounded-sm mt-0.5 max-h-60 overflow-y-auto">
-                      {filteredCountries.map((country) => (
-                        <div
-                          key={country}
-                          className="hover:bg-[#363d4a] p-2 text-sm text-gray-300 cursor-pointer border-b border-gray-700/50"
-                          onClick={() => selectCountry(country)}
-                        >
-                          {country}
-                        </div>
-                      ))}
-                      <div className="p-2 text-sm text-teal-400 cursor-pointer font-medium hover:bg-[#363d4a] sticky bottom-0 bg-[#2d333e]">
-                        Buscar más...
-                      </div>
+                    <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                        <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
+                            <option className="bg-[#2d333e] text-gray-300">País</option>
+                            <option className="bg-[#2d333e] text-gray-300">Perú</option>
+                            <option className="bg-[#2d333e] text-gray-300">Chile</option>
+                        </select>
                     </div>
-                  )}
                 </div>
-
               </div>
             </div>
           </div>
