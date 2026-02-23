@@ -3,12 +3,17 @@ package remsystem.admin.form.models.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.*;
 
 @Entity
 @Table(name = "usuario")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 public class Usuario{
     @Id
@@ -37,11 +42,11 @@ public class Usuario{
     @Column(name = "estado",nullable = false)
     private boolean estado;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

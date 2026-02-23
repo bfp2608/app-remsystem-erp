@@ -42,12 +42,8 @@ export const validateLoginForm = (email: string, password: string): Record<strin
 };
 
 // Utilidad para guardar tokens
-export const saveAuthToken = (token: string, rememberMe: boolean): void => {
-    if (rememberMe) {
-        localStorage.setItem('erp_token', token);
-    } else {
-        sessionStorage.setItem('erp_token', token);
-    }
+export const saveAuthToken = (token: string): void => {
+    localStorage.setItem('erp_token', token);
 };
 
 export const getAuthToken = (): string | null => {
