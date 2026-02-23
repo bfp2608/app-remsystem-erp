@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 
 export function EditarClientesPage() {
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
-  const [countryInput, setCountryInput] = useState("");
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const [showTagDropdown, setShowTagDropdown] = useState(false);
@@ -35,11 +34,6 @@ export function EditarClientesPage() {
     reader.readAsDataURL(file);
   };
 
-  const selectCountry = (name: string) => {
-    setCountryInput(name);
-    setShowCountryDropdown(false);
-  };
-
   const addTag = (text: string) => {
     setTags((prev) => [...prev, text]);
     setTagInput("");
@@ -49,11 +43,6 @@ export function EditarClientesPage() {
   const removeTag = (index: number) => {
     setTags((prev) => prev.filter((_, i) => i !== index));
   };
-
-  const countries = ["Afganistán", "Albania", "Alemania", "Andorra", "Angola"];
-  const filteredCountries = countries.filter((c) =>
-    c.toLowerCase().includes(countryInput.toLowerCase())
-  );
 
   const availableTags = ["0111", "0112", "0113"];
 
@@ -113,7 +102,7 @@ export function EditarClientesPage() {
               <input
                 type="text"
                 className="text-3xl bg-transparent border-none outline-none w-full text-white focus:ring-0 font-semibold py-1"
-                placeholder="Razón social"
+                placeholder="Razón social..."
               />
             </div>
 
@@ -152,81 +141,132 @@ export function EditarClientesPage() {
         {/* Grid de campos */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-6 mt-10 text-sm">
 
-          {/* Columna izquierda: Dirección */}
+          {/* Columna izquierda: */}
           <div className="space-y-1 mb-4">
+            {/* Nombre Comercial */}
             <div className="flex items-start">
-              <span className="w-32 font-bold text-gray-300 shrink-0 pt-1">Domicilio Fiscal</span>
+              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Nombre Comercial</span>
+                <div className="flex flex-col flex-1 gap-0">
+                  <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                    <input
+                      className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
+                      placeholder="Remsystems SAC"
+                    />
+                  </div>
+                </div>
+            </div>
+            {/* RUC */}
+            <div className="flex items-start">
+              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">
+                RUC <span className="text-xs text-blue-400 cursor-help">?</span>
+              </span>
+                <div className="flex flex-col flex-1 gap-0">
+                  <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                    <input
+                      className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
+                      placeholder="20614090465"
+                    />
+                  </div>
+                </div>
+            </div>
+            {/* Domicilio */}
+            <div className="flex items-start">
+              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Domicilio Fiscal</span>
               <div className="flex flex-col flex-1 gap-0">
 
                 <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
                   <input
                     className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
-                    placeholder="JR. ERNESTO MORA NRO. 475 URB. INGENIERIA (2DO PISO)"
+                    placeholder="Calle Ernesto Mora 475, Urb. Ingeniería"
                   />
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                     <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                      <option className="bg-[#2d333e] text-gray-300">Distrito</option>
-                      <option className="bg-[#2d333e] text-gray-300">Ancon</option>
-                      <option className="bg-[#2d333e] text-gray-300">Carabayllo</option>
-                      <option className="bg-[#2d333e] text-gray-300">Comas</option>
+                      <option className="bg-[#2d333e] text-gray-300">País</option>
+                      <option className="bg-[#2d333e] text-gray-300">Perú</option>
+                      <option className="bg-[#2d333e] text-gray-300">Chile</option>
+                      <option className="bg-[#2d333e] text-gray-300">Argentina</option>
                     </select>
                   </div>
-                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+
+                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                     <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                      <option className="bg-[#2d333e] text-gray-300">Ciudad</option>
+                      <option className="bg-[#2d333e] text-gray-300">Departamento</option>
                       <option className="bg-[#2d333e] text-gray-300">Lima</option>
-                      <option className="bg-[#2d333e] text-gray-300">Callao</option>
+                      <option className="bg-[#2d333e] text-gray-300">Cajamarca</option>
+                      <option className="bg-[#2d333e] text-gray-300">Piura</option>
                     </select>
                   </div>
-                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+
+                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                     <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
                       <option className="bg-[#2d333e] text-gray-300">Provincia</option>
                       <option className="bg-[#2d333e] text-gray-300">Lima</option>
-                      <option className="bg-[#2d333e] text-gray-300">Trujillo</option>
+                      <option className="bg-[#2d333e] text-gray-300">Chota</option>
+                      <option className="bg-[#2d333e] text-gray-300">Sullana</option>
                     </select>
                   </div>
                 </div>
-                <div className="flex">
+
+                <div className="flex gap-4">
                 {/* País con dropdown */}
-                    <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                    <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                         <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                            <option className="bg-[#2d333e] text-gray-300">País</option>
-                            <option className="bg-[#2d333e] text-gray-300">Perú</option>
-                            <option className="bg-[#2d333e] text-gray-300">Chile</option>
+                            <option className="bg-[#2d333e] text-gray-300">Distrito</option>
+                            <option className="bg-[#2d333e] text-gray-300">Ancon</option>
+                            <option className="bg-[#2d333e] text-gray-300">Carabayllo</option>
+                            <option className="bg-[#2d333e] text-gray-300">Comas</option>
                         </select>
+                    </div>
+                    <div className="w-1/3 relative border-transparent focus-within:border-teal-500 transition-colors">
+                        
+                    </div>
+                    <div className="w-1/3 relative border-transparent focus-within:border-teal-500 transition-colors">
+                        
                     </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Columna derecha: RUC, Sitio web, Etiquetas */}
+          {/* Columna derecha: */}
           <div className="space-y-4 mb-4">
-
-            <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1">
-              <span className="w-32 font-bold text-gray-300 flex items-center gap-1 shrink-0">
-                RUC <span className="text-xs text-blue-400 cursor-help">?</span>
+            {/* Fecha de inicio de actividades */}  
+            <div className="flex items-start">
+              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">
+                Fecha de inicio de actividades
               </span>
-              <input
-                className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base"
-                placeholder="20614090465"
-              />
+              <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1 relative">
+                <input
+                  type="date"
+                  className="bg-transparent border-none outline-none w-full text-gray-300 focus:ring-0 text-base scheme-dark z-10
+                            [&::-webkit-calendar-picker-indicator]:opacity-0" 
+                />
+                {/* Icono de reemplazo */}
+                <span className="absolute right-0 text-teal-500 pointer-events-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </span>
+              </div>
             </div>
-
-            <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1">
-              <span className="w-32 font-bold text-gray-300 shrink-0">Sitio web</span>
-              <input
-                className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 italic focus:ring-0 text-base"
-                placeholder="Por ejemplo, https://www.odoo.com"
-              />
+            {/* Sitio web */}
+            <div className="flex items-start">
+              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Sitio web</span>
+              <div className="flex flex-col flex-1 gap-0">
+                <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1"> 
+                  <input
+                    className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 italic focus:ring-0 text-base"
+                    placeholder="Por ejemplo, https://www.odoo.com"
+                  />
+                </div>
+              </div>
             </div>
-
             {/* Etiquetas */}
-            <div className="flex items-center pb-1">
-              <span className="w-32 font-bold text-gray-300 shrink-0">Etiquetas</span>
+            <div className="flex items-star">
+              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Etiquetas</span>
               <div className="flex-1 relative" ref={tagsRef}>
                 <div
                   className="flex flex-wrap gap-2 items-center border-b border-gray-600 hover:border-teal-500 focus-within:border-teal-500 min-h-[32px] pb-1 transition-colors cursor-text"
@@ -272,7 +312,11 @@ export function EditarClientesPage() {
                 )}
               </div>
             </div>
-
+            {/* Condición */}
+            <div className="flex items-start">
+                <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Condición</span>
+                <div className=" hover:bg-[#363d4a]"><p className="p-1">HABIDO</p></div>
+            </div>
           </div>
         </div>
 
