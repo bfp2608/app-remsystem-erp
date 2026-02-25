@@ -45,24 +45,22 @@ CREATE TABLE empresa (
     razon_social VARCHAR(255) NOT NULL,
     nombre_comercial VARCHAR(255),
 
-    celular_corporativo VARCHAR(20),
+    telefono VARCHAR(20),
     correo_corporativo VARCHAR(150),
 
+    direccion VARCHAR(255),
+
     fecha_inicio_actividades DATE,
-    actividad_economica VARCHAR(255),
     sitio_web VARCHAR(255),
 
-    estado_empresa VARCHAR(50),
-    estado_ruc VARCHAR(50),
     condicion_ruc VARCHAR(50),
 
-    created_at TIMESTAMP(6) WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP(6) WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_empresa_distrito
         FOREIGN KEY (id_distrito)
         REFERENCES distrito(id_distrito)
-        ON DELETE RESTRICT
 );
 
 CREATE TABLE sucursal (
@@ -105,6 +103,19 @@ CREATE TABLE persona (
         REFERENCES empresa(id_empresa)
         ON DELETE CASCADE
 );
+
+/*
+
+Cliente
+
+Proveedor
+
+Transportista
+
+Socio
+
+Distribuidor
+*/
 
 CREATE TABLE empresa_tipo (
     id_empresa_tipo BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

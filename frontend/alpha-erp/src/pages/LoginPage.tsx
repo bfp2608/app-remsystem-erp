@@ -12,7 +12,7 @@ const LoginPage: FC<LoginPageProps> = ({ onLoginSuccess }) =>{
 
     //Mover esta función cuando se haga la llamada a la API
     const mockLoginApi = async( credentials: LoginFormData ): Promise<LoginResponse> =>{
-            await new Promise(resolve => setTimeout(resolve, 1000))
+            await new Promise(resolve => setTimeout(resolve, 750))
 
             if(credentials.email === 'admin@erp.com' && credentials.password === '12345'){
                 return{

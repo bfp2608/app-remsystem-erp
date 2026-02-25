@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+/* Soporte para Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #374151 transparent;
+}
+
+/* Soporte para Chrome, Edge y Safari */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px; /* Súper delgadito */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Fondo invisible para que no ocupe espacio visual */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #374151; /* Un gris oscuro (equivalente a bg-gray-700) */
+  border-radius: 10px; /* Bordes bien redondeados */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #4b5563; /* Un gris un poco más claro al pasar el mouse */
+}

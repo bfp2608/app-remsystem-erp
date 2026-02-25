@@ -36,7 +36,7 @@ const LoginForm: FC<LoginFormProps> = ({ onSubmit, isLoading, error }) =>{
             <img src="img/background.svg" className="absolute inset-0 opacity-30 w-full h-full object-cover mix-blend-overlay pointer-events-none" alt="" />
 
             <div className="bg-gray-100 z-10 rounded-2xl shadow-lg w-full max-w-sm p-8 mx-4">
-                <span className="block text-3xl text-slate-900 text-center font-bold mb-4 -mt-3">REMSYSTEM - CRM</span>
+                <span className="block text-3xl text-slate-900 text-center font-bold mb-4 -mt-3">REMSYSTEMS - CRM</span>
                 <form onSubmit={ handleSubmit } id="loginForm">
                     <article className="flex flex-col gap-4">
                         <label htmlFor="email" className="block text-slate-700 text-xl font-semibold mb-2 ml-1">Correo Electrónico</label>
@@ -52,7 +52,7 @@ const LoginForm: FC<LoginFormProps> = ({ onSubmit, isLoading, error }) =>{
                         </button>
                     </article>
                 </form>
-                <span className="mt-4 block text-sm text-center text-gray-600 w-full">Copyright © 2017-2026 REMSYSTEM S.A.C.<br />Todos los derechos reservados.</span>
+                <span className="mt-4 block text-sm text-center text-gray-600 w-full">Copyright © 2017-2026 REMSYSTEMS S.A.C.<br />Todos los derechos reservados.</span>
             </div>
 
         </section>
