@@ -6,4 +6,5 @@ import remsystem.admin.form.clientes.models.entities.EmpresaTipo;
 
 @Repository
 public interface EmpresaTipoRepository extends JpaRepository<EmpresaTipo,Long>{
+
 }

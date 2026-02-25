@@ -6,5 +6,5 @@ import remsystem.admin.form.clientes.models.entities.Empresa;
 
 @Repository
 public interface EmpresaRepository extends JpaRepository<Empresa,Long>{
-
+    boolean existsByRuc(String ruc);
 }
