@@ -19,8 +19,6 @@ const colores: Record<ColorVariante, string> = {
 
 //------
 
-
-
 //COMPONENTE
 type PropBotonBase = {
     onPresionar : () => void;
