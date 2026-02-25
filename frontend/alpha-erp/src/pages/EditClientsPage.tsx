@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-export function EditarClientesPage() {
+export function EditClientsPage() {
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const [showTagDropdown, setShowTagDropdown] = useState(false);
