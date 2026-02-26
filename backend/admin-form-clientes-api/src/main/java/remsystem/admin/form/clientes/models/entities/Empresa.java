@@ -2,6 +2,7 @@ package remsystem.admin.form.clientes.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "empresa")
 @Data
+@Builder
 public class Empresa {
 
     @Id
