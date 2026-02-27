@@ -20,11 +20,11 @@ public class Distrito{
     @Column(name = "id_distrito")
     private long idDistrito;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_provincia")
     private Provincia provincia;
 
-    @OneToMany(mappedBy = "distrito")
+    @OneToMany(mappedBy = "distrito",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Empresa> empresas;
 

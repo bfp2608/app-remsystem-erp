@@ -10,7 +10,7 @@ import remsystem.admin.form.clientes.models.dto.Response;
 import remsystem.admin.form.clientes.services.AdminAddEmpresaService;
 
 @RestController
-@RequestMapping("api/admin/empresas")
+@RequestMapping("/admin")
 public class AdminEmpresaController {
     private final AdminAddEmpresaService adminAddEmpresaService;
 
@@ -25,12 +25,9 @@ public class AdminEmpresaController {
      * @param dto Objeto con los datos de la empresa a crear
      * @return ResponseEntity con el resultado de la operación
      */
-    @PostMapping
+    @PostMapping("/add/empresa")
     public ResponseEntity<Response> addEmpresa(@RequestBody EmpresaCreateDto dto) {
-
-        Response response = adminAddEmpresaService.addEmpresa(dto);
-
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity.ok(adminAddEmpresaService.addEmpresa(dto));
     }
 
 }

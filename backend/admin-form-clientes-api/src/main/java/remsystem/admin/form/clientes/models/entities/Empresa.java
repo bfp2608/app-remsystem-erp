@@ -21,7 +21,7 @@ public class Empresa {
     @Column(name = "id_empresa")
     private long idEmpresa;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_distrito")
     private Distrito distrito;
 
