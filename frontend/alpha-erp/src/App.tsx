@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import { LoginResponse  } from "./types/login"
 import { saveAuthToken, getAuthToken, clearAuthToken } from "./utils/validators";
 import Sidebar from "./components/sidebar/Sidebar";
+import { EditClientsPage } from "./pages/EditClientsPage";
 
 
 export function App (){
@@ -22,7 +23,7 @@ export function App (){
 
     return(
         <>
-            { isAuth ? <Sidebar onLogout={ handleLogout } /> : <LoginPage onLoginSuccess={ handleLoginSuccess } />}
+            <EditClientsPage/>
         </>
     )
     

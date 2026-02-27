@@ -75,3 +75,10 @@ export const NAVIGATION_DATA: NavigationItem[] = [
             icon: <PieChart />
         }
     ]
+
+export const PAISES_DATA: string [] = [
+        "Pais",
+        "Perú",
+        "Chile",
+        "Argentina"
+    ]
