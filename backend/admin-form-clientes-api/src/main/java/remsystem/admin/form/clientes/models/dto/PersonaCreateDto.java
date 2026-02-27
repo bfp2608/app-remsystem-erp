@@ -12,5 +12,4 @@ public class PersonaCreateDto {
     private String cargo;
     private String correoPersonal;
     private String celularPersonal;
-
 }
