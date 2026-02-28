@@ -2,6 +2,8 @@ package remsystem.admin.form.clientes.models.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "persona")
 @Data
+@SuperBuilder
+@NoArgsConstructor
 public class Persona {
 
     @Id

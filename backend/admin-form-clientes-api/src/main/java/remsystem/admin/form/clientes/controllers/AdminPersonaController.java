@@ -10,7 +10,7 @@ import remsystem.admin.form.clientes.models.dto.Response;
 import remsystem.admin.form.clientes.services.AdminAddPersonaService;
 
 @RestController
-@RequestMapping("api/admin/personas")
+@RequestMapping("/admin")
 public class AdminPersonaController {
 
     private final AdminAddPersonaService adminAddPersonaService;
@@ -19,9 +19,8 @@ public class AdminPersonaController {
         this.adminAddPersonaService = adminAddPersonaService;
     }
 
-    @PostMapping
+    @PostMapping("/add/persona")
     public ResponseEntity<Response> addPersona(@RequestBody PersonaCreateDto dto) {
-        Response response = adminAddPersonaService.addPersona(dto);
-        return ResponseEntity.status(response.getStatus()).body(response);
+        return ResponseEntity.ok(adminAddPersonaService.addPersona(dto));
     }
 }

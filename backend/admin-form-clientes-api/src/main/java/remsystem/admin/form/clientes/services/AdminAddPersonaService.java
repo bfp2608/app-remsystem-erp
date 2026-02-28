@@ -9,9 +9,6 @@ import remsystem.admin.form.clientes.repository.EmpresaRepository;
 import remsystem.admin.form.clientes.repository.PersonaRepository;
 import remsystem.admin.form.clientes.models.dto.Response;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class AdminAddPersonaService {
 
@@ -29,63 +26,43 @@ public class AdminAddPersonaService {
 
         Response response = new Response();
 
-        //Validar ruc de empresa
-        if (dto.getRuc() == null || dto.getRuc().isBlank()) {
+        if (dto.getRucEmpresa() == null || dto.getRucEmpresa().isBlank()) {
             response.setMessage("¡El RUC es obligatorio!");
             response.setStatus(400);
             return response;
         }
-        
 
-        // Validar nombres obligatorios
+        if(dto.getRucEmpresa().length() != 11){
+            response.setMessage("¡El RUC debe tener 11 digitos");
+            response.setStatus(400);
+            return response;
+        }
+
         if (dto.getNombresCompletos() == null || dto.getNombresCompletos().isBlank()) {
             response.setMessage("¡El nombre completo es obligatorio!");
             response.setStatus(400);
             return response;
         }
 
-        if (dto.getNombresCompletos().length() > 255) {
-            response.setMessage("¡El nombre completo no puede exceder 255 caracteres!");
+        if (dto.getCargo() != null && dto.getCargo().isBlank()) {
+            response.setMessage("¡El cargo no es valido!");
             response.setStatus(400);
             return response;
         }
 
-        // Validar cargo opcional
-        if (dto.getCargo() != null && dto.getCargo().length() > 120) {
-            response.setMessage("¡El cargo no puede exceder 120 caracteres!");
+        if (dto.getCorreoPersonal() == null || dto.getCorreoPersonal().length() > 150) {
+            response.setMessage("¡El correo ingresado no es valido!");
             response.setStatus(400);
             return response;
         }
 
-        // Validar correo
-        if (dto.getCorreoPersonal() != null) {
-
-            if (dto.getCorreoPersonal().length() > 150) {
-                response.setMessage("¡El correo no puede exceder 150 caracteres!");
-                response.setStatus(400);
-                return response;
-            }
-
-            // Uso de existsByCorreoPersonal
-            if (personaRepository.existsByCorreoPersonal(dto.getCorreoPersonal())) {
-                response.setMessage("El correo ya está registrado");
-                response.setStatus(409);
-                return response;
-            }
-
-            // Uso de findByCorreoPersonal
-            Optional<Persona> personaExistente =
-                    personaRepository.findByCorreoPersonal(dto.getCorreoPersonal());
-
-            if (personaExistente.isPresent()) {
-                response.setMessage("Ya existe una persona con ese correo");
-                response.setStatus(409);
-                return response;
-            }
+        if (personaRepository.existsByCorreoPersonal(dto.getCorreoPersonal())) {
+            response.setMessage("La persona con este correo ya está registrada");
+            response.setStatus(409);
+            return response;
         }
 
-        // Validar celular opcional
-        if (dto.getCelularPersonal() != null &&
+        if (dto.getCelularPersonal() == null ||
                 dto.getCelularPersonal().length() > 20) {
 
             response.setMessage("¡El celular no puede exceder 20 caracteres!");
@@ -93,9 +70,8 @@ public class AdminAddPersonaService {
             return response;
         }
 
-        // Verificar si empresa existe
         Empresa empresa = empresaRepository
-                .findById(dto.getIdEmpresa())
+                .findByRuc(dto.getRucEmpresa())
                 .orElse(null);
 
         if (empresa == null) {
@@ -104,30 +80,6 @@ public class AdminAddPersonaService {
             return response;
         }
 
-        // Uso de findByEmpresa_Id
-        List<Persona> personasEmpresa =
-                personaRepository.findByEmpresa_Id(dto.getIdEmpresa());
-
-        if (personasEmpresa.size() > 100) {
-            response.setMessage("La empresa ya tiene demasiadas personas registradas");
-            response.setStatus(400);
-            return response;
-        }
-
-        // Uso de findByNombresCompletosContainingIgnoreCase
-        List<Persona> personasSimilares =
-                personaRepository.findByNombresCompletosContainingIgnoreCase(
-                        dto.getNombresCompletos()
-                );
-
-        if (!personasSimilares.isEmpty()) {
-            response.setMessage("Ya existe una persona con nombre similar");
-            response.setStatus(409);
-            return response;
-        }
-
-
-        // Crear y guardar persona
         Persona persona = new Persona();
         persona.setEmpresa(empresa);
         persona.setNombresCompletos(dto.getNombresCompletos());

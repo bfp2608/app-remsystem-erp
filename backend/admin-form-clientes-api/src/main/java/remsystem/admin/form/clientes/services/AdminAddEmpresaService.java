@@ -10,67 +10,78 @@ import remsystem.admin.form.clientes.models.entities.EmpresaTipo;
 import remsystem.admin.form.clientes.repository.DistritoRepository;
 import remsystem.admin.form.clientes.repository.EmpresaRepository;
 import remsystem.admin.form.clientes.repository.EmpresaTipoRepository;
+import remsystem.admin.form.clientes.repository.TipoEmpresaRepository;
 
+/**
+ * CLASE SERVICIO QUE IMPLEMENTA LA LOGICA DE NEGOCIO
+ * PARA AGREGAR EMPRESAS
+ */
 @Service
 public class AdminAddEmpresaService {
 
     private final EmpresaRepository empresaRepo;
     private final EmpresaTipoRepository empresaTipoRepo;
     private final DistritoRepository distritoRepository;
+    private final TipoEmpresaRepository tipoEmpresaRepository;
 
+    /**
+     * Constructor para inicializar repositorios
+     * @param empresaRepo repositorio de la empresa
+     * @param empresaTipoRepo repositorio de el tipo de empresa
+     * @param distritoRepository repositorio de el distrito
+     */
     public AdminAddEmpresaService(
             EmpresaRepository empresaRepo,
             EmpresaTipoRepository empresaTipoRepo,
-            DistritoRepository distritoRepository
+            DistritoRepository distritoRepository,
+            TipoEmpresaRepository tipoEmpresaRepository
     ) {
         this.empresaRepo = empresaRepo;
         this.empresaTipoRepo = empresaTipoRepo;
         this.distritoRepository = distritoRepository;
+        this.tipoEmpresaRepository = tipoEmpresaRepository;
     }
 
+    /**
+     * Metodo para agregar datos de una empresa
+     * @param dto parametro objeto que contiene datos de la empresa
+     * @return devuelve una respuesta http
+     */
     @Transactional
     public Response addEmpresa(EmpresaCreateDto dto) {
-
-        // Validaciones básicas
         Response validationError = validateData(dto);
         if (validationError != null) return validationError;
 
-        // Validación de formato RUC
         if (!isValidRuc(dto.getRuc())) {
             return buildError("¡El RUC debe tener exactamente 11 dígitos numéricos!", 400);
         }
 
-        // Validar existencia de empresa
         if (empresaRepo.existsByRuc(dto.getRuc())) {
             return buildError("¡Ya existe una empresa con ese RUC!", 409);
         }
 
-        // Validar distrito existente
         Distrito distrito = distritoRepository
-                .findById(dto.getIdDistrito())
+                .findByDistrito(dto.getDistrito())
                 .orElse(null);
 
         if (distrito == null) {
             return buildError("¡El distrito especificado no existe!", 404);
         }
 
-        // Crear empresa
         Empresa empresa = mapToEmpresa(dto, distrito);
         empresaRepo.save(empresa);
 
-        // 6Crear tipo de empresa
         EmpresaTipo empresaTipo = new EmpresaTipo();
         empresaTipo.setEmpresa(empresa);
-        empresaTipo.setTipo(dto.getTipoEmpresa());
+        empresaTipo.setTipoEmpresa(
+                tipoEmpresaRepository.findByNombre(dto.getTipoEmpresa())
+                        .orElseThrow()
+        );
         empresaTipoRepo.save(empresaTipo);
 
         return buildSuccess("Empresa agregada exitosamente");
     }
 
-
-    /**
-     * Valida los datos básicos del DTO de creación de empresa, asegurando que los campos obligatorios estén presentes y sean válidos
-     */
     private Response validateData(EmpresaCreateDto dto) {
 
         if (isBlank(dto.getRuc()))
@@ -79,7 +90,7 @@ public class AdminAddEmpresaService {
         if (isBlank(dto.getRazonSocial()))
             return buildError("¡La Razón Social es obligatoria!", 400);
 
-        if (dto.getIdDistrito() == null || dto.getIdDistrito() <= 0)
+        if (dto.getDistrito() == null || dto.getDistrito().isEmpty())
             return buildError("¡El distrito es obligatorio y debe ser válido!", 400);
 
         if (isBlank(dto.getTipoEmpresa()))
@@ -93,13 +104,9 @@ public class AdminAddEmpresaService {
     }
 
     private boolean isValidRuc(String ruc) {
-        return ruc.matches("\\d{20}");
+        return ruc.length() == 11;
     }
 
-
-    /**
-     * Mapea el DTO de creación de empresa a la entidad Empresa, asignando el distrito correspondiente
-     */
     private Empresa mapToEmpresa(EmpresaCreateDto dto, Distrito distrito) {
         return Empresa.builder()
                 .ruc(dto.getRuc())
@@ -115,10 +122,6 @@ public class AdminAddEmpresaService {
                 .build();
     }
 
-
-    /**
-     * Construye una respuesta de error con el mensaje y estado proporcionados
-     */
     private Response buildError(String message, Integer status) {
         Response response = new Response();
         response.setMessage(message);
@@ -127,9 +130,6 @@ public class AdminAddEmpresaService {
         return response;
     }
 
-    /**
-     * Construye una respuesta de éxito con el mensaje proporcionado
-     */
     private Response buildSuccess(String message) {
         Response response = new Response();
         response.setMessage(message);

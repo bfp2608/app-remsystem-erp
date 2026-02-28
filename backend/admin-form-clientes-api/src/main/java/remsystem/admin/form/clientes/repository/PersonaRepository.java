@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface PersonaRepository extends JpaRepository<Persona, Long> {
 
     // Buscar personas por empresa
-    List<Persona> findByEmpresa_Id(Long idEmpresa);
+    List<Persona> findByEmpresa_Ruc(String ruc);
 
     // Buscar por correo
     Optional<Persona> findByCorreoPersonal(String correoPersonal);
