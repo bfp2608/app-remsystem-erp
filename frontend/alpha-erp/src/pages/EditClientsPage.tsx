@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { AvatarFoto } from "../components/AvatarFoto";
+import { InputForm } from "../components/editClientPage/InputForm"
+import { SelectForm } from "../components/editClientPage/SelectForm";
+import { PAISES_DATA } from "../constans";
 
 export function EditClientsPage() {
-  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [tagInput, setTagInput] = useState("");
@@ -25,16 +28,6 @@ export function EditClientsPage() {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      setPreviewSrc(ev.target?.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
   const addTag = (text: string) => {
     setTags((prev) => [...prev, text]);
     setTagInput("");
@@ -55,37 +48,7 @@ export function EditClientsPage() {
         <div className="flex flex-col md:flex-row gap-8 mb-10">
 
           {/* Avatar / foto */}
-          <div className="relative w-28 h-28 shrink-0 group">
-            <input
-              type="file"
-              id="foto-input"
-              className="hidden"
-              accept="image/*"
-              onChange={handleFotoChange}
-            />
-            <label
-              htmlFor="foto-input"
-              className="w-full h-full bg-[#3b6bb0] flex items-center justify-center text-white rounded-sm cursor-pointer transition-all duration-300 overflow-hidden relative border border-transparent hover:border-teal-500"
-            >
-              {!previewSrc && (
-                <span className="text-6xl font-bold group-hover:opacity-20 transition-opacity">
-                  1
-                </span>
-              )}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-[#3b6bb0]/40 transition-opacity p-2 text-center">
-                <span className="text-xs font-medium leading-tight">
-                  Agregar una fotografía
-                </span>
-              </div>
-              {previewSrc && (
-                <img
-                  src={previewSrc}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  alt="preview"
-                />
-              )}
-            </label>
-          </div>
+          <AvatarFoto />
 
           {/* Nombre y campos de contacto */}
           <div className="flex-1">
@@ -145,54 +108,31 @@ export function EditClientsPage() {
           {/* Columna izquierda: */}
           <div className="space-y-1 mb-4">
             {/* Nombre Comercial */}
-            <div className="flex items-start">
-              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Nombre Comercial</span>
-                <div className="flex flex-col flex-1 gap-0">
-                  <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
-                    <input
-                      className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
-                      placeholder="Remsystems SAC"
-                    />
-                  </div>
-                </div>
-            </div>
+            <InputForm
+              label= "Nombre Comercial"
+              placeholder="RemSystems SAC"
+            />
             {/* RUC */}
-            <div className="flex items-start">
-              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">
-                RUC <span className="text-xs text-blue-400 cursor-help">?</span>
-              </span>
-                <div className="flex flex-col flex-1 gap-0">
-                  <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
-                    <input
-                      className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
-                      placeholder="20614090465"
-                    />
-                  </div>
-                </div>
-            </div>
+            <InputForm
+              label= "RUC"
+              placeholder="20102542136"
+            />
             {/* Domicilio */}
+            <InputForm
+              label= "Domicilio Fiscal"
+              placeholder="Calle Ernesto Mora 475, Urb. Ingeniería"
+            />
+            
             <div className="flex items-start">
-              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Domicilio Fiscal</span>
-              <div className="flex flex-col flex-1 gap-0">
-
-                <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
-                  <input
-                    className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
-                    placeholder="Calle Ernesto Mora 475, Urb. Ingeniería"
-                  />
-                </div>
-
+              <div className="flex flex-col flex-1 ml-34 gap-0">
                 <div className="flex gap-4">
-                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
-                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                      <option className="bg-[#2d333e] text-gray-300">País</option>
-                      <option className="bg-[#2d333e] text-gray-300">Perú</option>
-                      <option className="bg-[#2d333e] text-gray-300">Chile</option>
-                      <option className="bg-[#2d333e] text-gray-300">Argentina</option>
-                    </select>
-                  </div>
 
-                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+                  <SelectForm 
+                    data={ PAISES_DATA }
+                  />
+
+
+                  <div className="w-1/4 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                     <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
                       <option className="bg-[#2d333e] text-gray-300">Departamento</option>
                       <option className="bg-[#2d333e] text-gray-300">Lima</option>
@@ -201,7 +141,7 @@ export function EditClientsPage() {
                     </select>
                   </div>
 
-                  <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+                  <div className="w-1/4 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                     <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
                       <option className="bg-[#2d333e] text-gray-300">Provincia</option>
                       <option className="bg-[#2d333e] text-gray-300">Lima</option>
@@ -209,23 +149,14 @@ export function EditClientsPage() {
                       <option className="bg-[#2d333e] text-gray-300">Sullana</option>
                     </select>
                   </div>
-                </div>
 
-                <div className="flex gap-4">
-                {/* País con dropdown */}
-                    <div className="w-1/3 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+                  <div className="w-1/4 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                         <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
                             <option className="bg-[#2d333e] text-gray-300">Distrito</option>
                             <option className="bg-[#2d333e] text-gray-300">Ancon</option>
                             <option className="bg-[#2d333e] text-gray-300">Carabayllo</option>
                             <option className="bg-[#2d333e] text-gray-300">Comas</option>
                         </select>
-                    </div>
-                    <div className="w-1/3 relative border-transparent focus-within:border-teal-500 transition-colors">
-                        
-                    </div>
-                    <div className="w-1/3 relative border-transparent focus-within:border-teal-500 transition-colors">
-                        
                     </div>
                 </div>
               </div>
