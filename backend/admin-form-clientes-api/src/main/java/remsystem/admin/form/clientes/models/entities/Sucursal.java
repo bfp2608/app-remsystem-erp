@@ -18,7 +18,7 @@ public class Sucursal{
     @Column(name = "id_sucursal")
     private long idSucursal;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_empresa")
     private Empresa empresa;
 

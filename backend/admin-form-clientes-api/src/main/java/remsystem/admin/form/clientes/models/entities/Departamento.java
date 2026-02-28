@@ -20,7 +20,7 @@ public class Departamento{
     @Column(name = "id_provincia")
     private long idProvincia;
 
-    @OneToMany(mappedBy = "departamento")
+    @OneToMany(mappedBy = "departamento",fetch =  FetchType.LAZY)
     @JsonIgnore
     private List<Provincia> provincias;
 

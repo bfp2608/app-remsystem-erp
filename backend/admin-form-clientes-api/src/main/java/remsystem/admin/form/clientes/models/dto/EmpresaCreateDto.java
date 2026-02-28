@@ -10,22 +10,16 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 public class EmpresaCreateDto {
-
     private String ruc;
     private String razonSocial;
     private String nombreComercial;
-
     private String telefono;
     private String correoCorporativo;
-
     private String direccion;
-
-    private Long idDistrito; // incluye pais/dep/prov implícitamente
-
+    private String distrito;
     private LocalDate fechaInicioActividades;
     private String sitioWeb;
-
     private String condicionRuc;
-
-    private List<String> etiquetas; // Cliente, Proveedor, etc
+    private List<String> etiquetas;
+    private String tipoEmpresa;
 }

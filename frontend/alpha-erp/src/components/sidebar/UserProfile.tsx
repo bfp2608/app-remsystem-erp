@@ -4,10 +4,9 @@ interface UserProfileProps {
     name: string, 
     avatarUrl: string,
     profileLink?: string
-    onLogout: ()=> void
 }
 
-export const UserProfile: FC<UserProfileProps> = (({ name, avatarUrl, profileLink = '#', onLogout }) =>{
+export const UserProfile: FC<UserProfileProps> = (({ name, avatarUrl, profileLink = '#' }) =>{
     return(
         <div className="p-4 border-t border-gray-600">
             <a href={ profileLink } className="flex items-center gap-2 w-full hover:bg-gray-800 p-2 rounded-md transition-colors">
@@ -19,7 +18,6 @@ export const UserProfile: FC<UserProfileProps> = (({ name, avatarUrl, profileLin
             </a>
             <button 
                 className="flex w-full hover:bg-gray-800 p-1 rounded-md transition-colors cursor-pointer"
-                onClick={ onLogout }
             >
                 <p className="text-sm font-medium pl-1.5">Cerrar Sesión</p>
             </button>
