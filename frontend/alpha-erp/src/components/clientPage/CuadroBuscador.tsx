@@ -1,3 +1,6 @@
+//Buscador genérico, solo envía texto al padre
+//----Ahora lo envia cada que se escribe, el boton buscar esta obsoleto
+
 import {Search} from 'lucide-react'
 import { useState } from 'react'
 
@@ -21,7 +24,10 @@ export function CuadroBuscador({buscar}:PropCuadroBuscador) {
                 type="text" 
                 placeholder="Buscar..."
                 value={texto}
-                onChange={(e)=>setTexto(e.target.value)}
+                onChange={(e)=>{
+                    setTexto(e.target.value) 
+                    buscar(e.target.value)
+                }}
                 className="flex-1 h-full px-4 text-white placeholder-gray-400 focus:outline-none border border-gray-800 focus:border-cyan-500 transition-colors"
             />
 

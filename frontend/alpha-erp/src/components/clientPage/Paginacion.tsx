@@ -1,4 +1,10 @@
+//Calcula y muestra el total de items, items por pagina y pagina actual
+//Recibe el control de volver y siguiente pagina del padre
+
 import { ArrowRight, ArrowLeft } from "lucide-react"
+
+
+//COMPONENTE
 
 type PropPaginacion = {
     totalItems: number
@@ -27,14 +33,14 @@ export function Paginacion({
     const enUltimaPagina = paginaActual >= totalPaginas
     
     return (
-        <div className="flex gap-5 items-center justify-between text-gray-400 text-sm">
+        <div className="flex gap-5 items-center justify-between text-gray-300 text-sm">
             <span>{textoContador}</span>
             
             <div className="flex gap-2">
                 <button 
                     onClick={onAnterior}
                     disabled={enPrimeraPagina}
-                    className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-800"
+                    className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-gray-300 transition-colors disabled:opacity-50 hover:cursor-pointer disabled:cursor-default disabled:hover:bg-gray-800"
                 >
                     <ArrowLeft/>
                 </button>
@@ -42,7 +48,7 @@ export function Paginacion({
                 <button 
                     onClick={onSiguiente}
                     disabled={enUltimaPagina}
-                    className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-800"
+                    className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-gray-300 transition-colors disabled:opacity-50 hover:cursor-pointer disabled:cursor-default disabled:hover:bg-gray-800"
                 >
                     <ArrowRight/>
                 </button>
