@@ -10,7 +10,7 @@ export function EditClientsPage() {
   const [tagInput, setTagInput] = useState("");
   const [showTagDropdown, setShowTagDropdown] = useState(false);
   const [tags, setTags] = useState<string[]>(["8510 / ENSEÑANZA PREESCOLAR..."]);
-
+  const [tipoCliente, setTipoCliente] = useState<"persona" | "empresa">("empresa");
   const countryRef = useRef<HTMLDivElement>(null);
   const tagsRef = useRef<HTMLDivElement>(null);
 
@@ -48,26 +48,40 @@ export function EditClientsPage() {
         <div className="flex flex-col md:flex-row gap-8 mb-10">
 
           {/* Avatar / foto */}
-          <AvatarFoto />
+          <AvatarFoto 
+            tipo={tipoCliente} 
+          />
 
           {/* Nombre y campos de contacto */}
           <div className="flex-1">
             <div className="flex items-center gap-4 mb-2 text-sm">
               <label className="flex items-center gap-1 cursor-pointer">
-                <input type="radio" name="tipo" className="accent-teal-500" /> Persona
+                <input 
+                  type="radio" 
+                  name="tipo" 
+                  className="accent-teal-500" 
+                  checked={tipoCliente === "persona"}
+                  onChange={() => setTipoCliente("persona")}
+                /> Persona
               </label>
               <label className="flex items-center gap-1 cursor-pointer">
-                <input type="radio" name="tipo" defaultChecked className="accent-teal-500" />
-                <span className="text-teal-400 font-medium">Empresa</span>
+                <input 
+                  type="radio" 
+                  name="tipo" 
+                  className="accent-teal-500"
+                  checked={tipoCliente === "empresa"}
+                  onChange={() => setTipoCliente("empresa")}
+                />
+                <span className={tipoCliente === "empresa" ? "text-teal-400 font-medium" : ""}>Empresa</span>
               </label>
             </div>
 
             <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors mb-4 w-full lg:w-2/3">
               <input
-                type="text"
-                className="text-3xl bg-transparent border-none outline-none w-full text-white focus:ring-0 font-semibold py-1"
-                placeholder="Razón social..."
-              />
+                  type="text"
+                  className="text-3xl bg-transparent border-none outline-none w-full text-white focus:ring-0 font-semibold py-1"
+                  placeholder={tipoCliente === "empresa" ? "Razón social..." : "Nombre completo..."}
+                />
             </div>
 
             <div className="space-y-2">
@@ -106,65 +120,62 @@ export function EditClientsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-6 mt-10 text-sm">
 
           {/* Columna izquierda: */}
-          <div className="space-y-1 mb-4">
-            {/* Nombre Comercial */}
-            <InputForm
-              label= "Nombre Comercial"
-              placeholder="RemSystems SAC"
-            />
-            {/* RUC */}
-            <InputForm
-              label= "RUC"
-              placeholder="20102542136"
-            />
-            {/* Domicilio */}
-            <InputForm
-              label= "Domicilio Fiscal"
-              placeholder="Calle Ernesto Mora 475, Urb. Ingeniería"
-            />
-            
+          <div className="space-y-1 mb-2">
+            {tipoCliente === "empresa" ? (
+              <>
+                {/* Campos exclusivos de Empresa */}
+                <InputForm label="Nombre Comercial" placeholder="RemSystems SAC" />
+                <InputForm label="RUC" placeholder="20102542136" />
+              </>
+            ) : (
+              <>
+                {/* Campos exclusivos de Persona */}
+                <InputForm label="Empresa" placeholder="Nombre de la empresa" />
+                <InputForm label="Puesto de trabajo" placeholder="Por ejemplo, director de ventas" />
+              </>
+            )}
+
+            {/* Son comunes en ambos */}
+            <InputForm label="Dirección" placeholder="Calle Ernesto Mora 475..." />
             <div className="flex items-start">
               <div className="flex flex-col flex-1 ml-34 gap-0">
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-3">
+                  
+                  {/* Selector de País */}
+                  <div className="w-full lg:w-[calc(50%-0.5rem)] 2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
+                      <option className="bg-[#2d333e] text-gray-300">Pais</option>
+                      <option className="bg-[#2d333e] text-gray-300">Perú</option>
+                    </select>
+                  </div>
 
-                  <SelectForm 
-                    data={ PAISES_DATA }
-                  />
-
-
-                  <div className="w-1/4 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+                  {/* Selector de Departamento */}
+                  <div className="w-full lg:w-[calc(50%-0.5rem)] 2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                     <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
                       <option className="bg-[#2d333e] text-gray-300">Departamento</option>
                       <option className="bg-[#2d333e] text-gray-300">Lima</option>
-                      <option className="bg-[#2d333e] text-gray-300">Cajamarca</option>
-                      <option className="bg-[#2d333e] text-gray-300">Piura</option>
                     </select>
                   </div>
 
-                  <div className="w-1/4 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+                  {/* Selector de Provincia */}
+                  <div className="w-full lg:w-[calc(50%-0.5rem)] 2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
                     <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
                       <option className="bg-[#2d333e] text-gray-300">Provincia</option>
                       <option className="bg-[#2d333e] text-gray-300">Lima</option>
-                      <option className="bg-[#2d333e] text-gray-300">Chota</option>
-                      <option className="bg-[#2d333e] text-gray-300">Sullana</option>
                     </select>
                   </div>
 
-                  <div className="w-1/4 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
-                        <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                            <option className="bg-[#2d333e] text-gray-300">Distrito</option>
-                            <option className="bg-[#2d333e] text-gray-300">Ancon</option>
-                            <option className="bg-[#2d333e] text-gray-300">Carabayllo</option>
-                            <option className="bg-[#2d333e] text-gray-300">Comas</option>
-                        </select>
-                    </div>
+                  {/* Selector de Distrito */}
+                  <div className="w-full lg:w-[calc(50%-0.5rem)] 2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
+                      <option className="bg-[#2d333e] text-gray-300">Distrito</option>
+                      <option className="bg-[#2d333e] text-gray-300">Ancon</option>
+                    </select>
+                  </div>          
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Columna derecha: */}
-          <div className="space-y-4 mb-4">
             {/* Fecha de inicio de actividades */}  
             <div className="flex items-start">
               <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">
@@ -173,7 +184,7 @@ export function EditClientsPage() {
               <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1 relative">
                 <input
                   type="date"
-                  className="bg-transparent border-none outline-none w-full text-gray-300 focus:ring-0 text-base scheme-dark z-10
+                  className="bg-transparent pt-2 border-none outline-none w-full text-gray-300 focus:ring-0 text-base scheme-dark z-10
                             [&::-webkit-calendar-picker-indicator]:opacity-0" 
                 />
                 {/* Icono de reemplazo */}
@@ -184,6 +195,11 @@ export function EditClientsPage() {
                 </span>
               </div>
             </div>
+
+          </div>
+
+          {/* Columna derecha: */}
+          <div className="space-y-4 mb-2">
             {/* Sitio web */}
             <div className="flex items-start">
               <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Sitio web</span>
@@ -244,16 +260,29 @@ export function EditClientsPage() {
                 )}
               </div>
             </div>
-            {/* Condición */}
-            <div className="flex items-start">
-                <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Condición</span>
-                <div className=" hover:bg-[#363d4a]"><p className="p-1">HABIDO</p></div>
-            </div>
+            
+            {tipoCliente === "empresa" ? (
+              <>
+                {/* Condición */}
+                <div className="flex items-center">
+                    <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Condición</span>
+                    <div className="w-full relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+                        <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
+                          <option className="bg-[#2d333e] text-gray-300">Habido</option>
+                          <option className="bg-[#2d333e] text-gray-300">No Habido</option>
+                        </select>
+                      </div>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}           
+
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-[#2d333e] border-y border-gray-700 overflow-x-auto">
+        <div className="flex bg-[#2d333e] border-y border-gray-700 overflow-x-auto mt-3">
           <button className="px-10 py-4 text-sm font-bold border-b-2 border-pink-500 text-pink-500 bg-[#252a34]">
             Contactos
           </button>
