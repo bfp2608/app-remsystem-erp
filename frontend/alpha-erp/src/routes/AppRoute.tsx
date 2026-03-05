@@ -1,7 +1,10 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { LoginPage } from '../pages/LoginPage';
 import Sidebar from '../components/sidebar/Sidebar';
-import { ClientesPage } from '../pages/ClientesPage';
+import { ClientesPage } from '../pages/cliente/ClientesPage';
+import { EditClientsPage } from '../pages/cliente/EditClientsPage';
+import {UsuarioPage} from '../pages/usuario/UsuarioPage';
+import {EditUsuarioPage} from '../pages/usuario/EditUsuarioPage';
 import { PrivateRoute } from './PrivateRoute';
 
 function App() {
@@ -17,7 +20,11 @@ function App() {
                     </PrivateRoute>
                 }
             />
+            {/*Por el momento los edit asi para verlos*/}
             <Route path="/clientes" element={<ClientesPage />} />
+            <Route path="/clientes/edit" element={<EditClientsPage />} />
+            <Route path="/usuario" element={<UsuarioPage />} />
+            <Route path="/usuario/edit" element={<EditUsuarioPage />} />
         </Routes>
         </BrowserRouter>
     );
