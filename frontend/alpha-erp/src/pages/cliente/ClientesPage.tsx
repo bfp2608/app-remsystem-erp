@@ -1,15 +1,15 @@
-import { esEmpresa } from '../types/contactos';
-import { mockContactos } from '../utils/mockDataClientes'
+import { esEmpresa } from '../../types/contactos';
+import { mockContactos } from '../../utils/mockDataClientes'
 
-import {CirculoAvatar} from '../components/clientPage/CirculoAvatar'
-import { CuadroBuscador } from '../components/clientPage/CuadroBuscador'
+import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
+import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
 
 import {CirclePlus} from 'lucide-react'
-import { BotonBase } from '../components/clientPage/BotonBase';
+import { BotonBase } from '../../components/clientPage/BotonBase';
 
 import { useState } from 'react';
-import { Paginacion } from '../components/clientPage/Paginacion';
-import { EdicionTabla } from '../components/clientPage/EdicionTabla';
+import { Paginacion } from '../../components/clientPage/Paginacion';
+import { EdicionTabla } from '../../components/clientPage/EdicionTabla';
 
 //FUNCIONES-----------------------------
 

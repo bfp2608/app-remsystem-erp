@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { AvatarFoto } from "../components/AvatarFoto";
-import { InputForm } from "../components/editClientPage/InputForm"
+import { AvatarFoto } from "../../components/AvatarFoto";
+import { InputForm } from "../../components/editClientPage/InputForm"
 import { SelectForm } from "../components/editClientPage/SelectForm";
 import { PAISES_DATA } from "../constans";
 
