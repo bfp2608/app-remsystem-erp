@@ -64,10 +64,10 @@ export const ClientesPage = () =>  {
     //Fin paginación------------------
 
     return (
-        <div className="min-h-screen bg-gray-900 p-6">
+        <div className="min-h-screen bg-gray-800 p-6">
             {/* Header*/}
             <div className="mb-8 pb-4 flex border-b border-gray-700  items-center justify-between">
-                <h1 className="text-2xl font-bold text-white">Contactos</h1>
+                <h1 className="text-2xl font-bold text-white">Clientes</h1>
             </div>
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}

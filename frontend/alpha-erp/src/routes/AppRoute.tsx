@@ -1,11 +1,12 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { LoginPage } from '../pages/LoginPage';
-import Sidebar from '../components/sidebar/Sidebar';
+import { DashboardLayout } from '../components/sidebar/DashboarLayout';
 import { ClientesPage } from '../pages/cliente/ClientesPage';
 import { EditClientsPage } from '../pages/cliente/EditClientsPage';
 import {UsuarioPage} from '../pages/usuario/UsuarioPage';
 import {EditUsuarioPage} from '../pages/usuario/EditUsuarioPage';
 import { PrivateRoute } from './PrivateRoute';
+import { RUTAS } from '../constans';
 
 function App() {
     return (
@@ -13,22 +14,23 @@ function App() {
         <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route
-                path="/dashboard"
+                path= {RUTAS.DASHBOARD}
                 element={
                     <PrivateRoute>
-                        <Sidebar />
+                        <DashboardLayout />
                     </PrivateRoute>
                 }
-            />
+            >
             {/*Por el momento los edit asi para verlos*/}
-            <Route path="/clientes" element={<ClientesPage />} />
-            <Route path="/clientes/edit" element={<EditClientsPage />} />
-            <Route path="/usuario" element={<UsuarioPage />} />
-            <Route path="/usuario/edit" element={<EditUsuarioPage />} />
+            <Route index element={<h1 className='text-3xl font-bold'>Página de inicio del Dashboard</h1>}></Route>
+            <Route path={ RUTAS.CLIENTES } element={<ClientesPage />} />
+            <Route path={ RUTAS.EDIT_CLIENTE } element={<EditClientsPage />} />
+            <Route path={ RUTAS.USUARIOS } element={<UsuarioPage />} />
+            <Route path={ RUTAS.EDIT_USUARIO } element={<EditUsuarioPage />} />
+            </ Route>
         </Routes>
         </BrowserRouter>
-    );
-
+    )
 }
 
 export default App

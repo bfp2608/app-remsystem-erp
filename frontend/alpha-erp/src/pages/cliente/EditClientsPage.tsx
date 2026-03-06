@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AvatarFoto } from "../../components/AvatarFoto";
 import { InputForm } from "../../components/editClientPage/InputForm"
-import { SelectForm } from "../components/editClientPage/SelectForm";
-import { PAISES_DATA } from "../constans";
+// import { SelectForm } from "../components/editClientPage/SelectForm";
+// import { PAISES_DATA } from "../constans";
 
 export function EditClientsPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -41,8 +41,8 @@ export function EditClientsPage() {
   const availableTags = ["0111", "0112", "0113"];
 
   return (
-    <div className="bg-[#1e2129] text-gray-200 font-sans min-h-screen">
-      <div className="w-full bg-[#242933] p-8 min-h-screen text-gray-300 font-sans">
+    <div className="bg-gray-800 text-gray-200 font-sans min-h-screen">
+      <div className="w-full bg-gray-800 p-8 min-h-screen text-gray-300 font-sans">
 
         {/* Cabecera: foto + nombre + contacto */}
         <div className="flex flex-col md:flex-row gap-8 mb-10">
