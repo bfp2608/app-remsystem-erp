@@ -1,12 +1,8 @@
 import { createContext, useState, useEffect, ReactNode } from "react"
-
-interface User {
-    email: string
-    role: string
-}
+import { signIn } from "../api/authApi"
+import { saveToken, getToken, removeToken } from "./tokenStorage"
 
 interface AuthContextType {
-    user: User | null
     token: string | null
     login: (email: string, password: string) => Promise<void>
     logout: () => void
@@ -19,56 +15,28 @@ export const AuthContext = createContext<AuthContextType>(
 )
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null)
     const [token, setToken] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("token")
-        const storedUser = localStorage.getItem("user")
-
-        if (storedToken && storedUser) {
-            try {
-                setToken(storedToken)
-                setUser(JSON.parse(storedUser))
-            } catch {
-                localStorage.clear()
-            }
-        }
-        console.log("AuthProvider render")
+        const stored = getToken() // ← obtener
+        if (stored) setToken(stored)
         setIsLoading(false)
     }, [])
 
     const login = async (email: string, password: string) => {
-        const { loginRequest } = await import("../api/authApi")
-
-        const response = await loginRequest({ email, password })
-
+        const response = await signIn({ email, password })
+        saveToken(response.token) // ← guardar
         setToken(response.token)
-        setUser(response.user)
-
-        localStorage.setItem("token", response.token)
-        localStorage.setItem("user", JSON.stringify(response.user))
     }
 
     const logout = () => {
+        removeToken() // ← eliminar
         setToken(null)
-        setUser(null)
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
     }
 
     return (
-        <AuthContext.Provider
-            value={{
-                user,
-                token,
-                login,
-                logout,
-                isAuthenticated: !!token,
-                isLoading
-            }}
-        >
+        <AuthContext.Provider value={{ token, login, logout, isAuthenticated: !!token, isLoading }}>
             {children}
         </AuthContext.Provider>
     )
