@@ -1,34 +1,14 @@
 import { useNavigate } from "react-router-dom"
-import React, { useState } from "react"
-import { useAuth } from "../auth/useAuth"
+import { useState } from "react"
+import { loginRequest,router,signIn } from "../api/authApi"
+import { saveToken } from "../auth/tokenStorage"
 
 export const LoginPage = () => {
 
     const navigate = useNavigate()
-    const { login } = useAuth()
-
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState<string | null>(null)
-    const [loading, setLoading] = useState(false)
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault()
-
-        try {
-            setLoading(true)
-            setError(null)
-
-            await login(email, password)
-
-            navigate('/dashboard')
-        } catch (error: any) {
-            setError(error.message)
-        } finally {
-            setLoading(false)
-        }
-
-    }
     return (
         <div className="h-screen overflow-hidden">
             <section className="relative bg-linear-to-br from-slate-400 via-slate-600 to-slate-800  h-lvh flex justify-center items-center">
@@ -37,7 +17,7 @@ export const LoginPage = () => {
 
                 <div className="bg-gray-100 z-10 rounded-2xl shadow-lg w-full max-w-sm p-8 mx-4">
                     <span className="block text-3xl text-slate-900 text-center font-bold mb-4 -mt-3">REMSYSTEMS - CRM</span>
-                    <form onSubmit={handleLogin} id="loginForm">
+                    <form id="loginForm">
                         <article className="flex flex-col gap-4">
                             <label htmlFor="email" className="block text-slate-700 text-xl font-semibold mb-2 ml-1">Correo Electrónico</label>
                             <input type="email" onChange={e => setEmail(e.target.value)} name="email" id="email" className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-yellow-500/20 focus:border-yellow-500 transition-all duration-300 ease-in-out shadow-sm" placeholder="nombre@empresa.com" />
@@ -45,12 +25,36 @@ export const LoginPage = () => {
                             <label htmlFor="password" className="block text-slate-700 text-xl font-semibold mb-2 ml-1">Contraseña</label>
                             <input type="password" onChange={e => setPassword(e.target.value)} name="password" id="password" className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-yellow-500/20 focus:border-yellow-500 transition-all duration-300 ease-in-out shadow-sm" placeholder="********" />
 
-                            {error && <p> {error} </p>}
+                            <button  className="mt-5 w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-slate-900/30 transform transition active:scale-95 cursor-pointer"
+                                type="button"
+                                onClick={async ()=>{
+                                    try{
+                                        const request: loginRequest = { email, password }
+                                        const response = await signIn(request);
+                                        alert(response.message);
+                                        if(response.success){
+                                            saveToken(response.token);
 
-                            <button className="mt-5 w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-slate-900/30 transform transition active:scale-95 cursor-pointer"
-                                type="submit"
+                                            const meResponse = await router(response.token);
+                                            const rol = meResponse.tipoUsuario;
+
+                                            switch(rol){
+                                                case 'Administrador':
+                                                    console.log("es admin")
+                                                    navigate('/dashboard')
+                                                    break;
+                                                case 'Trabajador':
+                                                    console.log("es vagito");
+                                                    navigate('/dashboard')
+                                                        break;
+                                            }
+                                        }
+                                    }catch(e){
+                                        console.error(e);
+                                    }
+                                }}
                             >
-                                {loading ? "Cargando..." : "Ingresar"}
+                                Ingresar
                             </button>
                         </article>
                     </form>
