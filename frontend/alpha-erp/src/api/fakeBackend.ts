@@ -1,3 +1,5 @@
+import { ROLE_TYPES } from "../constans"
+
 export interface LoginRequest {
     email: string
     password: string
@@ -14,7 +16,7 @@ export interface LoginResponse {
 const fakeUser = {
     email: "admin@empresa.com",
     password: "123456",
-    role: "ADMIN"
+    role: ROLE_TYPES.admin
 }
 
 export const fakeLoginApi = (data: LoginRequest): Promise<LoginResponse> => {

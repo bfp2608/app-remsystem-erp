@@ -4,8 +4,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AvatarFoto } from "../../components/AvatarFoto";
 import { InputForm } from "../../components/editClientPage/InputForm"
-import { SelectForm } from "../components/editClientPage/SelectForm";
-import { PAISES_DATA } from "../constans";
 
 export function EditUsuarioPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,7 +50,7 @@ export function EditUsuarioPage() {
 
           {/* Avatar / foto */}
           <AvatarFoto 
-            tipo={tipoCliente} 
+            tipo={ tipoCliente } 
           />
 
           {/* Nombre y campos de contacto */}

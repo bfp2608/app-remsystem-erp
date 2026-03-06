@@ -2,6 +2,7 @@ import { NavItem } from "./NavItem"
 import { NavDropdown } from "./NavDropdown"
 import { UserProfile } from "./UserProfile"
 import { NAVIGATION_DATA } from "../../constans"
+import { Link } from "react-router-dom"
 
 export const Sidebar = (() =>{
     return(
@@ -36,13 +37,13 @@ export const Sidebar = (() =>{
                                 >
                                 {/*Hacemos un segundo map para los subLinks de este menú */}
                                 {item.subItems?.map((subItem, subIndex) =>(
-                                    <a
+                                    <Link
                                         key={ subIndex } 
-                                        href={ subItem.href}
+                                        to={ subItem.href }
                                         className="block px-3 py-2 pl-11 text-sm text-dark-400 hover:text-white rounded-md transition-colors"
                                     >
                                         { subItem.label }
-                                    </a>
+                                    </Link>
                                 ))}
                                 </NavDropdown>
                             )
@@ -56,9 +57,6 @@ export const Sidebar = (() =>{
                     
                 />
             </aside>
-            <main className="flex-1 bg-gray-800 p-10">
-                <h1 className="text-3xl font-bold text-gray-200">Contenido principal de cada item del Sidebar</h1>
-            </main>
         </div>
     )
 })

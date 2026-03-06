@@ -8,6 +8,15 @@ export const ROLE_TYPES = {
     manager: 'manager'
 }
 
+//Diccionario de rutas - única fuente de la verdad
+export const RUTAS = {
+    DASHBOARD: '/dashboard',
+    CLIENTES: '/dashboard/clientes',
+    USUARIOS: '/dashboard/usuario',
+    EDIT_CLIENTE: '/dashboard/clientes/edit',
+    EDIT_USUARIO: '/dashboard/usuario/edit',
+}
+
 //Opciones del Sidebar del dashboard
 export const NAVIGATION_DATA: NavigationItem[] = [
         //Array de datos
@@ -15,7 +24,7 @@ export const NAVIGATION_DATA: NavigationItem[] = [
         {
             type: 'link',
             label: 'Dashboard',
-            href: '#',
+            href: RUTAS.DASHBOARD,
             icon: <House />
         },
 
@@ -37,10 +46,10 @@ export const NAVIGATION_DATA: NavigationItem[] = [
             defaultOpen: false,
             icon: <Users />,
             subItems: [
-                { label: 'Clientes', href: '#'},
-                { label: 'Proveedores', href: '#'},
-                { label: 'Personas Naturales', href: '#'},
-                { label: 'Empresas', href: '#'}
+                { label: 'Clientes', href: RUTAS.CLIENTES},
+                { label: 'Usuarios', href: RUTAS.USUARIOS},
+                { label: 'Editar clientes', href: RUTAS.EDIT_CLIENTE},
+                { label: 'Editar usuarios', href: RUTAS.EDIT_USUARIO}
             ]
         },
 
