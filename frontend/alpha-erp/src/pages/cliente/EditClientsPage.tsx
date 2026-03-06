@@ -137,41 +137,15 @@ export function EditClientsPage() {
 
             {/* Son comunes en ambos */}
             <InputForm label="Dirección" placeholder="Calle Ernesto Mora 475..." />
-            <div className="flex items-start">
+            <div className="flex items-start w-full">
               <div className="flex flex-col flex-1 ml-34 gap-0">
                 <div className="flex flex-wrap gap-3">
                   
-                  {/* Selector de País */}
-                  <div className="w-full lg:w-[calc(50%-0.5rem)] 2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
-                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                      <option className="bg-[#2d333e] text-gray-300">Pais</option>
-                      <option className="bg-[#2d333e] text-gray-300">Perú</option>
-                    </select>
-                  </div>
+                  <SelectForm label="País" options={["Perú", "Colombia", "Chile"]} />
+                  <SelectForm label="Departamento" options={["Lima", "Arequipa", "Cusco"]} />           
+                  <SelectForm label="Provincia" options={["Lima", "Callao"]} />   
+                  <SelectForm label="Distrito" options={["Ancón", "Miraflores", "Surco"]} />
 
-                  {/* Selector de Departamento */}
-                  <div className="w-full lg:w-[calc(50%-0.5rem)] 2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
-                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                      <option className="bg-[#2d333e] text-gray-300">Departamento</option>
-                      <option className="bg-[#2d333e] text-gray-300">Lima</option>
-                    </select>
-                  </div>
-
-                  {/* Selector de Provincia */}
-                  <div className="w-full lg:w-[calc(50%-0.5rem)] 2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
-                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                      <option className="bg-[#2d333e] text-gray-300">Provincia</option>
-                      <option className="bg-[#2d333e] text-gray-300">Lima</option>
-                    </select>
-                  </div>
-
-                  {/* Selector de Distrito */}
-                  <div className="w-full lg:w-[calc(50%-0.5rem)] 2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
-                    <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                      <option className="bg-[#2d333e] text-gray-300">Distrito</option>
-                      <option className="bg-[#2d333e] text-gray-300">Ancon</option>
-                    </select>
-                  </div>          
                 </div>
               </div>
             </div>
@@ -195,23 +169,12 @@ export function EditClientsPage() {
                 </span>
               </div>
             </div>
-
           </div>
 
           {/* Columna derecha: */}
           <div className="space-y-4 mb-2">
             {/* Sitio web */}
-            <div className="flex items-start">
-              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Sitio web</span>
-              <div className="flex flex-col flex-1 gap-0">
-                <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1"> 
-                  <input
-                    className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 italic focus:ring-0 text-base"
-                    placeholder="Por ejemplo, https://www.odoo.com"
-                  />
-                </div>
-              </div>
-            </div>
+            <InputForm label="Sitio web" placeholder="Por ejemplo, www.odoo.com" />
             {/* Etiquetas */}
             <div className="flex items-star">
               <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Etiquetas</span>
@@ -221,15 +184,12 @@ export function EditClientsPage() {
                   onClick={() => setShowTagDropdown(true)}
                 >
                   {tags.map((tag, i) => (
-                    <div
-                      key={i}
+                    <div key={i}
                       className="bg-[#1f4b4e] text-teal-300 px-3 py-0.5 rounded-full text-xs flex items-center gap-2 border border-teal-800"
                     >
                       {tag}
-                      <button
-                        className="hover:text-white font-bold"
-                        onClick={(e) => { e.stopPropagation(); removeTag(i); }}
-                      >
+                      <button className="hover:text-white font-bold"
+                        onClick={(e) => { e.stopPropagation(); removeTag(i); }} >
                         ✕
                       </button>
                     </div>
@@ -266,18 +226,10 @@ export function EditClientsPage() {
                 {/* Condición */}
                 <div className="flex items-center">
                     <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Condición</span>
-                    <div className="w-full relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
-                        <select className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1">
-                          <option className="bg-[#2d333e] text-gray-300">Habido</option>
-                          <option className="bg-[#2d333e] text-gray-300">No Habido</option>
-                        </select>
-                      </div>
+                     <SelectForm label="Habido" options={["No Habido"]} />
                 </div>
               </>
-            ) : (
-              <></>
-            )}           
-
+            ) : ( <></> )}           
           </div>
         </div>
 
@@ -316,7 +268,6 @@ export function EditClientsPage() {
             + Agregar Contacto
           </button>
         </div>
-
       </div>
     </div>
   );
