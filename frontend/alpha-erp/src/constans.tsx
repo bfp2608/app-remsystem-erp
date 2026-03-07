@@ -3,7 +3,7 @@ import type { NavigationItem } from "./types/sidebar"
 
 //Para los tipos de usuarios
 export const ROLE_TYPES = {
-    admin: 'admin',
+    admin: 'Administrador',
     user: 'user',
     manager: 'manager'
 }
