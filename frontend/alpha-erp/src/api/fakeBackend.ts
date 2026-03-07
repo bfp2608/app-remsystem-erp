@@ -39,3 +39,12 @@ export const fakeLoginApi = (data: LoginRequest): Promise<LoginResponse> => {
         }, 1000)
     })
 }
+
+export const fakeMeApi = () =>{
+    return Promise.resolve ( {
+        nombres: "Admin Fake",
+        email: fakeUser.email,
+        tipoUsuario: fakeUser.role,
+        fechaRegistro: "2026-01-01"
+    }) 
+}

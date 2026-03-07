@@ -1,4 +1,6 @@
 import { API_URL } from "./routes";
+import { fakeLoginApi, fakeMeApi } from "./fakeBackend";
+import { ENV } from "../config/env";
 
 export type loginResponse = {
   token: string;
@@ -20,6 +22,19 @@ export type meResponse = {
 }
 
 export const signIn = async (request: loginRequest): Promise<loginResponse> => {
+  
+  //Casa
+  if (ENV.USE_FAKE_BACKEND) {
+    const fake = await fakeLoginApi( request);
+    return{
+      token: fake.token,
+      message: "Login exitoso",
+      success: true,
+      status: 200
+    }
+  }
+  
+  //INSTITUTO
   const response = await fetch(`${API_URL.AUTH.LOGIN}`, {
     method: "POST",
     headers: {
@@ -38,6 +53,12 @@ export const signIn = async (request: loginRequest): Promise<loginResponse> => {
 };
 
 export const router = async (token: string): Promise<meResponse> => {
+
+  if (ENV.USE_FAKE_BACKEND) {
+    const fake = await fakeMeApi();
+    return fake
+  }
+
   const response = await fetch(`${API_URL.AUTH.ME_LOGIN}`, {
     method: "GET",
     headers: {

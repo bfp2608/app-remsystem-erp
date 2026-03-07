@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { loginRequest,router,signIn } from "../api/authApi"
-import { saveToken } from "../auth/tokenStorage"
+import { useAuth } from "../auth/useAuth"
+import { router } from '../api/authApi'
+import { getToken } from "../auth/tokenStorage"
 
 export const LoginPage = () => {
 
     const navigate = useNavigate()
+    const { login } = useAuth()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -29,28 +31,28 @@ export const LoginPage = () => {
                                 type="button"
                                 onClick={async ()=>{
                                     try{
-                                        const request: loginRequest = { email, password }
-                                        const response = await signIn(request);
-                                        alert(response.message);
-                                        if(response.success){
-                                            saveToken(response.token);
+                                        await login(email, password); 
 
-                                            const meResponse = await router(response.token);
-                                            const rol = meResponse.tipoUsuario;
+                                        const token = getToken();
+                                        const meResponse = await router(token!)
+                                        const rol = meResponse.tipoUsuario;
 
-                                            switch(rol){
-                                                case 'Administrador':
-                                                    console.log("es admin")
-                                                    navigate('/dashboard')
+                                        switch(rol){
+                                            case 'Administrador':
+                                                console.log("es admin")
+                                                navigate('/dashboard')
+                                                break;
+                                            case 'Trabajador':
+                                                console.log("es vagito");
+                                                navigate('/dashboard')
                                                     break;
-                                                case 'Trabajador':
-                                                    console.log("es vagito");
-                                                    navigate('/dashboard')
-                                                        break;
-                                            }
+                                            default:
+                                                alert ("Rol no reconocido")
+                                                break;
                                         }
                                     }catch(e){
                                         console.error(e);
+                                        alert ("Credenciales incorrectas")
                                     }
                                 }}
                             >
