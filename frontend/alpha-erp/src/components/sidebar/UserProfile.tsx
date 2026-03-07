@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "../../auth/useAuth"
 import { FC } from "react"
 
 interface UserProfileProps {
@@ -7,6 +9,10 @@ interface UserProfileProps {
 }
 
 export const UserProfile: FC<UserProfileProps> = (({ name, avatarUrl, profileLink = '#' }) =>{
+    
+    const navigate = useNavigate()
+    const { logout } = useAuth()
+    
     return(
         <div className="p-4 border-t border-gray-600">
             <a href={ profileLink } className="flex items-center gap-2 w-full hover:bg-gray-800 p-2 rounded-md transition-colors">
@@ -18,6 +24,10 @@ export const UserProfile: FC<UserProfileProps> = (({ name, avatarUrl, profileLin
             </a>
             <button 
                 className="flex w-full hover:bg-gray-800 p-1 rounded-md transition-colors cursor-pointer"
+                onClick = {() => {
+                    logout()
+                    navigate('/login')
+                }}
             >
                 <p className="text-sm font-medium pl-1.5">Cerrar Sesión</p>
             </button>
