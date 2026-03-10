@@ -1,5 +1,5 @@
-import { esEmpresa } from '../../types/contactos';
-import { mockContactos } from '../../utils/mockDataClientes'
+import { esEmpresa } from '../../types/cliente';
+import { mockClientes } from '../../utils/mockDataClientes'
 
 import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
 import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
@@ -41,7 +41,7 @@ export const ClientesPage = () =>  {
     const [textoBusqueda, setTextoBusqueda] = useState('')
 
     //Filtrar los datos
-    const contactosFiltrados = mockContactos.filter(contacto => {
+    const contactosFiltrados = mockClientes.filter(contacto => {
     const nombre = esEmpresa(contacto) 
         ? contacto.razon_social 
         : contacto.nombres_completos
