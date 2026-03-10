@@ -1,7 +1,6 @@
 //Es lo mismo que ClientPage 
 
-import { esEmpresa } from '../../types/contactos';
-import { mockContactos } from '../../utils/mockDataClientes'
+import { mockUsuarios } from '../../utils/mockDataUsuarios';
 
 import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
 import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
@@ -12,6 +11,7 @@ import { BotonBase } from '../../components/clientPage/BotonBase';
 import { useState } from 'react';
 import { Paginacion } from '../../components/clientPage/Paginacion';
 import { EdicionTabla } from '../../components/clientPage/EdicionTabla';
+import { FiltroTabla } from '../../components/clientPage/FiltroTabla';
 
 //FUNCIONES-----------------------------
 
@@ -43,10 +43,8 @@ export const UsuarioPage = () =>  {
     const [textoBusqueda, setTextoBusqueda] = useState('')
 
     //Filtrar los datos
-    const contactosFiltrados = mockContactos.filter(contacto => {
-    const nombre = esEmpresa(contacto) 
-        ? contacto.razon_social 
-        : contacto.nombres_completos
+    const contactosFiltrados = mockUsuarios.filter(usuario => {
+    const nombre = usuario.nombre_usuario
     return nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
     })
 
@@ -69,14 +67,19 @@ export const UsuarioPage = () =>  {
         <div className="min-h-screen bg-gray-800 p-6">
             {/* Header*/}
             <div className="mb-8 pb-4 flex border-b border-gray-700  items-center justify-between">
-                <h1 className="text-2xl font-bold text-white">Contactos</h1>
+                <h1 className="text-2xl font-bold text-white">Usuarios</h1>
             </div>
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
             <div className="flex items-center justify-between  mb-6">
+                {/*Boton añadir */}
                 <BotonBase onPresionar={botonAnadir} texto='Añadir' color='blue' icono={CirclePlus}/>
 
+                {/*Buscador */}
                 <CuadroBuscador buscar={manejarBuscador} />
+
+                {/*Filtro*/}
+                <FiltroTabla/>
 
                 {/* Paginación */}
                 <Paginacion 
@@ -86,6 +89,7 @@ export const UsuarioPage = () =>  {
                     onAnterior={() => setPaginaActual(p => p - 1)}
                     onSiguiente={() => setPaginaActual(p => p + 1)}
                 />
+                
             </div>
             
             
@@ -99,16 +103,13 @@ export const UsuarioPage = () =>  {
                                 Nombre
                             </th>
                             <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                Correo electrónico
+                                Correo
                             </th>
                             <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                Teléfono
+                                Telefono
                             </th>
                             <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                RUC
-                            </th>
-                            <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                Tipo
+                                Cargo
                             </th>
                             <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
                                 Acciones
@@ -118,19 +119,19 @@ export const UsuarioPage = () =>  {
                     
                     {/*Por el momento con datos mock*/}
                     <tbody className="divide-y divide-gray-600">
-                        {contactosPaginados.map(contacto => {
+                        {contactosPaginados.map(usuario => {
 
-                            const key = esEmpresa(contacto) ? 'empresa-'+contacto.id_empresa : 'persona-'+contacto.id_persona
+                            const key = usuario.id_usuario
 
-                            const nombre = esEmpresa(contacto) ? contacto.razon_social : contacto.nombres_completos
+                            const nombre = usuario.nombre_usuario
 
-                            const ruc = esEmpresa(contacto) ? contacto.ruc : ""
+                            const correo = usuario.email
 
-                            const correo = esEmpresa(contacto) ? contacto.correo_corporativo : contacto.correo_personal
+                            const telefono = usuario.telefono
 
-                            const celular = esEmpresa(contacto) ? contacto.celular_corporativo : contacto.celular_personal
+                            const cargo = usuario.id_tipo_usuario
 
-                            const tipo = esEmpresa(contacto) ? "Empresa" : "Persona"
+                            const nombreCargo:string = cargo == 1 ?  "Administrador" : "Usuario"
 
                             return(
                                 <tr key={key} className="hover:bg-gray-700/80 transition-colors">
@@ -143,9 +144,8 @@ export const UsuarioPage = () =>  {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-gray-300">{correo}</td>
-                                    <td className="px-6 py-4 text-gray-300">{celular}</td>
-                                    <td className="px-6 py-4 text-gray-300">{ruc}</td>
-                                    <td className="px-6 py-4 text-gray-300">{tipo}</td>
+                                    <td className="px-6 py-4 text-gray-300">{telefono}</td>
+                                    <td className="px-6 py-4 text-gray-300">{nombreCargo}</td>
                                     <td className="px-6 py-4 text-gray-300">
                                         <EdicionTabla 
                                         onEditar={() => editar(nombre)} 

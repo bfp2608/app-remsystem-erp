@@ -1,4 +1,4 @@
-//Tipos para Contactos, aún por afinar
+//Tipos para Clientes, aún por afinar
 
 export type Empresa = {
     id_empresa : number;
@@ -34,20 +34,20 @@ export type Persona = {
 }
 
 
-//El tipo Contacto permite Empresa y Persona
+//El tipo Cliente permite Empresa y Persona
 //Para poner todo en un array y mostrarlos en la tabla
-export type Contacto =  Empresa | Persona;
+export type Cliente =  Empresa | Persona;
 
 
 //Para diferenciar entre Persona y Empresa
-//contacto debe tener los campos que se le piden
+//cliente debe tener los campos que se le piden
 
-//Si el return es cierto, el contacto es EMPRESA
-export function esEmpresa(contacto: Contacto): contacto is Empresa {
-    return 'razon_social' in contacto && 'ruc' in contacto;
+//Si el return es cierto, el cliente es EMPRESA
+export function esEmpresa(cliente: Cliente): cliente is Empresa {
+    return 'razon_social' in cliente && 'ruc' in cliente;
 }
 
-//Si el return es cierto, el contacto es PERSONA
-export function esPersona(contacto: Contacto): contacto is Persona {
-    return 'id_persona' in contacto && 'nombres_completos' in contacto;
+//Si el return es cierto, el cliente es PERSONA
+export function esPersona(cliente: Cliente): cliente is Persona {
+    return 'id_persona' in cliente && 'nombres_completos' in cliente;
 }

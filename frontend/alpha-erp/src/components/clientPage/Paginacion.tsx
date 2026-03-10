@@ -40,7 +40,7 @@ export function Paginacion({
                 <button 
                     onClick={onAnterior}
                     disabled={enPrimeraPagina}
-                    className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-gray-300 transition-colors disabled:opacity-50 hover:cursor-pointer disabled:cursor-default disabled:hover:bg-gray-800"
+                    className="px-3 py-1 bg-gray-900 hover:bg-gray-700 rounded text-gray-300 transition-colors disabled:opacity-50 hover:cursor-pointer disabled:cursor-default disabled:hover:bg-gray-800"
                 >
                     <ArrowLeft/>
                 </button>
@@ -48,7 +48,7 @@ export function Paginacion({
                 <button 
                     onClick={onSiguiente}
                     disabled={enUltimaPagina}
-                    className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-gray-300 transition-colors disabled:opacity-50 hover:cursor-pointer disabled:cursor-default disabled:hover:bg-gray-800"
+                    className="px-3 py-1 bg-gray-900 hover:bg-gray-700 rounded text-gray-300 transition-colors disabled:opacity-50 hover:cursor-pointer disabled:cursor-default disabled:hover:bg-gray-800"
                 >
                     <ArrowRight/>
                 </button>

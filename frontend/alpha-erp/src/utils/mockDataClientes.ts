@@ -1,6 +1,6 @@
-import {Contacto} from "../types/contactos" 
+import {Cliente} from "../types/cliente" 
 
-export const mockContactos: Contacto[] = [
+export const mockClientes: Cliente[] = [
     // ==================== EMPRESAS ====================
     {
         id_empresa: 1,
