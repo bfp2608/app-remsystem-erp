@@ -21,7 +21,7 @@ export const SelectForm: FC<SelectFormProps> = ({
         name={name}
         value={value}
         onChange={onChange}
-        className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer py-1 text-white"
+        className="bg-transparent border-none outline-none w-full focus:ring-0 text-base cursor-pointer text-white"
       >
         {/* Opción por defecto / Placeholder */}
         <option value="" className="bg-[#2d333e] text-gray-300">
