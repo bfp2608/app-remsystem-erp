@@ -11,10 +11,10 @@ import { LucideIcon } from "lucide-react"
 type ColorVariante = 'blue' | 'green' | 'red' | 'teal'
 
 const colores: Record<ColorVariante, string> = {
-        blue: 'bg-blue-600 hover:bg-blue-700',
-        green: 'bg-green-600 hover:bg-green-700',
-        red: 'bg-red-600 hover:bg-red-700',
-        teal: 'bg-teal-600 hover:bg-teal-700'
+        blue: 'bg-blue-600 hover:bg-blue-700 disabled:hover:bg-blue-600',
+        green: 'bg-green-600 hover:bg-green-700 disabled:hover:bg-green-600',
+        red: 'bg-red-600 hover:bg-red-700 disabled:hover:bg-red-600',
+        teal: 'bg-teal-600 hover:bg-teal-700 disabled:hover:bg-teal-600'
     }
 
 //------
@@ -24,20 +24,23 @@ type PropBotonBase = {
     onPresionar : () => void;
     texto : string;
     icono? : LucideIcon;    
-    color? : ColorVariante
+    color? : ColorVariante;
+    disable? : boolean
 }
 
 export function BotonBase ({
     onPresionar, 
     texto, 
     icono:Icono, 
-    color = 'blue'
+    color = 'blue',
+    disable = false
 }:PropBotonBase){
 
     return(
         <button 
         onClick={onPresionar} 
-        className={`flex items-center gap-2 ${colores[color]} hover:cursor-pointer text-gray-200 px-3 py-2 rounded font-medium transition-colors`}>
+        disabled = {disable}
+        className={`flex items-center gap-2 ${colores[color]} disabled:opacity-65 disabled:hover:cursor-default hover:cursor-pointer text-white px-3 py-2 rounded font-medium transition-colors`}>
             {Icono ? <Icono size={20} /> : null}
             {texto}
         </button>
