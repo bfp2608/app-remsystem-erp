@@ -1,23 +1,28 @@
-//Filtro apto solo para la tabla USUARIOS, por el momento
+//Filtro apto solo para la tabla CLIENTES, por el momento
 //
 
 import { ListFilter, SquareX } from "lucide-react"
 import { useState, useRef, useEffect, ChangeEvent } from "react"
 import { SelectForm } from '../editClientPage/SelectForm';
 import { BotonBase } from '../clientPage/BotonBase';
+import { mockClientes } from "../../utils/mockDataClientes";
+import { esEmpresa } from "../../types/cliente";
 
 
+type FiltrosValor = { correo: string; tipo: string, telefono: string, sitioWeb:string, actividadEconomica: string, cargo: string }
 
-type FiltrosValor = { cargo: string; telefono: string }
+const filtroInicio:FiltrosValor = {correo: "", tipo: "", telefono: "", sitioWeb: "",actividadEconomica: "", cargo: "" }
 
 //COMPONENTE
 type PropFiltroTabla = {
     onAplicar: (filtros:FiltrosValor) => void
 }
 
-export function FiltroTablaUsuarios({onAplicar}:PropFiltroTabla) {
+export function FiltroTablaClientes({onAplicar}:PropFiltroTabla) {
 
-    const [filtrosAplicados, setFiltrosAplicados] = useState<FiltrosValor>({ cargo: "", telefono: "" })
+    
+
+    const [filtrosAplicados, setFiltrosAplicados] = useState<FiltrosValor>(filtroInicio)
 
     const [mostrarFiltro, estadoFiltro] = useState(false)
 
@@ -44,9 +49,8 @@ export function FiltroTablaUsuarios({onAplicar}:PropFiltroTabla) {
     }
 
     const limpiar = () => {
-        const vacio = { cargo: "", telefono: "" }
-        setFiltrosAplicados(vacio)
-        onAplicar(vacio)
+        setFiltrosAplicados(filtroInicio)
+        onAplicar(filtroInicio)
     }
 
     return(
@@ -76,12 +80,36 @@ export function FiltroTablaUsuarios({onAplicar}:PropFiltroTabla) {
                     {/*Contenido filtros*/}
                     <div className="overflow-y-auto flex-1">
                         <div className="my-5">
-                            <h1 className="text-lg font-semibold text-gray-100">Cargo</h1>
-                            <SelectForm name="cargo" value={filtrosAplicados.cargo} onChange={handleChange} label="Todos" options={["Administrador","Usuario"]}/>
+                            <h1 className="text-lg font-semibold text-gray-100">Correo</h1>
+                            <SelectForm name="correo" value={filtrosAplicados.correo} onChange={handleChange} label="Todos" options={["Con correo","Sin correo"]}/>
+                        </div>
+                        <div className="my-5">
+                            <h1 className="text-lg font-semibold text-gray-100">Tipo</h1>
+                            <SelectForm name="tipo" value={filtrosAplicados.tipo} onChange={handleChange} label="Todos" options={["Empresa","Persona"]}/>
                         </div>
                         <div className="my-5">
                             <h1 className="text-lg font-semibold text-gray-100">Teléfono</h1>
                             <SelectForm name="telefono" value={filtrosAplicados.telefono} onChange={handleChange} label="Todos" options={["Con teléfono","Sin teléfono"]}/>
+                        </div>
+                        <div className="my-5">
+                            <h1 className="text-lg font-semibold text-gray-100">Sitio web</h1>
+                            <SelectForm name="sitioWeb" value={filtrosAplicados.sitioWeb} onChange={handleChange} label="Todos" options={["Con sitio web", "Sin sitio web"]}/>
+                        </div>
+                        <div className="my-5">
+                            <h1 className="text-lg font-semibold text-gray-100">Actividad económica</h1>
+                            <SelectForm name="actividadEconomica" value={filtrosAplicados.actividadEconomica} onChange={handleChange} label="Todos" options={[...new Set(
+                                mockClientes
+                                    .map(c => esEmpresa(c) ? String(c.actividad_economica) : null)
+                                    .filter(Boolean) as string[]
+                            )]}/>
+                        </div>
+                        <div className="my-5">
+                            <h1 className="text-lg font-semibold text-gray-100">Cargo</h1>
+                            <SelectForm name="cargo" value={filtrosAplicados.cargo} onChange={handleChange} label="Todos" options={[...new Set(
+                                mockClientes
+                                    .map(c => !esEmpresa(c) ? String(c.cargo) : null)
+                                    .filter(Boolean) as string[]
+                            )]}/>
                         </div>
                     </div>
                 </div>

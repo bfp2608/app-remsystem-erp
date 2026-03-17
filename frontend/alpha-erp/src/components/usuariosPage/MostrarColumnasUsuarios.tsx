@@ -17,7 +17,7 @@ type PropMostrarColumnas = {
     onCambiar: (columna: keyof ColumnasVisibles) => void
 }
 
-export function MostrarColumnas({columnas, onCambiar}:PropMostrarColumnas) {
+export function MostrarColumnasUsuarios({columnas, onCambiar}:PropMostrarColumnas) {
 
     const [mostrarPanel, estadoPanel] = useState(false)
 
@@ -50,7 +50,7 @@ export function MostrarColumnas({columnas, onCambiar}:PropMostrarColumnas) {
 
             {
                 mostrarPanel && 
-                <div className="flex flex-col p-6 h-full w-90 bg-gray-900 absolute right-0 top-0 z-20 shadow-gray-600 shadow-xl">
+                <div className="flex flex-col p-6 h-full w-70 bg-gray-900 absolute right-0 top-0 z-20 shadow-gray-600 shadow-xl">
                     {/*Cabecera filtros*/}
                     <div className="mb-6 pb-3 border-b border-gray-600 shrink-0">
                         <div className="flex justify-between">
@@ -62,14 +62,14 @@ export function MostrarColumnas({columnas, onCambiar}:PropMostrarColumnas) {
                     </div>
                     {/*Contenido filtros*/}
                     <div className="overflow-y-auto flex-1">
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex accent-teal-600 items-center gap-2 mb-2">
                             <input className="hover:cursor-pointer size-5" type="checkbox" checked={columnas.correo} onChange={() => onCambiar("correo")} />
                             <h1>Correo</h1>
                         </div>
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex accent-teal-600 items-center gap-2 mb-2">
                             <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columnas.telefono} onChange={() => onCambiar("telefono")} />  Teléfono
                         </div>
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex accent-teal-600 items-center gap-2 mb-2">
                             <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columnas.cargo} onChange={() => onCambiar("cargo")} />  Cargo
                         </div>
                     </div>

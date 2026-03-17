@@ -13,7 +13,7 @@ import { Paginacion } from '../../components/clientPage/Paginacion';
 import { EdicionTabla } from '../../components/clientPage/EdicionTabla';
 import { FiltroTablaUsuarios } from '../../components/usuariosPage/FiltroTablaUsuarios';
 import { Header_th } from '../../components/tabla/Header_th';
-import { MostrarColumnas } from '../../components/usuariosPage/MostrarColumnas';
+import { MostrarColumnasUsuarios } from '../../components/usuariosPage/MostrarColumnasUsuarios';
 
 //FUNCIONES-----------------------------
 
@@ -34,7 +34,8 @@ const eliminar = (key:string) =>{
 
 //FIN FUNCIONES-----------------------------
 
-
+const CARGO_LABEL: Record<number,string> = {1:"Administrador", 2: "Usuario"}
+const ERROR_NO_HAY_CARGO:string = "No se encontró el cargo"
 
 //Total de items que se muestran en la tabla
 const ITEMS_POR_PAGINA = 20
@@ -79,8 +80,8 @@ export const UsuarioPage = () =>  {
         let valB: string | number | null | undefined
 
         if (orden.campo === 'cargo') {
-            valA = a.id_tipo_usuario === 1 ? 'Administrador' : 'Usuario'
-            valB = b.id_tipo_usuario === 1 ? 'Administrador' : 'Usuario'
+            valA = CARGO_LABEL[a.id_tipo_usuario] ?? ERROR_NO_HAY_CARGO
+            valB = CARGO_LABEL[b.id_tipo_usuario] ?? ERROR_NO_HAY_CARGO
         } else {
             valA = a[orden.campo] ?? null
             valB = b[orden.campo] ?? null
@@ -116,19 +117,23 @@ export const UsuarioPage = () =>  {
     
 
     return (
-        <div className="min-h-screen bg-gray-800 p-6">
-            {/* Header*/}
-            <div className="mb-8 pb-4 flex border-b border-gray-700  items-center justify-between">
+        <div className="h-screen flex flex-col bg-gray-800 p-4">
+            <div className='shrink-0'>
+                {/* Header*/}
+            <div className="mb-3 pb-3 flex border-b border-gray-700  items-center justify-between">
                 <h1 className="text-2xl font-bold text-white">Usuarios</h1>
                 <div className='flex items-center gap-4'>
                     {/*Filtro*/}
-                    <FiltroTablaUsuarios onAplicar={setFiltrosActivos}/>
-                    <MostrarColumnas columnas={columnasVisibles} onCambiar={handleColumna}/>
+                    <FiltroTablaUsuarios onAplicar={(filtros) => {
+                        setFiltrosActivos(filtros)
+                        setPaginaActual(1)
+                    }}/>
+                    <MostrarColumnasUsuarios columnas={columnasVisibles} onCambiar={handleColumna}/>
                 </div>
             </div>
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
-            <div className="flex items-center justify-between  mb-6">
+            <div className="flex items-center justify-between  mb-3">
                 {/*Boton añadir */}
                 <BotonBase onPresionar={botonAnadir} texto='Añadir' color='blue' icono={CirclePlus}/>
 
@@ -147,13 +152,12 @@ export const UsuarioPage = () =>  {
                 />
                 
             </div>
-            
-            
-            
-            {/* Tabla */}
-            <div className="bg-gray-700/60 rounded-lg overflow-hidden">
-                <table className="w-full">
-                    <thead className="bg-gray-600/60">
+            </div>
+            <div className="overflow-auto flex-1 min-h-0">
+                {/* Tabla */}
+            <div>
+                <table className="w-full bg-gray-700/60 rounded-lg">
+                    <thead className="bg-gray-600 sticky top-0 z-10">
                         <tr>
                             <Header_th 
                             texto='Nombre' 
@@ -213,8 +217,10 @@ export const UsuarioPage = () =>  {
                             const telefono = usuario.telefono
 
                             const cargo = usuario.id_tipo_usuario
+                            
 
-                            const nombreCargo:string = cargo == 1 ?  "Administrador" : "Usuario"
+                            
+                            const nombreCargo = CARGO_LABEL[cargo] ?? ERROR_NO_HAY_CARGO
 
                             return(
                                 <tr key={key} className="hover:bg-gray-700/80 transition-colors">
@@ -249,6 +255,7 @@ export const UsuarioPage = () =>  {
                         
                     </tbody>
                 </table>
+            </div>
             </div>
         </div>
     )

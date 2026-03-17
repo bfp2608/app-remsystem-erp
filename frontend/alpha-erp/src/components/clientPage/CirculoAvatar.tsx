@@ -55,7 +55,7 @@ export function CirculoAvatar({nombre}:PropAvatar) {
     //------------------------------------------
 
     return (
-        <div className={`w-8 h-8 ${colorClase} rounded-full flex items-center justify-center text-white font-semibold mr-3`}>
+        <div className={`min-w-8 min-h-8 ${colorClase} rounded-full flex items-center justify-center text-white font-semibold mr-3`}>
             {iniciales}
         </div>
     )
