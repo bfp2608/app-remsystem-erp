@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { AvatarFoto } from "../../components/AvatarFoto";
 import { InputForm } from "../../components/editClientPage/InputForm"
 import { SelectForm } from "../../components/editClientPage/SelectForm";
-import { PAISES_DATA } from "../../constans";
+import { ContactCard } from "../../components/editClientPage/ContactCard";
+import { CreateContactModal } from "../../components/editClientPage/CreateContactModal";
 
 export function EditClientsPage() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const [showTagDropdown, setShowTagDropdown] = useState(false);
@@ -13,6 +13,27 @@ export function EditClientsPage() {
   const [tipoCliente, setTipoCliente] = useState<"persona" | "empresa">("empresa");
   const countryRef = useRef<HTMLDivElement>(null);
   const tagsRef = useRef<HTMLDivElement>(null);
+  const [website, setWebsite] = useState("");
+  const [activeTab, setActiveTab] = useState("Contactos");
+
+  // Ventana modal para crear nuevo contacto
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Manejar sucursales dinámicas
+  const [sucursales, setSucursales] = useState([
+    { nombre: "", direccion: "", distrito: "" }
+  ]);
+
+  const addSucursal = () => {
+    if (sucursales.length < 3) {
+      setSucursales([...sucursales, { nombre: "", direccion: "", distrito: "" }]);
+    }
+  };
+
+  const handleSucursalChange = (index: number, field: string, value: string) => {
+    const nuevas = [...sucursales];
+    nuevas[index] = { ...nuevas[index], [field]: value };
+    setSucursales(nuevas);
+  };
   // Manejar teléfonos dinámicos 
   const [telefonos, setTelefonos] = useState<string[]>([""]); // Inicia con un campo vacío
   const handlePhoneChange = (index: number, value: string) => {
@@ -58,17 +79,15 @@ export function EditClientsPage() {
   }, []);
   // Manejar actividades económicas (tags)
   const addTag = (text: string) => {
-  // Solo permite agregar si hay menos de 3 etiquetas
-  if (tags.length < 3) {
-    setTags((prev) => [...prev, text]);
-    setTagInput("");
-    setShowTagDropdown(false);
-  } else {
-    // Opcional: podrías mostrar una alerta o mensaje al usuario
-    console.log("Máximo 3 actividades permitidas");
-    setShowTagDropdown(false);
-  }
-};
+    if (tags.length < 3) {
+      setTags((prev) => [...prev, text]);
+      setTagInput("");
+      setShowTagDropdown(false);
+    } else {
+      console.log("Máximo 3 actividades permitidas");
+      setShowTagDropdown(false);
+    }
+  };
 
   const removeTag = (index: number) => {
     setTags((prev) => prev.filter((_, i) => i !== index));
@@ -82,10 +101,8 @@ export function EditClientsPage() {
 
         {/* Cabecera: foto + nombre + contacto */}
         <div className="flex flex-col md:flex-row gap-8 mb-10">
-
           {/* Avatar / foto */}
           <AvatarFoto tipo={tipoCliente} />
-
           {/* Nombre y campos de contacto */}
           <div className="flex-1">
             <div className="flex items-center gap-4 mb-2 text-sm">
@@ -152,15 +169,14 @@ export function EditClientsPage() {
                     {/* Botón para eliminar */}
                     {telefonos.length > 1 && (
                       <button onClick={() => removePhoneField(index)} className="text-gray-500 hover:text-red-500 text-xs px-1" >
-                        ✕
-                      </button>
+                        ✕ </button>
                     )}
                   </div>
                 ))}
 
                 {/* Botón para agregar (siempre al final de la fila o debajo si no hay espacio) */}
                 {telefonos.length < 3 && (
-                  <button onClick={addPhoneField} className="text-teal-500 text-xs font-bold flex items-center gap-1 hover:text-teal-400 self-center h-8" >
+                  <button onClick={addPhoneField} className="text-teal-500 text-xs font-bold flex items-center gap-1 hover:text-teal-400 self-center h-8 cursor-pointer" >
                     <span className="text-lg">+</span> Añadir
                   </button>
                 )}
@@ -199,9 +215,8 @@ export function EditClientsPage() {
                     checked={tipos.proveedor}
                     onChange={() => handleTipoChange("proveedor")}
                     className="w-4 h-4 rounded border-gray-600 bg-transparent text-teal-500 focus:ring-teal-500 focus:ring-offset-gray-800 accent-teal-500" />
-                  <span className={`text-sm transition-colors ${tipos.proveedor ? "text-teal-400 font-medium" : "text-gray-400 group-hover:text-gray-200"}`}>
-                    Proveedor
-                  </span>
+                  <span className={`text-base transition-colors ${tipos.proveedor ? "text-teal-400" : "text-gray-400 group-hover:text-gray-200"}`}>
+                    Proveedor </span>
                 </label>
 
                 <label className="flex items-center gap-2 cursor-pointer group">
@@ -210,24 +225,59 @@ export function EditClientsPage() {
                     checked={tipos.cliente}
                     onChange={() => handleTipoChange("cliente")}
                     className="w-4 h-4 rounded border-gray-600 bg-transparent text-teal-500 focus:ring-teal-500 focus:ring-offset-gray-800 accent-teal-500"  />
-                  <span className={`text-sm transition-colors ${tipos.cliente ? "text-teal-400 font-medium" : "text-gray-400 group-hover:text-gray-200"}`}>
-                    Cliente
-                  </span>
+                  <span className={`text-base transition-colors ${tipos.cliente ? "text-teal-400" : "text-gray-400 group-hover:text-gray-200"}`}>
+                    Cliente </span>
                 </label>
               </div>
             </div>
+            {/* Sección Sucursales Dinámicas */}
+            <div className="flex items-start">
+              <div className="w-34 shrink-0 pt-1">
+                <span className="font-bold text-gray-300">Sucursal</span>
+                {/* Botón para añadir más sucursales */}
+                {sucursales.length < 3 && (
+                  <button 
+                    onClick={addSucursal}
+                    className="block text-teal-500 font-bold hover:text-teal-400 mt-2 tracking-wider text-xs cursor-pointer">
+                    <span className="text-lg">+</span> Añadir Sucursal
+                  </button>
+                )}
+              </div>
 
-            <InputForm label="Dirección" placeholder="Calle Ernesto Mora 475..." />
-            <div className="flex items-start w-full">
-              <div className="flex flex-col flex-1 ml-34 gap-0">
-                <div className="flex flex-wrap gap-3">
-                  
-                  <SelectForm label="País" options={["Perú", "Colombia", "Chile"]} />
-                  <SelectForm label="Departamento" options={["Lima", "Arequipa", "Cusco"]} />           
-                  <SelectForm label="Provincia" options={["Lima", "Callao"]} />   
-                  <SelectForm label="Distrito" options={["Ancón", "Miraflores", "Surco"]} />
-
-                </div>
+              <div className="flex-1 space-y-8"> {/* space-y-8 separa cada bloque de sucursal */}
+                {sucursales.map((sucursal, index) => (
+                  <div key={index} className="space-y-2 relative group/sucursal">
+                    {/* Nombre de Sucursal */}
+                    <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                      <input
+                        type="text"
+                        value={sucursal.nombre}
+                        onChange={(e) => handleSucursalChange(index, "nombre", e.target.value)}
+                        className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
+                        placeholder={index === 0 ? "Nombre de Sucursal" : `Nombre de Sucursal ${index + 1}`} />
+                    </div>
+                    {/* Dirección */}
+                    <div className="border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors">
+                      <input
+                        type="text"
+                        value={sucursal.direccion}
+                        onChange={(e) => handleSucursalChange(index, "direccion", e.target.value)}
+                        className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
+                        placeholder="Dirección (Calle, Número, etc.)" />
+                    </div>
+                    {/* Distrito */}
+                    <div className="pt-1">
+                      <SelectForm label="Distrito" options={["Ancón", "Miraflores", "Surco"]} />
+                    </div>
+                    {/* Botón eliminar (solo si hay más de una) */}
+                    {sucursales.length > 1 && (
+                      <button 
+                        onClick={() => setSucursales(sucursales.filter((_, i) => i !== index))}
+                        className="absolute -right-6 top-1 text-gray-600 hover:text-red-500">
+                        ✕ </button>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -237,8 +287,7 @@ export function EditClientsPage() {
             {/* Fecha de inicio de actividades */}  
             <div className="flex items-start">
               <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">
-                Fecha de inicio de actividades
-              </span>
+                Fecha de inicio de actividades </span>
               <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1 relative">
                 <input
                   type="date"
@@ -252,8 +301,41 @@ export function EditClientsPage() {
                 </span>
               </div>
             </div>
-            {/* Sitio web */}
-            <InputForm label="Sitio web" placeholder="Por ejemplo, www.odoo.com" />
+            
+            {/* Sitio web con Redirección */}
+            <div className="flex items-start group relative">
+              <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Sitio web</span>
+              <div className="flex-1 flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1">
+                <input
+                  type="text"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
+                  placeholder="Por ejemplo, www.odoo.com" />
+                
+                <div className="relative flex items-center justify-center">
+                  <a 
+                    // Lógica para asegurar que tenga http:// si no lo tiene
+                    href={website.startsWith('http') ? website : `https://${website}`}
+                    target="_blank" // Abre en pestaña nueva
+                    rel="noopener noreferrer" // Seguridad para pestañas nuevas
+                    className={`ml-2 transition-colors ${website ? 'text-teal-500 hover:text-teal-300' : 'text-gray-600 pointer-events-none'}`} >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                    </svg>
+                  </a>
+
+                  {/* Tooltip */}
+                  {website && (
+                    <div className="absolute bottom-full mb-2 hidden group-hover:flex flex-col items-center">
+                      <span className="relative z-10 p-2 text-xs text-white whitespace-nowrap bg-gray-700 shadow-lg rounded-md">
+                        Ir a URL </span>
+                      <div className="w-3 h-3 -mt-2 rotate-45 bg-gray-700"></div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
             {/* Actividades económicas */}
             <div className="flex items-star">
               <span className="w-34 font-bold text-gray-300 shrink-0 pt-1">Actividades económicas</span>
@@ -267,8 +349,7 @@ export function EditClientsPage() {
                       {tag}
                       <button className="hover:text-white font-bold"
                         onClick={(e) => { e.stopPropagation(); removeTag(i); }} >
-                        ✕
-                      </button>
+                        ✕ </button>
                     </div>
                   ))}
                   <input
@@ -309,41 +390,86 @@ export function EditClientsPage() {
             ) : ( <></> )}           
           </div>
         </div>
-
-        {/* Tabs */}
+        {/* Tabs con lógica de estado */}
         <div className="flex bg-[#2d333e] border-y border-gray-700 overflow-x-auto mt-3">
-          <button className="px-10 py-4 text-sm font-bold border-b-2 border-pink-500 text-pink-500 bg-[#252a34]">
-            Contactos
-          </button>
-          <button className="px-10 py-4 text-sm font-medium text-gray-400 hover:bg-[#363d4a] hover:text-white transition-colors">
-            Ventas y compras
-          </button>
-          <button className="px-10 py-4 text-sm font-medium text-gray-400 hover:bg-[#363d4a] hover:text-white transition-colors whitespace-nowrap">
-            Asignación de socio
-          </button>
-          <button className="px-10 py-4 text-sm font-medium text-gray-400 hover:bg-[#363d4a] hover:text-white transition-colors">
-            Notas
-          </button>
+          {["Contactos", "Ventas y compras", "Asignación de socio", "Notas"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-10 py-4 text-sm font-bold transition-colors whitespace-nowrap ${
+                activeTab === tab 
+                ? "border-b-2 border-pink-500 text-pink-500 bg-[#252a34]" 
+                : "text-gray-400 hover:bg-[#363d4a] hover:text-white border-b-2 border-transparent"
+              }`} >
+              {tab}
+            </button>
+          ))}
         </div>
-
-        {/* Tarjetas de contacto */}
-        <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <div className="bg-[#2d333e] flex rounded-sm border border-gray-700 hover:border-teal-500 transition-all cursor-pointer shadow-md">
-            <div className="w-24 h-24 bg-[#5c4a9c] flex items-center justify-center text-white text-4xl font-bold shrink-0">
-              N
+        {/* Contenido Dinámico de Pestañas */}
+        <div className="p-8">
+          {activeTab === "Contactos" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-fadeIn">
+              <ContactCard 
+                name="CHRISTY ANGELA RODRIGUEZ OBESO"
+                email="c.rodriguez@uct.edu.pe"
+                telefono="+51 958632589"
+                position="DIRECTOR"
+                color="bg-[#a832a4]" />
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="bg-[#252a34] border border-gray-700 rounded-sm flex items-center justify-center py-10 text-teal-500 hover:bg-[#2d333e] hover:border-teal-500 transition-all font-bold group"  >
+                <span className="group-hover:scale-110 transition-transform">Agregar Contacto</span>
+              </button>
             </div>
-            <div className="p-4 flex flex-col justify-center">
-              <h3 className="font-bold text-white text-sm uppercase">NORMA RUIZ CARREÑO</h3>
-              <div className="flex items-center gap-2 text-xs text-gray-400 mt-2">
-                <span className="text-teal-500">💼</span>
-                DIRECTOR
+          )}
+          {/* Renderizamos el Modal aquí abajo */}
+          <CreateContactModal 
+            isOpen={isModalOpen} 
+            onClose={() => setIsModalOpen(false)} />
+          {activeTab === "Ventas y compras" && (
+          <div className="animate-fadeIn space-y-10 max-w-4xl">            
+            {/* SECCIÓN VENTAS */}
+            <section>
+              <h3 className="text-white font-bold text-sm mb-4 tracking-wider">VENTAS</h3>
+              <div className="flex items-start group">
+                <span className="w-40 font-bold text-gray-300 shrink-0 flex items-center gap-1 pt-1">
+                  Vendedor
+                  <span className="text-teal-500" title="Responsable de ventas">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </span>
+                </span>               
+                {/* Input con Avatar */}
+                <div className="flex-1 flex items-center gap-2 border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pb-1">
+                  <img 
+                    src="https://via.placeholder.com/24" 
+                    alt="Adrian Martin" 
+                    className="w-6 h-6 rounded-md object-cover" />
+                  <input 
+                    type="text"
+                    className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base"
+                    defaultValue="Adrian Martin Alcantara Cortez"
+                    placeholder="Seleccionar vendedor..." />
+                </div>
               </div>
-            </div>
+            </section>
+            {/* SECCIÓN COMPRA */}
+            <section className="border-t border-gray-700 pt-6">
+              <h3 className="text-white font-bold text-sm mb-4 tracking-wider">COMPRA</h3>
+            </section>
+            {/* SECCIÓN VARIOS */}
+            <section className="border-t border-gray-700 pt-6 space-y-4">
+              <h3 className="text-white font-bold text-sm mb-6 tracking-wider">VARIOS</h3>            
+              {/* ID de la empresa */}
+              <InputForm label="ID de la empresa" placeholder="Ej. ID-001" />
+              {/* Referencia */}
+              <InputForm label="Referencia" placeholder="68" />
+              {/* Industria */}
+              <InputForm label="Industria" placeholder="7310" />
+            </section>
           </div>
-
-          <button className="border-2 border-dashed border-gray-700 rounded-sm flex items-center justify-center py-10 text-teal-400 hover:bg-[#2d333e] hover:border-teal-500 transition-all font-bold">
-            + Agregar Contacto
-          </button>
+          )}
         </div>
       </div>
     </div>
