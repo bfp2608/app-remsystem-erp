@@ -5,13 +5,15 @@ import { mockUsuarios } from '../../utils/mockDataUsuarios';
 import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
 import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
 
-import {CirclePlus} from 'lucide-react'
+import {CirclePlus } from 'lucide-react'
 import { BotonBase } from '../../components/clientPage/BotonBase';
 
 import { useState } from 'react';
 import { Paginacion } from '../../components/clientPage/Paginacion';
 import { EdicionTabla } from '../../components/clientPage/EdicionTabla';
-import { FiltroTabla } from '../../components/clientPage/FiltroTabla';
+import { FiltroTablaUsuarios } from '../../components/usuariosPage/FiltroTablaUsuarios';
+import { Header_th } from '../../components/tabla/Header_th';
+import { MostrarColumnas } from '../../components/usuariosPage/MostrarColumnas';
 
 //FUNCIONES-----------------------------
 
@@ -38,14 +40,62 @@ const eliminar = (key:string) =>{
 const ITEMS_POR_PAGINA = 20
 
 export const UsuarioPage = () =>  {
+
+    const [orden, setOrden] = useState<{campo: keyof typeof mockUsuarios[0] | "cargo", direccion: "up" | "down"}>({campo: "nombre_usuario", direccion: "up"})
     
+    const [filtrosActivos, setFiltrosActivos] = useState({ cargo: "", telefono: "" })
+
+    const [columnasVisibles, setColumnasVisibles] = useState({
+        correo: true,
+        telefono: true,
+        cargo: true
+    })
+
+    const handleColumna = (columna: keyof typeof columnasVisibles) => {
+        setColumnasVisibles(prev => ({
+            ...prev,
+            [columna]: !prev[columna]
+        }))
+    }
+
     //Buscador----------------------
     const [textoBusqueda, setTextoBusqueda] = useState('')
 
-    //Filtrar los datos
+    //Filtrar los datos del buscador y del filtro de la tabla
     const contactosFiltrados = mockUsuarios.filter(usuario => {
-    const nombre = usuario.nombre_usuario
-    return nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+        const nombre = usuario.nombre_usuario
+        const coincideNombre = nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+        const coincideCargo = filtrosActivos.cargo === "" || 
+            (filtrosActivos.cargo === "Administrador" ? usuario.id_tipo_usuario === 1 : usuario.id_tipo_usuario === 2)
+        const coincideTelefono = filtrosActivos.telefono === "" ||
+            (filtrosActivos.telefono === "Con teléfono" ? !!usuario.telefono : !usuario.telefono)
+        return coincideNombre && coincideCargo && coincideTelefono
+    })
+
+    const contactosOrdenados = [...contactosFiltrados].sort((a, b) => {
+        if (!orden) return 0
+
+        let valA: string | number | null | undefined
+        let valB: string | number | null | undefined
+
+        if (orden.campo === 'cargo') {
+            valA = a.id_tipo_usuario === 1 ? 'Administrador' : 'Usuario'
+            valB = b.id_tipo_usuario === 1 ? 'Administrador' : 'Usuario'
+        } else {
+            valA = a[orden.campo] ?? null
+            valB = b[orden.campo] ?? null
+        }
+
+        // Valores vacíos siempre al final, sin importar la dirección
+        if (!valA && !valB) return 0
+        if (!valA) return 1
+        if (!valB) return -1
+
+        const comp = typeof valA === 'number'
+            ? valA - (valB as number)
+            : valA.localeCompare(valB as string, 'es')
+
+        return orden.direccion === "up" ? comp : -comp
     })
 
     const manejarBuscador = (texto:string) =>{
@@ -59,15 +109,22 @@ export const UsuarioPage = () =>  {
 
     // Separar los datos según la página
     const inicio = (paginaActual - 1) * ITEMS_POR_PAGINA
-    const contactosPaginados = contactosFiltrados.slice(inicio, inicio + ITEMS_POR_PAGINA)
+    const contactosPaginados = contactosOrdenados.slice(inicio, inicio + ITEMS_POR_PAGINA)
 
     //Fin paginación------------------
+
+    
 
     return (
         <div className="min-h-screen bg-gray-800 p-6">
             {/* Header*/}
             <div className="mb-8 pb-4 flex border-b border-gray-700  items-center justify-between">
                 <h1 className="text-2xl font-bold text-white">Usuarios</h1>
+                <div className='flex items-center gap-4'>
+                    {/*Filtro*/}
+                    <FiltroTablaUsuarios onAplicar={setFiltrosActivos}/>
+                    <MostrarColumnas columnas={columnasVisibles} onCambiar={handleColumna}/>
+                </div>
             </div>
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
@@ -78,8 +135,7 @@ export const UsuarioPage = () =>  {
                 {/*Buscador */}
                 <CuadroBuscador buscar={manejarBuscador} />
 
-                {/*Filtro*/}
-                <FiltroTabla/>
+                
 
                 {/* Paginación */}
                 <Paginacion 
@@ -99,21 +155,48 @@ export const UsuarioPage = () =>  {
                 <table className="w-full">
                     <thead className="bg-gray-600/60">
                         <tr>
-                            <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                Nombre
-                            </th>
-                            <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                Correo
-                            </th>
-                            <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                Telefono
-                            </th>
-                            <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                Cargo
-                            </th>
-                            <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
-                                Acciones
-                            </th>
+                            <Header_th 
+                            texto='Nombre' 
+                            tipo={'texto'} 
+                            onOrdenar={(dir) =>{
+                                setOrden({
+                                    campo: "nombre_usuario",
+                                    direccion: dir
+                                })
+                            }}
+                            estaActivo = {orden?.campo === "nombre_usuario"}
+                            direccionActual={orden?.campo === "nombre_usuario" ? orden.direccion : "up"}
+                            />
+                            {
+                                columnasVisibles.correo && 
+                                <Header_th 
+                                texto='Correo'
+                                />
+                            }
+                            {
+                                columnasVisibles.telefono &&
+                                <Header_th 
+                                texto='Telefono'
+                                />
+                            }
+                            {
+                                columnasVisibles.cargo &&
+                                <Header_th 
+                                texto='Cargo'
+                                tipo={'texto'} 
+                                onOrdenar={(dir) =>{
+                                    setOrden({
+                                        campo: "cargo",
+                                        direccion: dir
+                                    })
+                                }}
+                                estaActivo = {orden?.campo === "cargo"}
+                                direccionActual={orden?.campo === "cargo" ? orden.direccion : "up"}
+                                />
+                            }
+                            <Header_th 
+                            texto='Acciones'
+                            />
                         </tr>
                     </thead>
                     
@@ -143,9 +226,18 @@ export const UsuarioPage = () =>  {
                                             {nombre}
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 text-gray-300">{correo}</td>
-                                    <td className="px-6 py-4 text-gray-300">{telefono}</td>
-                                    <td className="px-6 py-4 text-gray-300">{nombreCargo}</td>
+                                    {
+                                        columnasVisibles.correo &&
+                                        <td className="px-6 py-4 text-gray-300">{correo}</td>
+                                    }
+                                    {
+                                        columnasVisibles.telefono &&
+                                        <td className="px-6 py-4 text-gray-300">{telefono}</td>
+                                    }
+                                    {
+                                        columnasVisibles.cargo && 
+                                        <td className="px-6 py-4 text-gray-300">{nombreCargo}</td>
+                                    }
                                     <td className="px-6 py-4 text-gray-300">
                                         <EdicionTabla 
                                         onEditar={() => editar(nombre)} 
