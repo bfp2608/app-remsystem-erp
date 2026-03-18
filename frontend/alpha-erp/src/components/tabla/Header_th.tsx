@@ -26,7 +26,7 @@ export function Header_th({texto, tipo=null, onOrdenar, estaActivo, direccionAct
     const iconos = tipo === "texto" ? iconosTexto : iconosNumero
 
     return(
-        <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider hover:border-r-3 hover:border-gray-500 border-r-3 border-transparent">
+        <th className="text-left px-6 py-3 text-gray-300 font-semibold text-sm uppercase tracking-wider">
             <div className='flex items-center justify-between'>
                 {texto}
             {
@@ -40,7 +40,7 @@ export function Header_th({texto, tipo=null, onOrdenar, estaActivo, direccionAct
                     onOrdenar?.(nuevo)
                     }
                 }} 
-                className={`hover:cursor-pointer ${estaActivo ? "bg-gray-800" : "text-gray-400"} hover:bg-gray-800 p-2 border-transparent rounded-sm`}>
+                className={`ml-3 hover:cursor-pointer ${estaActivo ? "bg-gray-800" : "text-gray-400"} hover:bg-gray-800 p-2 border-transparent rounded-sm`}>
                     {estaActivo ? iconos[direccionActual ?? "up"] : iconos["up"]}
                 </button>
             }
