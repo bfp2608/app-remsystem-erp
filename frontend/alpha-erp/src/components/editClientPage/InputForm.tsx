@@ -18,6 +18,6 @@ export const InputForm: FC <InputFormProps> = ({ label, placeholder }) => {
                     />
                   </div>
                 </div>
-            </div>
+        </div>
     )
 }

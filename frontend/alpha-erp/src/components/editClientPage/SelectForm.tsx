@@ -16,9 +16,7 @@ export const SelectForm: FC<SelectFormProps> = ({
     name 
   }) => {
   return (
-    //lg:w-[calc(50%-0.5rem)] -> antes en este classname, lo quité para que 
-    //ocupe todo el ancho de la pantalla
-    <div className="w-full  2xl:flex-1 relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
+     <div className="w-full lg:w-[calc(50%-0.5rem)] relative border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors pt-1">
       <select
         name={name}
         value={value}
