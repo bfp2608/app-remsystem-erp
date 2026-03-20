@@ -5,7 +5,7 @@ interface ContactCardProps {
   email?: string;
   position?: string;
   telefono?: string;
-  color: string; // Ejemplo: "bg-pink-600" o "bg-purple-600"
+  color: string; 
 }
 
 export const ContactCard: FC<ContactCardProps> = ({ name, email, telefono, position, color }: ContactCardProps) => {
