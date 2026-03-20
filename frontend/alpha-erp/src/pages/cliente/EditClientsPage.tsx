@@ -4,6 +4,7 @@ import { InputForm } from "../../components/editClientPage/InputForm"
 import { SelectForm } from "../../components/editClientPage/SelectForm";
 import { ContactCard } from "../../components/editClientPage/ContactCard";
 import { CreateContactModal } from "../../components/editClientPage/CreateContactModal";
+import { EditContactModal, Contact } from "../../components/editClientPage/EditContactModal";
 
 export function EditClientsPage() {
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
@@ -15,9 +16,13 @@ export function EditClientsPage() {
   const tagsRef = useRef<HTMLDivElement>(null);
   const [website, setWebsite] = useState("");
   const [activeTab, setActiveTab] = useState("Contactos");
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
 
-  // Ventana modal para crear nuevo contacto
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  type ModalType = "edit" | "create" | null;
+  // Ventana modal para crear nuevo contacto o editar contacto existente
+  const [activeModal, setActiveModal] = useState<ModalType>(null);
+  const closeModal = () => setActiveModal(null);
+
   // Manejar sucursales dinámicas
   const [sucursales, setSucursales] = useState([
     { nombre: "", direccion: "", distrito: "" }
@@ -186,7 +191,7 @@ export function EditClientsPage() {
         </div>
 
         {/* Grid de campos */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-6 mt-10 text-sm">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-20 gap-y-6 mt-10 text-sm">
 
           {/* Columna izquierda: */}
           <div className="space-y-1 mb-2">
@@ -265,9 +270,12 @@ export function EditClientsPage() {
                         className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
                         placeholder="Dirección (Calle, Número, etc.)" />
                     </div>
-                    {/* Distrito */}
-                    <div className="pt-1">
+                    {/* Contenedor de Ubicación */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1">
                       <SelectForm label="Distrito" options={["Ancón", "Miraflores", "Surco"]} />
+                      <SelectForm label="Provincia" options={["Lima", "Callao"]} />
+                      <SelectForm label="Departamento" options={["Lima", "Callao"]} />
+                      <SelectForm label="País" options={["Perú", "Ecuador", "Colombia"]} />
                     </div>
                     {/* Botón eliminar (solo si hay más de una) */}
                     {sucursales.length > 1 && (
@@ -408,24 +416,51 @@ export function EditClientsPage() {
         {/* Contenido Dinámico de Pestañas */}
         <div className="p-8">
           {activeTab === "Contactos" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-fadeIn">
-              <ContactCard 
-                name="CHRISTY ANGELA RODRIGUEZ OBESO"
-                email="c.rodriguez@uct.edu.pe"
-                telefono="+51 958632589"
-                position="DIRECTOR"
-                color="bg-[#a832a4]" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-fadeIn"> 
               <button 
-                onClick={() => setIsModalOpen(true)}
-                className="bg-[#252a34] border border-gray-700 rounded-sm flex items-center justify-center py-10 text-teal-500 hover:bg-[#2d333e] hover:border-teal-500 transition-all font-bold group"  >
+                onClick={() => {
+                  setSelectedContact({
+                    name: "CHRISTY ANGELA RODRIGUEZ OBESO",
+                    email: "c.rodriguez@uct.edu.pe",
+                    telefono: "+51 958632589",
+                    position: "DIRECTOR",
+                    color: "bg-[#a832a4]"
+                  });
+                  setActiveModal("edit"); 
+                }}
+                className="cursor-pointer gap-5 animate-fadeIn"
+                >
+                <ContactCard 
+                  name="CHRISTY ANGELA RODRIGUEZ OBESO"
+                  email="c.rodriguez@uct.edu.pe"
+                  telefono="+51 958632589"
+                  position="DIRECTOR"
+                  color="bg-[#a832a4]"/>
+              </button>
+              <button
+                //Al hacer clic en cada contacto tendría su propio modal para agregar nuevo contacto
+                onClick={() => setActiveModal("create")}
+                className="cursor-pointer bg-[#252a34] border border-gray-700 rounded-sm flex items-center justify-center py-10 text-teal-500 hover:bg-[#2d333e] hover:border-teal-500 transition-all font-bold group"  >
                 <span className="group-hover:scale-110 transition-transform">Agregar Contacto</span>
               </button>
             </div>
           )}
-          {/* Renderizamos el Modal aquí abajo */}
-          <CreateContactModal 
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} />
+          {/* Solo se renderiza el que coincida con el estado */}
+            {activeModal === "edit" && selectedContact && (
+              <EditContactModal 
+                isOpen={true} 
+                contact={selectedContact} 
+                onClose={() => {
+                  setSelectedContact(null);
+                  setActiveModal(null); // Cerramos el modal completamente
+                }} 
+              />
+            )}
+
+            {activeModal === "create" && (
+              <CreateContactModal isOpen={true} onClose={closeModal} />
+            )}
+
           {activeTab === "Ventas y compras" && (
           <div className="animate-fadeIn space-y-10 max-w-4xl">            
             {/* SECCIÓN VENTAS */}
