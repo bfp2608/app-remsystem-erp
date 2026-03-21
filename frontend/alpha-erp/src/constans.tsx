@@ -48,7 +48,6 @@ export const NAVIGATION_DATA: NavigationItem[] = [
             subItems: [
                 { label: 'Clientes', href: RUTAS.CLIENTES},
                 { label: 'Usuarios', href: RUTAS.USUARIOS},
-                { label: 'Editar clientes', href: RUTAS.EDIT_CLIENTE},
                 { label: 'Editar usuarios', href: RUTAS.EDIT_USUARIO}
             ]
         },
