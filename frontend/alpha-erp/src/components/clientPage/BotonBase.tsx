@@ -37,6 +37,7 @@ export function BotonBase ({
 }:PropBotonBase){
 
     return(
+        
         <button 
         onClick={onPresionar} 
         disabled = {disable}

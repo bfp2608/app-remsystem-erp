@@ -14,14 +14,16 @@ import { EdicionTabla } from '../../components/clientPage/EdicionTabla';
 import { FiltroTablaClientes } from '../../components/clientPage/FiltroTablaClientes'
 import { MostrarColumnasClientes } from '../../components/clientPage/MostrarColumnasClientes';
 import { Header_th } from '../../components/tabla/Header_th';
+import { Link } from 'react-router-dom';
+import { RUTAS } from '../../constans';
 
 
 //FUNCIONES-----------------------------
 
 //Botón añadir
-const botonAnadir = () =>{
-    alert("Presionaste --Añadir--")
-}
+// const botonAnadir = () =>{
+//     alert("Presionaste --Añadir--")
+// }
 
 //Editar cliente
 const editarCliente = (key:string) =>{
@@ -55,9 +57,9 @@ export const ClientesPage = () =>  {
         telefono: true,
         ruc: true,
         tipo: true,
-        sitioWeb: true,
-        actividadEconomica: true,
-        cargo: true   
+        sitioWeb: false,
+        actividadEconomica: false,
+        cargo: false   
     })
 
     const handleColumna = (columna: keyof typeof columnasVisibles) => {
@@ -177,7 +179,10 @@ export const ClientesPage = () =>  {
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
             <div className="flex items-center justify-between mb-3">
-                <BotonBase onPresionar={botonAnadir} texto='Añadir' color='blue' icono={CirclePlus}/>
+                {/* <BotonBase onPresionar={} texto='Añadir' color='blue' icono={CirclePlus}/> */}
+                <Link to={RUTAS.EDIT_CLIENTE}>
+                    añadir
+                </Link>
 
                 <CuadroBuscador buscar={manejarBuscador} />
 
@@ -276,7 +281,7 @@ export const ClientesPage = () =>  {
                     <tbody className="divide-y divide-gray-600">
                         {contactosPaginados.map(contacto => {
 
-                            const key = esEmpresa(contacto) ? 'empresa-'+contacto.id_empresa : 'persona-'+contacto.id_persona
+                            const key = esEmpresa(contacto) ? 'e'+contacto.id_empresa : 'p'+contacto.id_persona
 
                             const nombre = esEmpresa(contacto) ? contacto.razon_social : contacto.nombres_completos
 
