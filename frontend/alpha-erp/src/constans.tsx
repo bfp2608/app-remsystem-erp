@@ -10,6 +10,7 @@ export const ROLE_TYPES = {
 
 //Diccionario de rutas - única fuente de la verdad
 export const RUTAS = {
+    LOGIN: '/login',
     DASHBOARD: '/dashboard',
     CLIENTES: '/dashboard/clientes',
     USUARIOS: '/dashboard/usuario',
@@ -48,7 +49,6 @@ export const NAVIGATION_DATA: NavigationItem[] = [
             subItems: [
                 { label: 'Clientes', href: RUTAS.CLIENTES},
                 { label: 'Usuarios', href: RUTAS.USUARIOS},
-                { label: 'Editar usuarios', href: RUTAS.EDIT_USUARIO}
             ]
         },
 
