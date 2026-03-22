@@ -5,7 +5,6 @@ import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
 import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
 
 import {CirclePlus} from 'lucide-react'
-import { BotonBase } from '../../components/clientPage/BotonBase';
 
 import { useState } from 'react';
 import { Paginacion } from '../../components/clientPage/Paginacion';
@@ -179,9 +178,11 @@ export const ClientesPage = () =>  {
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
             <div className="flex items-center justify-between mb-3">
-                {/* <BotonBase onPresionar={} texto='Añadir' color='blue' icono={CirclePlus}/> */}
-                <Link to={RUTAS.EDIT_CLIENTE}>
-                    añadir
+                <Link 
+                to={RUTAS.EDIT_CLIENTE} 
+                className='link-button'
+                >
+                    <span><CirclePlus /></span>Añadir
                 </Link>
 
                 <CuadroBuscador buscar={manejarBuscador} />
@@ -216,7 +217,7 @@ export const ClientesPage = () =>  {
                             />
                             {
                                 columnasVisibles.correo &&
-                                <Header_th texto='Correo electrónico'/>
+                            <Header_th texto='Correo electrónico'/>
                             }
                             
                             {

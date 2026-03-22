@@ -6,7 +6,6 @@ import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
 import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
 
 import {CirclePlus } from 'lucide-react'
-import { BotonBase } from '../../components/clientPage/BotonBase';
 
 import { useState } from 'react';
 import { Paginacion } from '../../components/clientPage/Paginacion';
@@ -14,13 +13,10 @@ import { EdicionTabla } from '../../components/clientPage/EdicionTabla';
 import { FiltroTablaUsuarios } from '../../components/usuariosPage/FiltroTablaUsuarios';
 import { Header_th } from '../../components/tabla/Header_th';
 import { MostrarColumnasUsuarios } from '../../components/usuariosPage/MostrarColumnasUsuarios';
+import { Link } from 'react-router-dom';
+import { RUTAS } from '../../constans';
 
 //FUNCIONES-----------------------------
-
-//Botón añadir
-const botonAnadir = () =>{
-    alert("Presionaste --Añadir--")
-}
 
 //Editar usuario
 const editar = (key:string) =>{
@@ -134,8 +130,12 @@ export const UsuarioPage = () =>  {
             
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
             <div className="flex items-center justify-between  mb-3">
-                {/*Boton añadir */}
-                <BotonBase onPresionar={botonAnadir} texto='Añadir' color='blue' icono={CirclePlus}/>
+                <Link 
+                to={RUTAS.EDIT_USUARIO} 
+                className='link-button'
+                >
+                    <span><CirclePlus /></span>Añadir
+                </Link>
 
                 {/*Buscador */}
                 <CuadroBuscador buscar={manejarBuscador} />
