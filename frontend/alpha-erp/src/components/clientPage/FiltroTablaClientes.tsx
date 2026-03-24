@@ -6,7 +6,7 @@ import { useState, useRef, useEffect, ChangeEvent } from "react"
 import { SelectForm } from '../editClientPage/SelectForm';
 import { BotonBase } from '../clientPage/BotonBase';
 import { mockClientes } from "../../utils/mockDataClientes";
-import { esEmpresa } from "../../types/cliente";
+import { esEmpresa } from "../../types/client";
 
 
 type FiltrosValor = { correo: string; tipo: string, telefono: string, sitioWeb:string, actividadEconomica: string, cargo: string }

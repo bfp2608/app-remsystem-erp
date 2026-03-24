@@ -24,7 +24,7 @@
   background-color: #4b5563; /* Un gris un poco más claro al pasar el mouse */
 }
 
-.link-button {
+.add-button {
   display: flex;
   gap: 8px;
   background: #155DFC;
@@ -35,6 +35,35 @@
   transition: background 0.3s ease;
 }
 
-.link-button:hover {
-  background: #0e4bcc;
+.add-button:hover {
+  background: #1447E6;
 }
+
+.edit-button {
+  display: flex;
+  background: #FE9A00;
+  padding: 6px;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.edit-button:hover {
+  background: #E17100;
+}
+
+.delete-button {
+  display: flex;
+  background: #FB2C36;
+  padding: 6px;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.delete-button:hover {
+  background: #E7000B;
+}
+

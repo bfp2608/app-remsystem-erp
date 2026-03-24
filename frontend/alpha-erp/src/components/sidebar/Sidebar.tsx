@@ -25,18 +25,19 @@ export const Sidebar = (() =>{
         <div className="flex h-screen overflow-hidden bg-gray-900 text-white">
             <aside className={`flex flex-col bg-dark-900 border-r border-gray-600 h-full transition-all duration-400 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-16' : 'w-64'}`}>
                 <div 
-                className={`h-16 flex items-center justify-between px-3 shrink-0 border-b border-gray-800`}
-                >
-                    { !isCollapsed && <span className={`text-lg font-medium pl-2 transition-opacity duration-300 ${isCollapsed ? 'opacity-0' : 'opacity-100'}`}
-                    >
-                        REMSYSTEMS S.A.C
-                    </span>}
+                className={`h-16 flex items-center gap-1 px-3 shrink-0 border-b border-gray-800`}
+                >   
                     <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     className="p-2 hover:bg-gray-800 rounded-md transition-colors text-gray-400 hover:text-white"
                     >
                         <Menu />
                     </button>
+
+                    <span className={`text-lg font-medium transition-opacity duration-300 whitespace-nowrap ${isCollapsed ? 'opacity-0' : 'opacity-100'}`}
+                    >
+                        REMSYSTEMS S.A.C
+                    </span>
                 </div>
 
 

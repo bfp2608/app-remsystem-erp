@@ -1,4 +1,4 @@
-import {Cliente} from "../types/cliente" 
+import {Cliente} from "../types/client" 
 
 export const mockClientes: Cliente[] = [
     // ==================== EMPRESAS ====================
