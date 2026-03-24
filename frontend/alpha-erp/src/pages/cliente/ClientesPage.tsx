@@ -1,38 +1,19 @@
-import { esEmpresa } from '../../types/cliente';
+import { esEmpresa } from '../../types/client';
 import { mockClientes } from '../../utils/mockDataClientes'
 
 import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
 import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
 
-import {CirclePlus} from 'lucide-react'
+import {CirclePlus, Pencil, Trash2} from 'lucide-react'
 
 import { useState } from 'react';
 import { Paginacion } from '../../components/clientPage/Paginacion';
-import { EdicionTabla } from '../../components/clientPage/EdicionTabla';
 
 import { FiltroTablaClientes } from '../../components/clientPage/FiltroTablaClientes'
 import { MostrarColumnasClientes } from '../../components/clientPage/MostrarColumnasClientes';
 import { Header_th } from '../../components/tabla/Header_th';
 import { Link } from 'react-router-dom';
-import { RUTAS } from '../../constans';
 
-
-//FUNCIONES-----------------------------
-
-//Botón añadir
-// const botonAnadir = () =>{
-//     alert("Presionaste --Añadir--")
-// }
-
-//Editar cliente
-const editarCliente = (key:string) =>{
-    alert("Enviando a editCliente..." + key)
-}
-
-//Eliminar cliente
-const eliminarCliente = (key:string) =>{
-    alert("Eliminando cliente..." + key)
-}
 
 //FIN FUNCIONES-----------------------------
 
@@ -179,8 +160,8 @@ export const ClientesPage = () =>  {
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
             <div className="flex items-center justify-between mb-3">
                 <Link 
-                to={RUTAS.EDIT_CLIENTE} 
-                className='link-button'
+                to="#" 
+                className='add-button'
                 >
                     <span><CirclePlus /></span>Añadir
                 </Link>
@@ -338,10 +319,24 @@ export const ClientesPage = () =>  {
                                         columnasVisibles.cargo && 
                                         <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate" title={cargo}>{cargo}</td>
                                     }
-                                    <td className="px-6 py-4 text-gray-300 max-w-[140px] truncate">
-                                        <EdicionTabla 
-                                        onEditar={() => editarCliente(nombre)} 
-                                        onEliminar={() => eliminarCliente(nombre)}/>
+                                    <td className="px-6 py-4 text-gray-300 max-w-[140px] truncate items-start">
+                                        <div className='flex gap-2 items-center'>
+                                            <Link 
+                                            to={`/dashboard/clientes/edit/${key}`}
+                                            className='edit-button'
+                                            title='Editar'
+                                            >
+                                                <Pencil width={20} />
+                                            </Link>
+
+                                            <Link 
+                                            to='#'
+                                            className='delete-button'
+                                            title='Eliminar'
+                                            >
+                                                <Trash2 width={20} />
+                                            </Link>
+                                        </div>
                                     </td>   
                                 </tr>
                             )

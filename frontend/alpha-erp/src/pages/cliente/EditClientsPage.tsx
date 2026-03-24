@@ -5,23 +5,67 @@ import { SelectForm } from "../../components/editClientPage/SelectForm";
 import { ContactCard } from "../../components/editClientPage/ContactCard";
 import { CreateContactModal } from "../../components/editClientPage/CreateContactModal";
 import { EditContactModal, Contact } from "../../components/editClientPage/EditContactModal";
+import { useNavigate, useParams } from "react-router-dom";
+import { useClientsStore } from "../../store/clients";
+import { esEmpresa } from "../../types/client";
+import { RUTAS } from "../../constans";
 
 export function EditClientsPage() {
+
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const getClient = useClientsStore(state => state.getClient)
+
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const [showTagDropdown, setShowTagDropdown] = useState(false);
   const [tags, setTags] = useState<string[]>(["8510 / ENSEÑANZA PREESCOLAR..."]);
   const [tipoCliente, setTipoCliente] = useState<"persona" | "empresa">("empresa");
+  const [nombreVal, setNombreVal] = useState("")
   const countryRef = useRef<HTMLDivElement>(null);
   const tagsRef = useRef<HTMLDivElement>(null);
   const [website, setWebsite] = useState("");
   const [activeTab, setActiveTab] = useState("Contactos");
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [telefonos, setTelefonos] = useState<string[]>([""])
+  const [ruc, setRuc] = useState("")
+  const [commercialName, setCommercialName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [address, setAddress] = useState("")
+  const [condition, setCondition] = useState("")
 
   type ModalType = "edit" | "create" | null;
   // Ventana modal para crear nuevo contacto o editar contacto existente
   const [activeModal, setActiveModal] = useState<ModalType>(null);
   const closeModal = () => setActiveModal(null);
+
+  useEffect(() =>{
+    if(id){
+      const isClientFound = getClient(id)
+
+      if(isClientFound){
+        const isCompany = esEmpresa(isClientFound)
+        setTipoCliente(isCompany ? 'empresa': 'persona')
+
+        if(isCompany){
+          setNombreVal(isClientFound.razon_social || "")
+          setWebsite(isClientFound.sitio_web || "")
+          setCommercialName(isClientFound.nombre_comercial || "")
+          setRuc(isClientFound.ruc || "")
+          setAddress(isClientFound.direccion || "")
+          setEmail(isClientFound.correo_corporativo || "")
+          setCondition(isClientFound.condicion)
+        }else{
+          setNombreVal(isClientFound.nombres_completos || "")
+        }
+      }else{
+        alert('Cliente no encontrado')
+        navigate(RUTAS.CLIENTES)
+      }
+
+    }
+  },[id, getClient, navigate])
 
   // Manejar sucursales dinámicas
   const [sucursales, setSucursales] = useState([
@@ -40,7 +84,7 @@ export function EditClientsPage() {
     setSucursales(nuevas);
   };
   // Manejar teléfonos dinámicos 
-  const [telefonos, setTelefonos] = useState<string[]>([""]); // Inicia con un campo vacío
+   // Inicia con un campo vacío
   const handlePhoneChange = (index: number, value: string) => {
     const soloNumeros = value.replace(/\D/g, "");
     if (soloNumeros.length <= 9) {
@@ -103,7 +147,21 @@ export function EditClientsPage() {
   return (
     <div className="bg-gray-800 text-gray-200 font-sans min-h-screen">
       <div className="w-full bg-gray-800 p-8 min-h-screen text-gray-300 font-sans">
-
+          <div className="fixed top-6 right-6 z-50 flex gap-4">
+            <button 
+              type="button" 
+              onClick={() => navigate(RUTAS.CLIENTES)}
+              className="px-4 py-2 rounded-md text-gray-400 hover:text-white transition-colors"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="submit" 
+              className="px-4 py-2 bg-teal-600 hover:bg-teal-500 rounded-md text-white font-medium transition-colors"
+            >
+              Guardar
+            </button>
+        </div>
         {/* Cabecera: foto + nombre + contacto */}
         <div className="flex flex-col md:flex-row gap-8 mb-10">
           {/* Avatar / foto */}
@@ -134,6 +192,8 @@ export function EditClientsPage() {
             <div className="flex items-center border-b border-transparent hover:border-gray-600 focus-within:border-teal-500 transition-colors mb-4 w-full lg:w-2/3">
               <input
                   type="text"
+                  value={nombreVal}
+                  onChange={(e) => setNombreVal(e.target.value)}
                   className="text-3xl bg-transparent border-none outline-none w-full text-white focus:ring-0 font-semibold py-1"
                   placeholder={tipoCliente === "empresa" ? "Razón social..." : "Nombre completo..."}  />
             </div>
@@ -148,6 +208,8 @@ export function EditClientsPage() {
                 </span>
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="bg-transparent border-none outline-none w-full text-gray-300 placeholder-gray-500 focus:ring-0 text-base py-1"
                   placeholder="Correo electrónico" />
               </div>
@@ -198,14 +260,15 @@ export function EditClientsPage() {
             {tipoCliente === "empresa" ? (
               <>
                 {/* Campos exclusivos de Empresa */}
-                <InputForm label="Nombre Comercial" placeholder="RemSystems SAC" />
-                <InputForm label="RUC" placeholder="20102542136" />
+                <InputForm label="Nombre Comercial" name="companyName" placeholder="RemSystems SAC" defaultValue={commercialName}/>
+
+                <InputForm label="RUC" name="ruc" defaultValue={ruc} placeholder="20102542136" />
               </>
             ) : (
               <>
                 {/* Campos exclusivos de Persona */}
-                <InputForm label="Empresa" placeholder="Nombre de la empresa" />
-                <InputForm label="Puesto de trabajo" placeholder="Por ejemplo, director de ventas" />
+                <InputForm label="Empresa" name="name" placeholder="Nombre de la empresa" />
+                <InputForm label="Puesto de trabajo" name="jobTitle" placeholder="Por ejemplo, director de ventas" />
               </>
             )}
 
@@ -497,11 +560,11 @@ export function EditClientsPage() {
             <section className="border-t border-gray-700 pt-6 space-y-4">
               <h3 className="text-white font-bold text-sm mb-6 tracking-wider">VARIOS</h3>            
               {/* ID de la empresa */}
-              <InputForm label="ID de la empresa" placeholder="Ej. ID-001" />
+              <InputForm label="ID de la empresa" name="idEmpresa" placeholder="Ej. ID-001" />
               {/* Referencia */}
-              <InputForm label="Referencia" placeholder="68" />
+              <InputForm label="Referencia" name="reference" placeholder="68" />
               {/* Industria */}
-              <InputForm label="Industria" placeholder="7310" />
+              <InputForm label="Industria" name="industry" placeholder="7310" />
             </section>
           </div>
           )}

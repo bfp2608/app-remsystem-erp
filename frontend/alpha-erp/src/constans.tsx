@@ -14,7 +14,7 @@ export const RUTAS = {
     DASHBOARD: '/dashboard',
     CLIENTES: '/dashboard/clientes',
     USUARIOS: '/dashboard/usuario',
-    EDIT_CLIENTE: '/dashboard/clientes/edit',
+    EDIT_CLIENTE: '/dashboard/clientes/edit/:id',
     EDIT_USUARIO: '/dashboard/usuario/edit',
 }
 
