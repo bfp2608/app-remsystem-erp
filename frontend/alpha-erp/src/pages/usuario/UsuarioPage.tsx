@@ -13,6 +13,8 @@ import { EdicionTabla } from '../../components/clientPage/EdicionTabla';
 import { FiltroTablaUsuarios } from '../../components/usuariosPage/FiltroTablaUsuarios';
 import { Header_th } from '../../components/tabla/Header_th';
 import { MostrarColumnasUsuarios } from '../../components/usuariosPage/MostrarColumnasUsuarios';
+import { aplicarFiltroUsuario, columnasInicioUsuarios } from '../../types/filtros/filtrosUsuarios';
+
 import { Link } from 'react-router-dom';
 import { RUTAS } from '../../constans';
 
@@ -42,11 +44,7 @@ export const UsuarioPage = () =>  {
     
     const [filtrosActivos, setFiltrosActivos] = useState({ cargo: "", telefono: "" })
 
-    const [columnasVisibles, setColumnasVisibles] = useState({
-        correo: true,
-        telefono: true,
-        cargo: true
-    })
+    const [columnasVisibles, setColumnasVisibles] = useState(columnasInicioUsuarios)
 
     const handleColumna = (columna: keyof typeof columnasVisibles) => {
         setColumnasVisibles(prev => ({
@@ -62,10 +60,11 @@ export const UsuarioPage = () =>  {
     const contactosFiltrados = mockUsuarios.filter(usuario => {
         const nombre = usuario.nombre_usuario
         const coincideNombre = nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
-        const coincideCargo = filtrosActivos.cargo === "" || 
-            (filtrosActivos.cargo === "Administrador" ? usuario.id_tipo_usuario === 1 : usuario.id_tipo_usuario === 2)
-        const coincideTelefono = filtrosActivos.telefono === "" ||
-            (filtrosActivos.telefono === "Con teléfono" ? !!usuario.telefono : !usuario.telefono)
+        const coincideCargo = aplicarFiltroUsuario(
+            filtrosActivos.cargo,
+            CARGO_LABEL[usuario.id_tipo_usuario]
+        )
+        const coincideTelefono = aplicarFiltroUsuario(filtrosActivos.telefono,usuario.telefono)
         return coincideNombre && coincideCargo && coincideTelefono
     })
 

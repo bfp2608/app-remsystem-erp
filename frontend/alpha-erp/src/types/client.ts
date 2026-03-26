@@ -1,5 +1,6 @@
 //Tipos para Clientes, aún por afinar
 
+
 export type Empresa = {
     id_empresa : number;
     ruc : string;
@@ -38,6 +39,19 @@ export type Persona = {
 //Para poner todo en un array y mostrarlos en la tabla
 export type Cliente =  Empresa | Persona;
 
+
+//
+export type ClienteNormalizado = {
+    id: string
+    nombre: string
+    correo?: string
+    telefono?: string
+    tipo: 'Empresa' | 'Persona'
+    ruc?: string
+    sitioWeb?: string
+    actividadEconomica?: string
+    cargo?: string
+}
 
 //Para diferenciar entre Persona y Empresa
 //cliente debe tener los campos que se le piden

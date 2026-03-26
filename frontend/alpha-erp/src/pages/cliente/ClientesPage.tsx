@@ -1,10 +1,10 @@
-import { esEmpresa } from '../../types/client';
+import { ClienteNormalizado } from '../../types/client';
 import { mockClientes } from '../../utils/mockDataClientes'
 
 import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
 import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
 
-import {CirclePlus, Pencil, Trash2} from 'lucide-react'
+import {CirclePlus, Pencil } from 'lucide-react'
 
 import { useState } from 'react';
 import { Paginacion } from '../../components/clientPage/Paginacion';
@@ -13,34 +13,24 @@ import { FiltroTablaClientes } from '../../components/clientPage/FiltroTablaClie
 import { MostrarColumnasClientes } from '../../components/clientPage/MostrarColumnasClientes';
 import { Header_th } from '../../components/tabla/Header_th';
 import { Link } from 'react-router-dom';
-
+import { TipoFiltrosCliente, filtroVacioCliente, columnasInicioClientes, aplicarFiltroClientes } from '../../types/filtros/filtrosClientes';
+import { normalizar } from '../../utils/normalizarClientes';
 
 //FIN FUNCIONES-----------------------------
 
-type CampoOrdenCliente = 'nombre' | 'correo' | 'telefono' | 'tipo' | 'ruc' | 'cargo' | 'sitioWeb' | 'actividadEconomica'
-
-type FiltrosValor = { correo: string; tipo: string, telefono: string, sitioWeb:string, actividadEconomica: string, cargo: string }
-
-const filtroInicio:FiltrosValor = {correo: "", tipo: "", telefono: "", sitioWeb: "",actividadEconomica: "", cargo: "" }
+const clientesNormalizados:ClienteNormalizado[] = normalizar(mockClientes)
 
 //Total de items que se muestran en la tabla
 const ITEMS_POR_PAGINA = 20
 
 export const ClientesPage = () =>  {
 
-    const [orden, setOrden] = useState<{campo: CampoOrdenCliente, direccion: "up" | "down"}>({campo: 'nombre', direccion: "up"})
+    const [orden, setOrden] = useState<{campo: keyof ClienteNormalizado, direccion: "up" | "down"}>({campo: 'nombre', direccion: "up"})
         
-    const [filtrosActivos, setFiltrosActivos] = useState<FiltrosValor>(filtroInicio)
+    const [filtrosActivos, setFiltrosActivos] = useState<TipoFiltrosCliente>(filtroVacioCliente)
 
-    const [columnasVisibles, setColumnasVisibles] = useState({
-        correo: true,
-        telefono: true,
-        ruc: true,
-        tipo: true,
-        sitioWeb: false,
-        actividadEconomica: false,
-        cargo: false   
-    })
+
+    const [columnasVisibles, setColumnasVisibles] = useState(columnasInicioClientes)
 
     const handleColumna = (columna: keyof typeof columnasVisibles) => {
         setColumnasVisibles(prev => ({
@@ -53,78 +43,39 @@ export const ClientesPage = () =>  {
     const [textoBusqueda, setTextoBusqueda] = useState('')
 
     //Filtrar los datos del buscador y del filtro de la tabla
-        const contactosFiltrados = mockClientes.filter(cliente => {
-            const nombre = esEmpresa(cliente) ? cliente.razon_social : cliente.nombres_completos
-            const correo = esEmpresa(cliente) ? cliente.correo_corporativo : cliente.correo_personal
-            const telefono = esEmpresa(cliente) ? cliente.celular_corporativo : cliente.celular_personal
-            const tipo = esEmpresa(cliente)
-            const web = esEmpresa(cliente) ? cliente.sitio_web : null
-            const actividadEconomica = esEmpresa(cliente) ? cliente.actividad_economica : null
-            const cargo = esEmpresa(cliente) ? null : cliente.cargo
+    const contactosFiltrados = clientesNormalizados.filter(cliente => {
 
-            const coincideNombre = nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+        const coincideNombre = cliente.nombre.toLowerCase().includes(textoBusqueda.toLowerCase())
+        const coincideCorreo = aplicarFiltroClientes(filtrosActivos.correo, cliente.correo)
+        const coincideTipo = aplicarFiltroClientes(filtrosActivos.tipo,cliente.tipo)
+        const coincideTelefono = aplicarFiltroClientes(filtrosActivos.telefono, cliente.telefono)
+        const coincideWeb = aplicarFiltroClientes(filtrosActivos.sitioWeb, cliente.sitioWeb)
 
 
-            const coincideCorreo = filtrosActivos.correo === "" || 
-                (filtrosActivos.correo === "Con correo" ? !!correo : !correo)
-            const coincideTipo = filtrosActivos.tipo === "" ||
-                (filtrosActivos.tipo === "Empresa" ? !!tipo : !tipo)
-            const coincideTelefono = filtrosActivos.telefono === "" ||
-                (filtrosActivos.telefono === "Con teléfono" ? !!telefono : !telefono)
-            const coincideWeb = filtrosActivos.sitioWeb === "" ||
-                (filtrosActivos.sitioWeb === "Con sitio web" ? !!web : !web)  
-            const coincideActividadEco = filtrosActivos.actividadEconomica === "" ||
-                actividadEconomica === filtrosActivos.actividadEconomica
-            const coincideCargo = filtrosActivos.cargo === "" ||
-                cargo === filtrosActivos.cargo    
-            return coincideNombre && coincideCorreo && coincideTelefono && coincideTipo && coincideWeb && coincideActividadEco && coincideCargo
-        })
-    
-        const contactosOrdenados = [...contactosFiltrados].sort((a, b) => {
-            if (!orden) return 0
-    
-            let valA: string | number | null | undefined
-            let valB: string | number | null | undefined
-    
-           
-            if (orden.campo === 'nombre') {
-                valA = esEmpresa(a) ? a.razon_social : a.nombres_completos
-                valB = esEmpresa(b) ? b.razon_social : b.nombres_completos
-            } else if (orden.campo === 'correo') {
-                valA = esEmpresa(a) ? a.correo_corporativo : a.correo_personal
-                valB = esEmpresa(b) ? b.correo_corporativo : b.correo_personal
-            } else if (orden.campo === 'telefono') {
-                valA = esEmpresa(a) ? a.celular_corporativo : a.celular_personal
-                valB = esEmpresa(b) ? b.celular_corporativo : b.celular_personal
-            } else if (orden.campo === 'tipo') {
-                valA = esEmpresa(a) ? "Empresa" : "Persona"
-                valB = esEmpresa(b) ? "Empresa" : "Persona"
-            } else if (orden.campo === 'ruc') {
-                valA = esEmpresa(a) ? a.ruc : null
-                valB = esEmpresa(b) ? b.ruc : null
-            } else if (orden.campo === 'sitioWeb') {
-                valA = esEmpresa(a) ? a.sitio_web : null
-                valB = esEmpresa(b) ? b.sitio_web : null
-            } else if (orden.campo === 'actividadEconomica') {
-                valA = esEmpresa(a) ? a.actividad_economica : null
-                valB = esEmpresa(b) ? b.actividad_economica : null
-            } else if (orden.campo === 'cargo') {
-                valA = esEmpresa(a) ? null : a.cargo
-                valB = esEmpresa(b) ? null : b.cargo
-            }
-            
-    
-            // Valores vacíos siempre al final, sin importar la dirección
-            if (!valA && !valB) return 0
-            if (!valA) return 1
-            if (!valB) return -1
-    
-            const comp = typeof valA === 'number'
-                ? valA - (valB as number)
-                : valA.localeCompare(valB as string, 'es')
-    
-            return orden.direccion === "up" ? comp : -comp
-        })
+        const coincideActividadEco = filtrosActivos.actividadEconomica === "" ||
+            cliente.actividadEconomica === filtrosActivos.actividadEconomica
+        const coincideCargo = filtrosActivos.cargo === "" ||
+            cliente.cargo === filtrosActivos.cargo   
+
+        return coincideNombre && coincideCorreo && coincideTelefono && coincideTipo && coincideWeb && coincideActividadEco && coincideCargo
+    })
+
+    const contactosOrdenados = [...contactosFiltrados].sort((a, b) => {
+        if (!orden) return 0
+
+        const valA = a[orden.campo] ?? null
+        const valB = b[orden.campo] ?? null
+        
+
+        // Valores vacíos siempre al final, sin importar la dirección
+        if (!valA && !valB) return 0
+        if (!valA) return 1
+        if (!valB) return -1
+
+        return orden.direccion === "up" 
+            ? String(valA).localeCompare(String(valB), 'es')
+            : String(valB).localeCompare(String(valA), 'es')
+    })
 
     const manejarBuscador = (texto:string) =>{
         setTextoBusqueda(texto)
@@ -149,10 +100,11 @@ export const ClientesPage = () =>  {
                 <h1 className="text-2xl font-bold text-white">Clientes</h1>
                 <div className='flex items-center gap-4'>
                     {/*Filtro*/}
-                    <FiltroTablaClientes onAplicar={(filtros) => {
+                    <FiltroTablaClientes onAplicar={(filtros) =>{
                         setFiltrosActivos(filtros)
                         setPaginaActual(1)
                     }}/>
+                    
                     <MostrarColumnasClientes columnas={columnasVisibles} onCambiar={handleColumna}/>
                 </div>
             </div>
@@ -261,25 +213,25 @@ export const ClientesPage = () =>  {
                     
                     {/*Por el momento con datos mock*/}
                     <tbody className="divide-y divide-gray-600">
-                        {contactosPaginados.map(contacto => {
+                        {contactosPaginados.map(cliente => {
 
-                            const key = esEmpresa(contacto) ? 'e'+contacto.id_empresa : 'p'+contacto.id_persona
+                            const key = cliente.id
 
-                            const nombre = esEmpresa(contacto) ? contacto.razon_social : contacto.nombres_completos
+                            const nombre = cliente.nombre
 
-                            const ruc = esEmpresa(contacto) ? contacto.ruc : ""
+                            const ruc = cliente.ruc
 
-                            const correo = esEmpresa(contacto) ? contacto.correo_corporativo : contacto.correo_personal
+                            const correo = cliente.correo
 
-                            const celular = esEmpresa(contacto) ? contacto.celular_corporativo : contacto.celular_personal
+                            const celular = cliente.telefono
 
-                            const tipo = esEmpresa(contacto) ? "Empresa" : "Persona"
+                            const tipo = cliente.tipo
 
-                            const web = esEmpresa(contacto) ? contacto.sitio_web : ""
+                            const web = cliente.sitioWeb
 
-                            const actividadEconomica = esEmpresa(contacto) ? contacto.actividad_economica : ""
+                            const actividadEconomica = cliente.actividadEconomica
 
-                            const cargo = !esEmpresa(contacto) ? contacto.cargo : ""
+                            const cargo = cliente.cargo
 
                             return(
                                 <tr key={key} className="hover:bg-gray-700/80 transition-colors">
@@ -327,14 +279,6 @@ export const ClientesPage = () =>  {
                                             title='Editar'
                                             >
                                                 <Pencil width={20} />
-                                            </Link>
-
-                                            <Link 
-                                            to='#'
-                                            className='delete-button'
-                                            title='Eliminar'
-                                            >
-                                                <Trash2 width={20} />
                                             </Link>
                                         </div>
                                     </td>   
