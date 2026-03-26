@@ -63,7 +63,6 @@ export function EditClientsPage() {
         alert('Cliente no encontrado')
         navigate(RUTAS.CLIENTES)
       }
-
     }
   },[id, getClient, navigate])
 
