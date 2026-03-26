@@ -279,6 +279,7 @@ export const ClientesPage = () =>  {
                                             title='Editar'
                                             >
                                                 <Pencil width={20} />
+                                                <span>Editar</span>
                                             </Link>
                                         </div>
                                     </td>   

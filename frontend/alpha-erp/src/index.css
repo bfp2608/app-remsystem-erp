@@ -26,6 +26,7 @@
 
 .add-button {
   display: flex;
+  justify-content: center;
   gap: 8px;
   background: #155DFC;
   padding: 8px;
@@ -37,11 +38,18 @@
 
 .add-button:hover {
   background: #1447E6;
+  transform: scale(1.05);
+}
+
+.add-button:active{
+  transform: scale(0.95);
 }
 
 .edit-button {
   display: flex;
+  justify-content: center;
   background: #FE9A00;
+  gap: 8px;
   padding: 6px;
   border-radius: 5px;
   color: white;
@@ -51,6 +59,11 @@
 
 .edit-button:hover {
   background: #E17100;
+  transform: scale(1.1);
+}
+
+.edit-button:active{
+  transform: scale(0.95);
 }
 
 .delete-button {

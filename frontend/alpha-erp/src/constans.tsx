@@ -16,6 +16,7 @@ export const RUTAS = {
     USUARIOS: '/dashboard/usuario',
     EDIT_CLIENTE: '/dashboard/clientes/edit/:id',
     EDIT_USUARIO: '/dashboard/usuario/edit',
+    NEW_EDIT_CLIENTE: "clientes/formulario"
 }
 
 //Opciones del Sidebar del dashboard
@@ -64,8 +65,8 @@ export const NAVIGATION_DATA: NavigationItem[] = [
 
         {
             type: 'link',
-            label: 'Calendario',
-            href: '#',
+            label: 'Formulario',
+            href: RUTAS.NEW_EDIT_CLIENTE,
             icon: <CalendarDays />
         },
 

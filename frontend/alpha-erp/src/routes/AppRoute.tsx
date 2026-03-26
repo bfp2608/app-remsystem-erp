@@ -7,6 +7,7 @@ import {UsuarioPage} from '../pages/usuario/UsuarioPage';
 import {EditUsuarioPage} from '../pages/usuario/EditUsuarioPage';
 import { PrivateRoute } from './PrivateRoute';
 import { RUTAS } from '../constans';
+import { CustomerForm } from '../pages/newPageClient/CustomerForm';
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
             <Route path={ RUTAS.EDIT_CLIENTE } element={<EditClientsPage />} />
             <Route path={ RUTAS.USUARIOS } element={<UsuarioPage />} />
             <Route path={ RUTAS.EDIT_USUARIO } element={<EditUsuarioPage />} />
+            <Route path={ RUTAS.NEW_EDIT_CLIENTE} element={<CustomerForm />} />
             </ Route>
         </Routes>
         </BrowserRouter>
