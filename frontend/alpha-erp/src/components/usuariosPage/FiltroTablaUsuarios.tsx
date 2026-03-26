@@ -1,91 +1,49 @@
 //Filtro apto solo para la tabla USUARIOS, por el momento
 //
 
-import { ListFilter, SquareX } from "lucide-react"
-import { useState, useRef, useEffect, ChangeEvent } from "react"
+import { ListFilter } from "lucide-react"
 import { SelectForm } from '../editClientPage/SelectForm';
 import { BotonBase } from '../clientPage/BotonBase';
 
+import { PanelLateral } from "../utilidades/PanelLateral";
 
+import { OPCIONES_FILTRO_USUARIO, TIPO_USUARIO, TipoFiltrosUsuario, filtroVacioUsuario } from "../../types/filtros/filtrosUsuarios";
 
-type FiltrosValor = { cargo: string; telefono: string }
+import { useFiltros } from "../../hooks/useFiltros";
 
 //COMPONENTE
 type PropFiltroTabla = {
-    onAplicar: (filtros:FiltrosValor) => void
+    onAplicar: (filtros:TipoFiltrosUsuario) => void
 }
 
 export function FiltroTablaUsuarios({onAplicar}:PropFiltroTabla) {
 
-    const [filtrosAplicados, setFiltrosAplicados] = useState<FiltrosValor>({ cargo: "", telefono: "" })
-
-    const [mostrarFiltro, estadoFiltro] = useState(false)
-
-    const abrir = () => {
-        estadoFiltro(true)
-    }
-
-    const ref = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target as Node)) {
-                estadoFiltro(false)
-            }
-        }
-        document.addEventListener("mousedown", handler)
-        return () => document.removeEventListener("mousedown", handler)
-    }, [])
-
-    const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        const nuevos = { ...filtrosAplicados, [e.target.name]: e.target.value }
-        setFiltrosAplicados(nuevos)
-        onAplicar(nuevos)
-    }
-
-    const limpiar = () => {
-        const vacio = { cargo: "", telefono: "" }
-        setFiltrosAplicados(vacio)
-        onAplicar(vacio)
-    }
+    const {filtros, handleChange, limpiar} = useFiltros(filtroVacioUsuario, onAplicar)
 
     return(
-        <div ref={ref}>
-            <button 
-                onClick={abrir}
-                title="Filtrar"
-                className="px-3 py-2 flex gap-2 bg-transparent hover:bg-gray-900 border border-gray-500 rounded items-center hover:cursor-pointer  text-gray-100 transition-colors"
-            >   
-                <ListFilter size={16} /> 
-                Filtrar
-            </button>
-
-            {
-                mostrarFiltro && 
-                <div className="flex flex-col p-6 h-full w-80 bg-gray-900 absolute right-0 top-0 z-20 shadow-gray-600 shadow-xl">
-                    {/*Cabecera filtros*/}
-                    <div className="mb-6 pb-3 border-b border-gray-600 shrink-0">
-                        <div className="flex justify-between">
-                            <h1 className="font-bold text-2xl">Filtros</h1>
-                            <button className="hover:cursor-pointer text-gray-100 hover:text-red-300 transition-colors" onClick={()=>estadoFiltro(!mostrarFiltro)}>
-                                <SquareX size={36}/>
-                            </button>
-                        </div>
-                        <BotonBase onPresionar={limpiar} texto="Limpiar" color="teal" />
-                    </div>
-                    {/*Contenido filtros*/}
-                    <div className="overflow-y-auto flex-1">
-                        <div className="my-5">
-                            <h1 className="text-lg font-semibold text-gray-100">Cargo</h1>
-                            <SelectForm name="cargo" value={filtrosAplicados.cargo} onChange={handleChange} label="Todos" options={["Administrador","Usuario"]}/>
-                        </div>
-                        <div className="my-5">
-                            <h1 className="text-lg font-semibold text-gray-100">Teléfono</h1>
-                            <SelectForm name="telefono" value={filtrosAplicados.telefono} onChange={handleChange} label="Todos" options={["Con teléfono","Sin teléfono"]}/>
-                        </div>
-                    </div>
+        <PanelLateral 
+            icono={ListFilter}
+            texto="Filtrar"
+            cabecera={
+                <BotonBase onPresionar={limpiar} texto="Limpiar" color="teal" />
+            } 
+        >
+            <div>
+                <div className="my-5">
+                    <h1 className="text-lg font-semibold text-gray-100">Cargo</h1>
+                    <SelectForm name="cargo" value={filtros.cargo} onChange={handleChange} label="Todos" options={[
+                        TIPO_USUARIO.ADMIN,
+                        TIPO_USUARIO.USUARIO
+                    ]}/>
                 </div>
-            }
-        </div>
+                <div className="my-5">
+                    <h1 className="text-lg font-semibold text-gray-100">Teléfono</h1>
+                    <SelectForm name="telefono" value={filtros.telefono} onChange={handleChange} label="Todos" options={[
+                        OPCIONES_FILTRO_USUARIO.CON_TELEFONO,
+                        OPCIONES_FILTRO_USUARIO.SIN_TELEFONO
+                    ]}/>
+                </div>
+            </div>
+        </PanelLateral>
     )
 }
