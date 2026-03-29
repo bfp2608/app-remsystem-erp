@@ -28,6 +28,7 @@ function App() {
             <Route path={ RUTAS.EDIT_CLIENTE } element={<EditClientsPage />} />
             <Route path={ RUTAS.USUARIOS } element={<UsuarioPage />} />
             <Route path={ RUTAS.EDIT_USUARIO } element={<EditUsuarioPage />} />
+            <Route path={ RUTAS.NEW_CLIENTE } element={<CustomerForm />} />
             <Route path={ RUTAS.NEW_EDIT_CLIENTE} element={<CustomerForm />} />
             </ Route>
         </Routes>

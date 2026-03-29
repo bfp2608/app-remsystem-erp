@@ -1,8 +1,9 @@
 import { Map, MapPin, Plus } from "lucide-react"
+import { FormState } from "../../utils/mapFormToBackend"
 
 interface BranchLocationCardProps {
-    data:any
-    onChange: (field:string, value:any) =>void
+    data:FormState
+    onChange: <K extends keyof FormState>(field: K, value: FormState[K]) =>void
 }
 
 export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =>{
@@ -10,9 +11,9 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
     const {
         branchName= '',
         streetAddress= '',
-        distric= '',
-        pronvince= '',
-        state= '',
+        district= '',
+        province= '',
+        department= '',
         country= 'PE'
     } = data || {}
 
@@ -25,7 +26,9 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                     Ubicación de la Sucursal
                 </h3>
 
-                <button className="text-xs flex items-center gap-1 text-teal-400 hover:text-teal-300 font-semibold transition-colors">
+                <button 
+                type="button"
+                className="text-xs flex items-center gap-1 text-teal-400 hover:text-teal-300 font-semibold transition-colors">
                     <Plus className="h4 w-4"/>
                     Añadir Sucursal
                 </button>
@@ -85,14 +88,14 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                     </div>
                     
                     <div className="flex flex-col gap-1.5">
-                        <label htmlFor="state" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        <label htmlFor="department" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                             Departamento
                         </label>
                         <select
-                        name="state" 
-                        id="state"
-                        value={state}
-                        onChange={(e) => onChange('state', e.target.value)}
+                        name="department" 
+                        id="department"
+                        value={department}
+                        onChange={(e) => onChange('department', e.target.value)}
                         className="w-full bg-slate-900 border border-slate-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all appearance-none"
                         >
                             <option value="">Seleccionar</option>
@@ -102,14 +105,14 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                     </div>
                     
                     <div className="flex flex-col gap-1.5">
-                        <label htmlFor="pronvince" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        <label htmlFor="province" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                             Provincia
                         </label>
                         <select
-                        name="pronvince" 
-                        id="pronvince"
-                        value={pronvince}
-                        onChange={(e) => onChange('pronvince', e.target.value)}
+                        name="province" 
+                        id="province"
+                        value={province}
+                        onChange={(e) => onChange('province', e.target.value)}
                         className="w-full bg-slate-900 border border-slate-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all appearance-none"
                         >
                             <option value="">Seleccionar</option>
@@ -119,14 +122,14 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                     </div>
                     
                     <div className="flex flex-col gap-1.5">
-                        <label htmlFor="distric" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        <label htmlFor="district" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                             Distrito
                         </label>
                         <select
-                        name="distric" 
-                        id="distric"
-                        value={distric}
-                        onChange={(e) => onChange('distric', e.target.value)}
+                        name="district" 
+                        id="district"
+                        value={district}
+                        onChange={(e) => onChange('district', e.target.value)}
                         className="w-full bg-slate-900 border border-slate-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all appearance-none"
                         >
                             <option value="">Seleccionar</option>

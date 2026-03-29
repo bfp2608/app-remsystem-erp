@@ -25,6 +25,7 @@ export const RelatedDataTabs = ({ data, onContactAdd }:RelatedDataTabsProps) =>{
                     const currentTab = activeTab === tab.id
                     return(
                     <button
+                    type="button"
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-6 py-4 text-sm font-semibold transition-all relative
@@ -69,6 +70,7 @@ export const RelatedDataTabs = ({ data, onContactAdd }:RelatedDataTabsProps) =>{
                         </div>
 
                         <button
+                        type="button"
                         onClick={onContactAdd}
                         className="bg-slate-800/50 border-2 border-dashed border-slate-600 rounded-lg p-4 flex flex-col items-center justify-center gap-2 text-slate-400 hover:text-teal-400 hover:border-teal-500 hover:bg-slate-800 transition-all min-h-[140px] group"
                         >

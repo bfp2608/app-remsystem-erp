@@ -1,12 +1,12 @@
 import { ClienteNormalizado } from '../../types/client';
-import { mockClientes } from '../../utils/mockDataClientes'
+//import { mockClientes } from '../../utils/mockDataClientes'
 
 import {CirculoAvatar} from '../../components/clientPage/CirculoAvatar'
 import { CuadroBuscador } from '../../components/clientPage/CuadroBuscador'
 
 import {CirclePlus, Pencil } from 'lucide-react'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Paginacion } from '../../components/clientPage/Paginacion';
 
 import { FiltroTablaClientes } from '../../components/clientPage/FiltroTablaClientes'
@@ -15,15 +15,25 @@ import { Header_th } from '../../components/tabla/Header_th';
 import { Link } from 'react-router-dom';
 import { TipoFiltrosCliente, filtroVacioCliente, columnasInicioClientes, aplicarFiltroClientes } from '../../types/filtros/filtrosClientes';
 import { normalizar } from '../../utils/normalizarClientes';
+import { RUTAS } from '../../constans';
+import { useClientsStore } from '../../store/clientStore';
 
 //FIN FUNCIONES-----------------------------
-
-const clientesNormalizados:ClienteNormalizado[] = normalizar(mockClientes)
 
 //Total de items que se muestran en la tabla
 const ITEMS_POR_PAGINA = 20
 
 export const ClientesPage = () =>  {
+
+    const { clients, isLoading, fetchClients} = useClientsStore()
+
+    useEffect(() =>{
+        if(clients.length === 0){
+            fetchClients()
+        }
+    },[clients.length, fetchClients])
+
+    const clientesNormalizados:ClienteNormalizado[] = normalizar(clients)
 
     const [orden, setOrden] = useState<{campo: keyof ClienteNormalizado, direccion: "up" | "down"}>({campo: 'nombre', direccion: "up"})
         
@@ -92,6 +102,11 @@ export const ClientesPage = () =>  {
 
     //Fin paginación------------------
 
+    if(isLoading){
+        return <div className='h-screen flex flex-col bg-gray-800 p-4 items-center justify-center text-white text-xl'>Cargando Clientes</div>
+    } 
+        
+
     return (
         <div className="h-screen flex flex-col bg-gray-800 p-4">
             <div className='shrink-0'>
@@ -112,7 +127,7 @@ export const ClientesPage = () =>  {
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
             <div className="flex items-center justify-between mb-3">
                 <Link 
-                to="#" 
+                to={RUTAS.NEW_CLIENTE} 
                 className='add-button'
                 >
                     <span><CirclePlus /></span>Añadir
@@ -274,7 +289,7 @@ export const ClientesPage = () =>  {
                                     <td className="px-6 py-4 text-gray-300 max-w-[140px] truncate items-start">
                                         <div className='flex gap-2 items-center'>
                                             <Link 
-                                            to={`/dashboard/clientes/edit/${key}`}
+                                            to={RUTAS.NEW_EDIT_CLIENTE.replace(':id', key.toString())}
                                             className='edit-button'
                                             title='Editar'
                                             >

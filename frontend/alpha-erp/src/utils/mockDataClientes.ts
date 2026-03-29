@@ -499,7 +499,8 @@ export const mockClientes: Cliente[] = [
         correo_personal: "alex.pacheco@gmail.com",
         celular_personal: "+51 912 345 678",
         fecha_creacion: "2023-01-15",
-        fecha_actualizacion: "2024-10-05"
+        fecha_actualizacion: "2024-10-05",
+        ruc: "100697561450"
     },
     {
         id_persona: 2,
@@ -509,7 +510,8 @@ export const mockClientes: Cliente[] = [
         correo_personal: "mf.torres@hotmail.com",
         celular_personal: "+51 923 456 789",
         fecha_creacion: "2023-03-20",
-        fecha_actualizacion: "2024-11-10"
+        fecha_actualizacion: "2024-11-10",
+        ruc: "10894653018"
     },
     {
         id_persona: 3,

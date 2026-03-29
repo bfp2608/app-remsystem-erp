@@ -1,8 +1,9 @@
 import { Activity, Briefcase, CalendarDays, Globe } from "lucide-react"
+import { FormState } from "../../utils/mapFormToBackend"
 
 interface OperationDetailsCardProps {
-    data:any,
-    onChange: (field: string, value: any) => void
+    data:FormState,
+    onChange: <K extends keyof FormState>(field: K, value: FormState[K]) => void
 }
 
 export const OperationDetailsCard = ({ data, onChange }: OperationDetailsCardProps) =>{
@@ -67,7 +68,7 @@ export const OperationDetailsCard = ({ data, onChange }: OperationDetailsCardPro
                         
                         <div className="bg-teal-900/50 text-teal-400 border border-teal-700/50 text-xs px-2 py-1 rounded-md flex items-center gap-3 mr-2">
                             <span>8510 / ENSEÑANZA PREESCOLAR...</span>
-                            <button className="hover:text-teal-200">×</button>
+                            <button type="button" className="hover:text-teal-200">×</button>
                         </div>
 
                         <input

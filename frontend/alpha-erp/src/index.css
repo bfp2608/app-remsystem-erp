@@ -24,6 +24,21 @@
   background-color: #4b5563; /* Un gris un poco más claro al pasar el mouse */
 }
 
+/* Hack para el autocompletado en Dark Mode */
+@layer base {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active{
+    /* Usa un box-shadow interno gigante del color de tu fondo (slate-900) */
+    -webkit-box-shadow: 0 0 0 30px #0f172a inset !important;
+    /* Fuerza el color del texto a blanco */
+    -webkit-text-fill-color: white !important;
+    /* Fuerza el color del cursor */
+    caret-color: white !important;
+  }
+}
+
 .add-button {
   display: flex;
   justify-content: center;
