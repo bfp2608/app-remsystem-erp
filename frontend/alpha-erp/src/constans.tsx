@@ -1,4 +1,4 @@
-import { House, Users,  CalendarDays, FileText, PieChart, DollarSign } from "lucide-react"
+import { House, Users, FileText, PieChart, DollarSign, UserRoundPlus } from "lucide-react"
 import type { NavigationItem } from "./types/sidebar"
 
 //Para los tipos de usuarios
@@ -14,7 +14,12 @@ export const RUTAS = {
     DASHBOARD: '/dashboard',
     CLIENTES: '/dashboard/clientes',
     USUARIOS: '/dashboard/usuario',
+
+    NEW_CLIENTE: "/dashboard/clientes/formulario",
+    NEW_EDIT_CLIENTE: '/dashboard/clientes/formulario/:id',
+
     EDIT_CLIENTE: '/dashboard/clientes/edit/:id',
+
     EDIT_USUARIO: '/dashboard/usuario/edit',
 }
 
@@ -64,9 +69,9 @@ export const NAVIGATION_DATA: NavigationItem[] = [
 
         {
             type: 'link',
-            label: 'Calendario',
-            href: '#',
-            icon: <CalendarDays />
+            label: 'Formulario',
+            href: RUTAS.NEW_EDIT_CLIENTE,
+            icon: <UserRoundPlus />
         },
 
         {

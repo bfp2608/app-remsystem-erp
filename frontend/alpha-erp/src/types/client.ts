@@ -26,6 +26,7 @@ export type Persona = {
     id_empresa : number;
     nombres_completos : string;
     cargo : string;
+    ruc: string
 
     //nulo o aún por REVISAR
     correo_personal? : string;
@@ -44,6 +45,7 @@ export type Cliente =  Empresa | Persona;
 export type ClienteNormalizado = {
     id: string
     nombre: string
+    nombreComercial?: string
     correo?: string
     telefono?: string
     tipo: 'Empresa' | 'Persona'
@@ -51,6 +53,7 @@ export type ClienteNormalizado = {
     sitioWeb?: string
     actividadEconomica?: string
     cargo?: string
+    condicion?:string
 }
 
 //Para diferenciar entre Persona y Empresa
@@ -65,3 +68,40 @@ export function esEmpresa(cliente: Cliente): cliente is Empresa {
 export function esPersona(cliente: Cliente): cliente is Persona {
     return 'id_persona' in cliente && 'nombres_completos' in cliente;
 }
+
+
+
+//------------------------------------
+export interface BaseCustomer {
+    id?: string
+    customerType: 'COMPANY' | 'PERSON'
+    emailAddress?: string
+    phoneNumber?: string
+
+    streetAddress?: string
+    country?: string
+    department?: string
+    province?: string
+    district?: string 
+}
+
+export interface CompanyCustomer extends BaseCustomer {
+    customerType: 'COMPANY'
+    commercialName: string
+    businessName: string
+    taxId: string //Esto es el RUC
+    activityStartDate?: string
+    websiteUrl?: string
+    taxCondition?: string
+    economicActivities?: string
+    branchName?: string
+}
+
+export interface PersonCustomer extends BaseCustomer {
+    customerType: 'PERSON'
+    fullName: string
+    jobTitle?: string
+    nationalId?: string //Esto es el DNI en el caso de Perú
+}
+
+export type Customer = CompanyCustomer | PersonCustomer

@@ -131,7 +131,7 @@ export const UsuarioPage = () =>  {
             <div className="flex items-center justify-between  mb-3">
                 <Link 
                 to={RUTAS.EDIT_USUARIO} 
-                className='link-button'
+                className='add-button'
                 >
                     <span><CirclePlus /></span>Añadir
                 </Link>
