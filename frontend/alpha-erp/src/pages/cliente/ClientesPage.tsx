@@ -251,7 +251,7 @@ export const ClientesPage = () =>  {
                             return(
                                 <tr key={key} className="hover:bg-gray-700/80 transition-colors">
                                     <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate" title={nombre}>
-                                        <div className="flex items-center">
+                                        <div className="flex items-center uppercase">
 
                                             <CirculoAvatar nombre={nombre} />
 

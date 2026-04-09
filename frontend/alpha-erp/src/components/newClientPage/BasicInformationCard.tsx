@@ -1,5 +1,6 @@
 import { Building2, User } from "lucide-react"
 import { FormState } from "../../utils/mapFormToBackend"
+import { useParams } from "react-router-dom"
 
 interface BasicInformationCardProps {
     data: FormState
@@ -7,6 +8,10 @@ interface BasicInformationCardProps {
 }
 
 export const BasicInformationCard = ({data, onChange}: BasicInformationCardProps) =>{
+
+    const { id } = useParams()
+
+    const isEditMode = Boolean(id)
 
     const { 
         businessName = '',
@@ -28,13 +33,16 @@ export const BasicInformationCard = ({data, onChange}: BasicInformationCardProps
                     { isCompany ? <Building2 /> : <User /> }
                 </div>
                 
-                <div className="bg-slate-900 p-1 rounded-lg inline-flex shadow-inner">
+                <div className={`bg-slate-900 p-1 rounded-lg inline-flex shadow-inner`}>
                     <button
                         type="button"
                         className={`px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
                             ${!isCompany 
                             ? 'bg-teal-500 text-white shadow' 
-                            : 'text-slate-400 hover:text-slate-200'}`}
+                            : 'text-slate-400 hover:text-slate-200'}
+                            ${isEditMode && isCompany ? 'cursor-not-allowed' : ''}
+                        `}
+                        disabled= {isEditMode}
                         onClick={() => onChange('customerType', 'PERSON')}
                     >
                         Persona
@@ -44,12 +52,16 @@ export const BasicInformationCard = ({data, onChange}: BasicInformationCardProps
                         className={`px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200 
                             ${isCompany 
                             ? 'bg-teal-500 text-white shadow' 
-                            : 'text-slate-400 hover:text-slate-200'}`}
+                            : 'text-slate-400 hover:text-slate-200'}
+                            ${isEditMode && !isCompany ? 'cursor-not-allowed' : ''}
+                        `}
+                        disabled= {isEditMode}
                         onClick={() => onChange('customerType', 'COMPANY')}
                     >
                         Empresa
                     </button>
                 </div>
+                
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
@@ -85,19 +97,22 @@ export const BasicInformationCard = ({data, onChange}: BasicInformationCardProps
                         </div>
                     </>
                 ) : (
-                    <div className="flex flex-col gap-1.5">
-                        <label htmlFor="fullName" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            Nombre y Apellidos
-                        </label>
-                        <input 
-                        id="fullName"
-                        type="text"
-                        value={fullName}
-                        onChange={(e) => onChange('fullName', e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-700 text-white text-lg px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
-                        placeholder="Juan Pérez Robles"
-                        />
-                    </div>
+                    <>
+                        <div className="flex flex-col gap-1.5">
+                            <label htmlFor="fullName" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                Nombre y Apellidos
+                            </label>
+                            <input 
+                            id="fullName"
+                            type="text"
+                            value={fullName}
+                            onChange={(e) => onChange('fullName', e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-700 text-white text-lg px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+                            placeholder="Juan Pérez Robles"
+                            />
+                        </div>
+
+                    </>
                 )}
                 
                 <div className="flex flex-col gap-1.5">

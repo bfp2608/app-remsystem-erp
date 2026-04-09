@@ -7,6 +7,8 @@ interface ClientStore {
     isLoading: boolean
     fetchClients: () => Promise<void>
     getClient:(id:string) => Cliente | undefined
+    addClient: (newClient: Cliente) => void
+    updateClient: (id: string, updatedClient: Partial<Cliente>) => void
 }
 
 export const useClientsStore = create<ClientStore>((set, get) => ({
@@ -14,6 +16,12 @@ export const useClientsStore = create<ClientStore>((set, get) => ({
     isLoading: false,
     fetchClients: async () =>{
         set({isLoading: true})
+
+        const localData = localStorage.getItem("clientesDB")
+        if(localData){
+            set({ clients: JSON.parse(localData), isLoading: false})
+            return
+        }
 
         try{
             const response = await fetch("/mockClients.json")
@@ -40,5 +48,32 @@ export const useClientsStore = create<ClientStore>((set, get) => ({
 
             return clientId === id
         })
+    },
+    addClient: (newClient) =>{
+        const currentClients = get().clients
+
+        const updateClients = [newClient, ...currentClients]
+
+        set({ clients: updateClients })
+
+        localStorage.setItem("clientesDB", JSON.stringify(updateClients))
+    },
+    updateClient: (id, updatedClientData) =>{
+        const currentClients = get().clients
+
+        const updatedClients = currentClients.map(client =>{
+            const clientId = esEmpresa(client)
+            ? `${ID_TIPO_CLIENTE.ID_EMPRESA}${client.id_empresa}`
+            : `${ID_TIPO_CLIENTE.ID_PERSONA}${client.id_persona}`
+
+            if(clientId === id){
+                return {...client, ...updatedClientData } as Cliente
+            }
+            return client
+        })
+
+        set({ clients: updatedClients })
+
+        localStorage.setItem("clientesDB", JSON.stringify(updatedClients))
     }
 }))
