@@ -17,9 +17,18 @@ export const mapNormalizedToForm = (client: ClienteNormalizado): Partial<Custome
         emailAddress: client.correo || '',
         phoneNumber: client.telefono || '',
 
-        websiteUrl: client.sitioWeb || '',
+        webSiteUrl: client.sitioWeb || '',
         economicActivities: client.actividadEconomica || '',
-        jobTitle: client.cargo
+        jobTitle: client.cargo || '',
+
+        streetAddress: client.direccion || '',
+        country: client.pais || '',
+        department: client.departamento || '',
+        province: client.provincia || '',
+        district: client.idDistrito || '',
+
+        activityStartDate: client.fechaInicioActividades || '',
+        branchName: isCompany ? client.sucursal : ''
     }
 
 }

@@ -3,9 +3,15 @@ import { useClientsStore } from "../store/clientStore"
 import { FormState, mapFormToBackend } from "../utils/mapFormToBackend"
 import { normalizar } from "../utils/normalizarClientes"
 import { mapNormalizedToForm } from "../utils/mapNormalizedToForm"
+import { useNavigate } from "react-router-dom"
+import { RUTAS } from "../constans"
+import { toast } from "sonner"
 
 export const useCustomerForm = (clientId?: string) =>{
-    const { clients, fetchClients, getClient } = useClientsStore()
+
+    const navigate = useNavigate() 
+
+    const { clients, fetchClients, getClient, addClient, updateClient } = useClientsStore()
 
     const [formData, setFormData] = useState<FormState>({
         customerType: 'COMPANY',
@@ -15,9 +21,17 @@ export const useCustomerForm = (clientId?: string) =>{
         taxId: '',
         emailAddress: '',
         phoneNumber: '',
-        websiteUrl: '',
+        webSiteUrl: '',
         taxCondition: '',
-        economicActivities: ''
+        economicActivities: '',
+        streetAddress: '',
+        country: '',
+        department: '',
+        province: '',
+        district: '',
+        branchName: '',
+        activityStartDate: '',
+        jobTitle: '',
     })
 
     useEffect(() =>{
@@ -71,7 +85,25 @@ export const useCustomerForm = (clientId?: string) =>{
                 return
             }
         }
+
         const payloadToAPI = mapFormToBackend(formData)
+
+        if(clientId){
+            updateClient(clientId, payloadToAPI as any)
+            toast.success('Cliente actualizado correctamente')
+        }else{
+            const fakeId = Math.floor(Math.random() * 100000)
+
+            const newClient = {
+                ...payloadToAPI,
+                ...(formData.customerType === 'COMPANY' ? { id_empresa : fakeId } : { id_persona: fakeId})
+            }
+
+            addClient(newClient as any)
+            toast.success('Cliente registrado correctamente')
+        }
+
+        navigate(RUTAS.CLIENTES)
 
             console.log("=========================")
             console.log("ESTADO DEL FORMULARIO (Frontend):", formData)

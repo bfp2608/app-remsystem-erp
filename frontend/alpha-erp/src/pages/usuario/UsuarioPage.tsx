@@ -130,7 +130,7 @@ export const UsuarioPage = () =>  {
             {/* Header con propiedades de clientes, buscador y botón añadir*/}
             <div className="flex items-center justify-between  mb-3">
                 <Link 
-                to={RUTAS.EDIT_USUARIO} 
+                to={RUTAS.NEW_CLIENTE} 
                 className='add-button'
                 >
                     <span><CirclePlus /></span>Añadir

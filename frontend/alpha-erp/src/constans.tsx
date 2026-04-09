@@ -1,4 +1,4 @@
-import { House, Users, FileText, PieChart, DollarSign, UserRoundPlus } from "lucide-react"
+import { House, Users, FileText, PieChart, DollarSign} from "lucide-react"
 import type { NavigationItem } from "./types/sidebar"
 
 //Para los tipos de usuarios
@@ -65,13 +65,6 @@ export const NAVIGATION_DATA: NavigationItem[] = [
             subItems: [
                 { label: 'Estádisticas', href: '#'}
             ]
-        },
-
-        {
-            type: 'link',
-            label: 'Formulario',
-            href: RUTAS.NEW_EDIT_CLIENTE,
-            icon: <UserRoundPlus />
         },
 
         {

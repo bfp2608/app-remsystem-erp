@@ -11,12 +11,17 @@ export function normalizar(clientes: Cliente[]): ClienteNormalizado[] {
                 ruc: cliente.ruc,
                 nombre: cliente.razon_social,
                 nombreComercial: cliente.nombre_comercial,
-                telefono: cliente.celular_corporativo,
+                telefono: cliente.telefono,
                 correo: cliente.correo_corporativo,
                 direccion: cliente.direccion,
+                sucursal: cliente.sucursal,
                 fechaInicioActividades: cliente.fecha_inicio_actividades,
                 sitioWeb: cliente.sitio_web,
-                condicion: cliente.condicion
+                condicion: cliente.condicion_ruc,
+                pais: cliente.pais,
+                departamento: cliente.departamento,
+                provincia: cliente.provincia,
+                idDistrito: cliente.id_distrito
             }
         } else {
             return {
@@ -26,7 +31,12 @@ export function normalizar(clientes: Cliente[]): ClienteNormalizado[] {
                 cargo: cliente.cargo,
                 correo: cliente.correo_personal,
                 telefono: cliente.celular_personal,
-                ruc: cliente.ruc
+                ruc: cliente.ruc,
+                direccion: cliente.direccion,
+                pais: cliente.pais,
+                departamento: cliente.departamento,
+                provincia: cliente.provincia,
+                idDistrito: cliente.id_distrito
             }
         }
     })
