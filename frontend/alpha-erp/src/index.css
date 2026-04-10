@@ -37,6 +37,15 @@
     /* Fuerza el color del cursor */
     caret-color: white !important;
   }
+
+  .login-input:-webkit-autofill,
+  .login-input:-webkit-autofill:hover, 
+  .login-input:-webkit-autofill:focus, 
+  .login-input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #f9fafb inset !important; /* Equivalente a bg-gray-50 */
+    -webkit-text-fill-color: #374151 !important; /* Equivalente a text-gray-700 */
+    caret-color: #374151 !important;
+  }
 }
 
 .add-button {

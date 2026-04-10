@@ -5,6 +5,5 @@ export type Usuario = {
     email : string;
     contrasenia : string;
     
-    
     telefono? : string
 }

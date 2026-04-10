@@ -7,7 +7,7 @@ import { useFiltros } from '../../hooks/useFiltros';
 import { mockClientes } from "../../utils/mockDataClientes";
 import { esEmpresa } from "../../types/client";
 
-import { TipoFiltrosCliente, filtroVacioCliente, OPCIONES_FILTRO_CLIENTE, TIPO_CLIENTE } from "../../types/filtros/filtrosClientes";
+import { CustomerFilterType, emptyCustomerFilter, CUSTOMER_FILTER_OPTIONS, CUSTOMER_TYPE } from "../../types/filtros/filtrosClientes";
 
 import { PanelLateral } from "../utilidades/PanelLateral";
 import { ListFilter } from "lucide-react";
@@ -15,12 +15,12 @@ import { BotonBase } from "./BotonBase";
 
 //COMPONENTE
 type PropFiltroTabla = {
-    onAplicar: (filtros:TipoFiltrosCliente) => void
+    onAplicar: (filters:CustomerFilterType) => void
 }
 
 export function FiltroTablaClientes({onAplicar}:PropFiltroTabla) {
 
-    const { filtros, handleChange, limpiar } = useFiltros(filtroVacioCliente, onAplicar)
+    const { filtros, handleChange, limpiar } = useFiltros(emptyCustomerFilter, onAplicar)
 
     return(
         <PanelLateral 
@@ -33,35 +33,35 @@ export function FiltroTablaClientes({onAplicar}:PropFiltroTabla) {
             <div>
                 <div className="my-5">
                     <h1 className="text-lg font-semibold text-gray-100">Correo</h1>
-                    <SelectForm name="correo" value={filtros.correo} onChange={handleChange} label="Todos" options={[
-                        OPCIONES_FILTRO_CLIENTE.CON_CORREO,
-                        OPCIONES_FILTRO_CLIENTE.SIN_CORREO
+                    <SelectForm name="email" value={filtros.email} onChange={handleChange} label="Todos" options={[
+                        CUSTOMER_FILTER_OPTIONS.WITH_EMAIL,
+                        CUSTOMER_FILTER_OPTIONS.WITHOUT_EMAIL
                     ]}/>
                 </div>
                 <div className="my-5">
                     <h1 className="text-lg font-semibold text-gray-100">Tipo</h1>
-                    <SelectForm name="tipo" value={filtros.tipo} onChange={handleChange} label="Todos" options={[
-                        TIPO_CLIENTE.EMPRESA,
-                        TIPO_CLIENTE.PERSONA
+                    <SelectForm name="type" value={filtros.type} onChange={handleChange} label="Todos" options={[
+                        CUSTOMER_TYPE.COMPANY,
+                        CUSTOMER_TYPE.PERSON
                     ]}/>
                 </div>
                 <div className="my-5">
                     <h1 className="text-lg font-semibold text-gray-100">Teléfono</h1>
-                    <SelectForm name="telefono" value={filtros.telefono} onChange={handleChange} label="Todos" options={[
-                        OPCIONES_FILTRO_CLIENTE.CON_TELEFONO,
-                        OPCIONES_FILTRO_CLIENTE.SIN_TELEFONO
+                    <SelectForm name="phone" value={filtros.phone} onChange={handleChange} label="Todos" options={[
+                        CUSTOMER_FILTER_OPTIONS.WITH_PHONE,
+                        CUSTOMER_FILTER_OPTIONS.WITHOUT_PHONE
                     ]}/>
                 </div>
                 <div className="my-5">
                     <h1 className="text-lg font-semibold text-gray-100">Sitio web</h1>
-                    <SelectForm name="sitioWeb" value={filtros.sitioWeb} onChange={handleChange} label="Todos" options={[
-                        OPCIONES_FILTRO_CLIENTE.CON_WEB,
-                        OPCIONES_FILTRO_CLIENTE.SIN_WEB
+                    <SelectForm name="website" value={filtros.website} onChange={handleChange} label="Todos" options={[
+                        CUSTOMER_FILTER_OPTIONS.WITH_WEB,
+                        CUSTOMER_FILTER_OPTIONS.WITHOUT_WEB
                     ]}/>
                 </div>
                 <div className="my-5">
                     <h1 className="text-lg font-semibold text-gray-100">Actividad económica</h1>
-                    <SelectForm name="actividadEconomica" value={filtros.actividadEconomica} onChange={handleChange} label="Todos" options={[...new Set(
+                    <SelectForm name="economicActivity" value={filtros.economicActivity} onChange={handleChange} label="Todos" options={[...new Set(
                         mockClientes
                             .map(c => esEmpresa(c) ? String(c.actividad_economica) : null)
                             .filter(Boolean) as string[]

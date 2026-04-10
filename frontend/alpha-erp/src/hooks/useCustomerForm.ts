@@ -6,6 +6,7 @@ import { mapNormalizedToForm } from "../utils/mapNormalizedToForm"
 import { useNavigate } from "react-router-dom"
 import { RUTAS } from "../constans"
 import { toast } from "sonner"
+import { Cliente } from "../types/client"
 
 export const useCustomerForm = (clientId?: string) =>{
 
@@ -33,6 +34,8 @@ export const useCustomerForm = (clientId?: string) =>{
         activityStartDate: '',
         jobTitle: '',
     })
+
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     useEffect(() =>{
         if(clients.length === 0){
@@ -71,47 +74,62 @@ export const useCustomerForm = (clientId?: string) =>{
         }))
     }
 
-    const handleSubmit = (e:FormEvent<HTMLFormElement>) =>{
+    const handleSubmit = async (e:FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
+
+        setIsSubmitting(true)
 
         if(formData.customerType === 'COMPANY'){
             if(!formData.businessName || !formData.taxId){
-                alert("Por favor, ingresa la Razón social y el RUC")
+                toast.error("Por favor, ingresa la Razón social y el RUC")
+                setIsSubmitting(false)
                 return
             }
         }else{
             if(!formData.fullName || !formData.taxId){
-                alert("Por favor, ingrese el Nombre Completo y el DNI")
+                toast.error("Por favor, ingrese el Nombre Completo y el DNI")
+                setIsSubmitting(false)
                 return
             }
         }
 
-        const payloadToAPI = mapFormToBackend(formData)
+        try{
+            await new Promise(resolve => setTimeout(resolve, 800))
 
-        if(clientId){
-            updateClient(clientId, payloadToAPI as any)
-            toast.success('Cliente actualizado correctamente')
-        }else{
-            const fakeId = Math.floor(Math.random() * 100000)
+            const payloadToAPI = mapFormToBackend(formData)
 
-            const newClient = {
-                ...payloadToAPI,
-                ...(formData.customerType === 'COMPANY' ? { id_empresa : fakeId } : { id_persona: fakeId})
+            if(clientId){
+                updateClient(clientId, payloadToAPI as Partial<Cliente>)
+                toast.success('Cliente actualizado correctamente')
+            }else{
+                const fakeId = Math.floor(Math.random() * 100000)
+
+                const newClient = {
+                    ...payloadToAPI,
+                    ...(formData.customerType === 'COMPANY' ? { id_empresa : fakeId } : { id_persona: fakeId})
+                }
+
+                addClient(newClient as Cliente)
+                toast.success('Cliente registrado correctamente')
             }
 
-            addClient(newClient as any)
-            toast.success('Cliente registrado correctamente')
+            navigate(RUTAS.CLIENTES)
+
+                console.log("=========================")
+                console.log("ESTADO DEL FORMULARIO (Frontend):", formData)
+                console.log("DATOS LISTOS PARA ENVIAR (Backend):", payloadToAPI)
+                console.log("=========================")
+        }catch(error){
+            toast.error("Ocurrió un error al guardar")
+            console.log(error)
+        }finally{
+            setIsSubmitting(false)
         }
 
-        navigate(RUTAS.CLIENTES)
-
-            console.log("=========================")
-            console.log("ESTADO DEL FORMULARIO (Frontend):", formData)
-            console.log("DATOS LISTOS PARA ENVIAR (Backend):", payloadToAPI)
-            console.log("=========================")
     }
     return{
             formData,
+            isSubmitting,
             handleInputChange,
             handleSubmit
         }

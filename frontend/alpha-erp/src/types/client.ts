@@ -78,12 +78,12 @@ export type ClienteNormalizado = {
 
 //Si el return es cierto, el cliente es EMPRESA
 export function esEmpresa(cliente: Cliente): cliente is Empresa {
-    return 'razon_social' in cliente && 'ruc' in cliente;
+    return cliente.tipo_entidad === "Empresa"
 }
 
 //Si el return es cierto, el cliente es PERSONA
 export function esPersona(cliente: Cliente): cliente is Persona {
-    return 'id_persona' in cliente && 'nombres_completos' in cliente;
+    return cliente.tipo_entidad === "Persona"
 }
 
 

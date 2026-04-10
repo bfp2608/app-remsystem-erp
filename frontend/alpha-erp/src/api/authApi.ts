@@ -17,7 +17,7 @@ export type loginRequest = {
 export type meResponse = {
   nombres:string,
   email:string,
-  tipoUsuario:string,
+  tipoUsuario:number,
   fechaRegistro:string
 }
 

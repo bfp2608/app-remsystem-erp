@@ -6,7 +6,7 @@ import { ContactCard } from "../../components/editClientPage/ContactCard";
 import { CreateContactModal } from "../../components/editClientPage/CreateContactModal";
 import { EditContactModal, Contact } from "../../components/editClientPage/EditContactModal";
 import { useNavigate, useParams } from "react-router-dom";
-import { useClientsStore } from "../../store/clients";
+import { useClientsStore } from "../../store/clientStore";
 import { esEmpresa } from "../../types/client";
 import { RUTAS } from "../../constans";
 

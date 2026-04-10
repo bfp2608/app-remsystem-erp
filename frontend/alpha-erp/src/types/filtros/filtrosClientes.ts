@@ -1,60 +1,86 @@
-export type TipoFiltrosCliente = { correo: string; tipo: string, telefono: string, sitioWeb:string, actividadEconomica: string, cargo: string }
+// 1. TYPES
+export type CustomerFilterType = { 
+    email: string; 
+    type: string; 
+    phone: string; 
+    website: string; 
+    economicActivity: string; 
+    cargo: string; // ver si cambiarlo a jobTitle
+}
 
-export const filtroVacioCliente:TipoFiltrosCliente = {correo: "", tipo: "", telefono: "", sitioWeb: "",actividadEconomica: "", cargo: "" }
+export type CustomerColumnType = {
+    email: boolean;
+    phone: boolean;
+    taxId: boolean;
+    type: boolean;
+    website: boolean;
+    economicActivity: boolean;
+    jobTitle: boolean;    
+}
 
-export const ID_TIPO_CLIENTE = {
-    ID_EMPRESA: "E",
-    ID_PERSONA: "P"
+// 2. INITIAL STATES
+export const emptyCustomerFilter: CustomerFilterType = { 
+    email: "", 
+    type: "", 
+    phone: "", 
+    website: "", 
+    economicActivity: "", 
+    cargo: "" 
+}
+
+export const initialCustomerColumns: CustomerColumnType = {
+    email: true,
+    phone: true,
+    taxId: true,
+    type: true,
+    website: false,
+    economicActivity: false,
+    jobTitle: false   
+}
+
+// 3. CONSTANTS
+export const CUSTOMER_ID_TYPE = {
+    COMPANY: "E",
+    PERSON: "P"
 } as const
 
-export const TIPO_CLIENTE = {
-    EMPRESA: "Empresa",
-    PERSONA: "Persona"
+export const CUSTOMER_TYPE = {
+    COMPANY: "Empresa",
+    PERSON: "Persona"
 } as const
 
-export const OPCIONES_FILTRO_CLIENTE = {
-    CON_CORREO: "Con correo",
-    SIN_CORREO: "Sin correo",
-    CON_TELEFONO: "Con teléfono",
-    SIN_TELEFONO: "Sin teléfono",
-    CON_WEB: "Con sitio web",
-    SIN_WEB: "Sin sitio web"
+export const CUSTOMER_FILTER_OPTIONS = {
+    WITH_EMAIL: "Con correo",
+    WITHOUT_EMAIL: "Sin correo",
+    WITH_PHONE: "Con teléfono",
+    WITHOUT_PHONE: "Sin teléfono",
+    WITH_WEB: "Con sitio web",
+    WITHOUT_WEB: "Sin sitio web"
 } as const
 
+// 4. EL PATRÓN ESTRATEGIA
+// Definimos un diccionario donde la "llave" es el filtro, y el "valor" es la función que lo resuelve.
+type FilterStrategy = (val?: string) => boolean;
 
-export function aplicarFiltroClientes(valorFiltro: string, valor?: string): boolean {
-
-    const tieneValor = Boolean(valor)
+const filterStrategies: Record<string, FilterStrategy> = {
+    [CUSTOMER_TYPE.COMPANY]: (val) => val === CUSTOMER_TYPE.COMPANY,
+    [CUSTOMER_TYPE.PERSON]: (val) => val === CUSTOMER_TYPE.PERSON,
     
-    switch(valorFiltro) {
-        case TIPO_CLIENTE.EMPRESA: return valor === TIPO_CLIENTE.EMPRESA
-        case TIPO_CLIENTE.PERSONA: return valor === TIPO_CLIENTE.PERSONA
-        case OPCIONES_FILTRO_CLIENTE.CON_CORREO: return tieneValor
-        case OPCIONES_FILTRO_CLIENTE.SIN_CORREO: return !tieneValor
-        case OPCIONES_FILTRO_CLIENTE.CON_TELEFONO: return tieneValor
-        case OPCIONES_FILTRO_CLIENTE.SIN_TELEFONO: return !tieneValor
-        case OPCIONES_FILTRO_CLIENTE.CON_WEB: return tieneValor
-        case OPCIONES_FILTRO_CLIENTE.SIN_WEB: return !tieneValor
-        default: return true
-    }
+    [CUSTOMER_FILTER_OPTIONS.WITH_EMAIL]: (val) => Boolean(val),
+    [CUSTOMER_FILTER_OPTIONS.WITHOUT_EMAIL]: (val) => !val,
+    
+    [CUSTOMER_FILTER_OPTIONS.WITH_PHONE]: (val) => Boolean(val),
+    [CUSTOMER_FILTER_OPTIONS.WITHOUT_PHONE]: (val) => !val,
+    
+    [CUSTOMER_FILTER_OPTIONS.WITH_WEB]: (val) => Boolean(val),
+    [CUSTOMER_FILTER_OPTIONS.WITHOUT_WEB]: (val) => !val,
 }
 
-export type TipoColumnasClientes = {
-    correo: boolean
-    telefono: boolean
-    ruc: boolean
-    tipo: boolean
-    sitioWeb: boolean
-    actividadEconomica: boolean
-    cargo: boolean    
-}
-
-export const columnasInicioClientes:TipoColumnasClientes = {
-    correo: true,
-    telefono: true,
-    ruc: true,
-    tipo: true,
-    sitioWeb: false,
-    actividadEconomica: false,
-    cargo: false   
+// 5. LA FUNCIÓN PRINCIPAL OPTIMIZADA
+export function applyCustomerFilter(filterValue: string, value?: string): boolean {
+    // Buscamos la estrategia en nuestro diccionario
+    const strategy = filterStrategies[filterValue]
+    
+    // Si existe una estrategia para ese filtro, la ejecutamos. Si no, devolvemos true (default).
+    return strategy ? strategy(value) : true
 }

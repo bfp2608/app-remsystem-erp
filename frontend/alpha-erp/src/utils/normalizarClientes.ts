@@ -1,13 +1,13 @@
 import { Cliente, esEmpresa, ClienteNormalizado } from '../types/client'
-import { ID_TIPO_CLIENTE, TIPO_CLIENTE } from '../types/filtros/filtrosClientes'
+import { CUSTOMER_ID_TYPE, CUSTOMER_TYPE } from '../types/filtros/filtrosClientes'
 
 
 export function normalizar(clientes: Cliente[]): ClienteNormalizado[] {
     return clientes.map(cliente => {
         if (esEmpresa(cliente)) {
             return {
-                id: `${ID_TIPO_CLIENTE.ID_EMPRESA}${cliente.id_empresa}`,
-                tipo: TIPO_CLIENTE.EMPRESA,
+                id: `${CUSTOMER_ID_TYPE.COMPANY}${cliente.id_empresa}`,
+                tipo: CUSTOMER_TYPE.COMPANY,
                 ruc: cliente.ruc,
                 nombre: cliente.razon_social,
                 nombreComercial: cliente.nombre_comercial,
@@ -25,8 +25,8 @@ export function normalizar(clientes: Cliente[]): ClienteNormalizado[] {
             }
         } else {
             return {
-                id: `${ID_TIPO_CLIENTE.ID_PERSONA}${cliente.id_persona}`,
-                tipo: TIPO_CLIENTE.PERSONA,
+                id: `${CUSTOMER_ID_TYPE.PERSON}${cliente.id_persona}`,
+                tipo: CUSTOMER_TYPE.PERSON,
                 nombre: cliente.nombres_completos,
                 cargo: cliente.cargo,
                 correo: cliente.correo_personal,
