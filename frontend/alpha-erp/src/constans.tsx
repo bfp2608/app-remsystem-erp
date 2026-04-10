@@ -3,9 +3,9 @@ import type { NavigationItem } from "./types/sidebar"
 
 //Para los tipos de usuarios
 export const ROLE_TYPES = {
-    admin: 'Administrador',
-    user: 'user',
-    manager: 'manager'
+    admin: 1,
+    user: 2,
+    manager: 3
 }
 
 //Diccionario de rutas - única fuente de la verdad
@@ -16,11 +16,10 @@ export const RUTAS = {
     USUARIOS: '/dashboard/usuario',
 
     NEW_CLIENTE: "/dashboard/clientes/formulario",
-    NEW_EDIT_CLIENTE: '/dashboard/clientes/formulario/:id',
+    EDIT_CLIENTE: '/dashboard/clientes/formulario/:id',
 
-    EDIT_CLIENTE: '/dashboard/clientes/edit/:id',
-
-    EDIT_USUARIO: '/dashboard/usuario/edit',
+    NEW_USUARIO: '/dashboard/usuario/formulario',
+    EDIT_USUARIO: '/dashboard/usuario/formulario/:id',
 }
 
 //Opciones del Sidebar del dashboard

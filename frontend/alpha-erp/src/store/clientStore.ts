@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { Cliente, esEmpresa } from "../types/client";
-import { ID_TIPO_CLIENTE } from "../types/filtros/filtrosClientes";
+import { CUSTOMER_ID_TYPE } from "../types/filtros/filtrosClientes";
 
 interface ClientStore {
     clients: Cliente[]
@@ -9,6 +9,7 @@ interface ClientStore {
     getClient:(id:string) => Cliente | undefined
     addClient: (newClient: Cliente) => void
     updateClient: (id: string, updatedClient: Partial<Cliente>) => void
+    deleteClient: (id: string) => void
 }
 
 export const useClientsStore = create<ClientStore>((set, get) => ({
@@ -43,8 +44,8 @@ export const useClientsStore = create<ClientStore>((set, get) => ({
     getClient: (id) =>{
         return get().clients.find(client =>{
             const clientId = esEmpresa(client)
-            ? `${ID_TIPO_CLIENTE.ID_EMPRESA}${client.id_empresa}`
-            : `${ID_TIPO_CLIENTE.ID_PERSONA}${client.id_persona}`
+            ? `${CUSTOMER_ID_TYPE.COMPANY}${client.id_empresa}`
+            : `${CUSTOMER_ID_TYPE.PERSON}${client.id_persona}`
 
             return clientId === id
         })
@@ -63,8 +64,8 @@ export const useClientsStore = create<ClientStore>((set, get) => ({
 
         const updatedClients = currentClients.map(client =>{
             const clientId = esEmpresa(client)
-            ? `${ID_TIPO_CLIENTE.ID_EMPRESA}${client.id_empresa}`
-            : `${ID_TIPO_CLIENTE.ID_PERSONA}${client.id_persona}`
+            ? `${CUSTOMER_ID_TYPE.COMPANY}${client.id_empresa}`
+            : `${CUSTOMER_ID_TYPE.PERSON}${client.id_persona}`
 
             if(clientId === id){
                 return {...client, ...updatedClientData } as Cliente
@@ -74,6 +75,18 @@ export const useClientsStore = create<ClientStore>((set, get) => ({
 
         set({ clients: updatedClients })
 
+        localStorage.setItem("clientesDB", JSON.stringify(updatedClients))
+    },
+    deleteClient: (id) =>{
+        const currentClients = get().clients
+        const updatedClients = currentClients.filter(client =>{
+            const clientId = esEmpresa(client)
+            ? `${CUSTOMER_ID_TYPE.COMPANY}${client.id_empresa}`
+            : `${CUSTOMER_ID_TYPE.PERSON}${client.id_persona}`
+            return clientId !== id
+        })
+
+        set({ clients: updatedClients })
         localStorage.setItem("clientesDB", JSON.stringify(updatedClients))
     }
 }))

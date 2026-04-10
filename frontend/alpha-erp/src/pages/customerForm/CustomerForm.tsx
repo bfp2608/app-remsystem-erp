@@ -11,7 +11,7 @@ export const CustomerForm = () => {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    const { formData, handleInputChange, handleSubmit } = useCustomerForm(id)
+    const { formData, isSubmitting, handleInputChange, handleSubmit } = useCustomerForm(id)
 
     const handleClickNavigateClients = () =>{
         navigate(RUTAS.CLIENTES)
@@ -41,10 +41,22 @@ export const CustomerForm = () => {
                 type="button"
                 className="text-gray-400 px-3 py-2 rounded-md cursor-pointer hover:bg-slate-500 hover:text-white transition-colors duration-300"
                 onClick={handleClickNavigateClients}
+                disabled={isSubmitting}
                 >
                     Cancelar
                 </button>
-                <button type="submit" className="bg-teal-500 text-white px-3 py-2 rounded-md cursor-pointer">Guardar</button>
+
+                <button 
+                type="submit"
+                disabled={isSubmitting}
+                className={`flex justify-center items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-300
+                    ${isSubmitting
+                        ? 'bg-teal-600/60 cursor-not-allowed text-white/80'
+                        : 'bg-teal-500 text-white cursor-pointer hover:bg-teal-400 active:scale-95'
+                    }`}
+                >
+                    {isSubmitting ? 'Guardando...' : 'Guardar'}
+                </button>
             </div>
         </form>
     )

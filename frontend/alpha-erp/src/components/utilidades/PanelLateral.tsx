@@ -1,10 +1,6 @@
 //Panel lateral
-
-
 import { SquareX } from "lucide-react"
 import { useState, useRef, useEffect, ReactNode } from "react"
-
-
 
 //COMPONENTE
 type PropPanelLateral = {

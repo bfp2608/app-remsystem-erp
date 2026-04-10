@@ -1,46 +1,41 @@
-//
-//
-
 import { Columns3Cog } from "lucide-react"
 import { PanelLateral } from "../utilidades/PanelLateral"
-import { TipoColumnasClientes } from "../../types/filtros/filtrosClientes"
+import { CustomerColumnType } from "../../types/filtros/filtrosClientes"
 
 //COMPONENTE
 
-
-
-type PropMostrarColumnas = {
-    columnas : TipoColumnasClientes
-    onCambiar: (columna: keyof TipoColumnasClientes) => void
+type PropMostrarcolumns = {
+    columns : CustomerColumnType
+    onChange: (columna: keyof CustomerColumnType) => void
 }
 
-export function MostrarColumnasClientes({columnas, onCambiar}:PropMostrarColumnas) {
+export function MostrarColumnasClientes({columns, onChange}:PropMostrarcolumns) {
 
     return(
         <PanelLateral 
             icono={Columns3Cog}
-            texto="Columnas"
+            texto="columns"
         >
             <div className="flex accent-teal-600 items-center gap-2 mb-2">
-                <input className="hover:cursor-pointer size-5" type="checkbox" checked={columnas.correo} onChange={() => onCambiar("correo")} /> Correo
+                <input className="hover:cursor-pointer size-5" type="checkbox" checked={columns.email} onChange={() => onChange("email")} /> Correo
             </div>
             <div className="flex accent-teal-600 items-center gap-2 mb-2">
-                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columnas.telefono} onChange={() => onCambiar("telefono")} />  Teléfono
+                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columns.phone} onChange={() => onChange("phone")} />  Teléfono
             </div>
             <div className="flex accent-teal-600 items-center gap-2 mb-2">
-                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columnas.ruc} onChange={() => onCambiar("ruc")} />  Ruc
+                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columns.taxId} onChange={() => onChange("taxId")} />  Ruc
             </div>
             <div className="flex accent-teal-600 items-center gap-2 mb-2">
-                <input className="hover:cursor-pointer size-5" type="checkbox" checked={columnas.tipo} onChange={() => onCambiar("tipo")} /> Tipo
+                <input className="hover:cursor-pointer size-5" type="checkbox" checked={columns.type} onChange={() => onChange("type")} /> Tipo
             </div>
             <div className="flex accent-teal-600 items-center gap-2 mb-2">
-                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columnas.sitioWeb} onChange={() => onCambiar("sitioWeb")} />  Sitio Web
+                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columns.website} onChange={() => onChange("website")} />  Sitio Web
             </div>
             <div className="flex accent-teal-600 items-center gap-2 mb-2">
-                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columnas.actividadEconomica} onChange={() => onCambiar("actividadEconomica")} />  Actividad Económica
+                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columns.economicActivity} onChange={() => onChange("economicActivity")} />  Actividad Económica
             </div>
             <div className="flex accent-teal-600 items-center gap-2 mb-2">
-                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columnas.cargo} onChange={() => onCambiar("cargo")} />  Cargo
+                <input className="hover:cursor-pointer size-5"  type="checkbox" checked={columns.jobTitle} onChange={() => onChange("jobTitle")} />  Cargo
             </div>
         </PanelLateral>
     )
