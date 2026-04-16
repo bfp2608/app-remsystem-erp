@@ -4,7 +4,6 @@ import { SelectForm } from '../editClientPage/SelectForm';
 
 import { useFiltros } from '../../hooks/useFiltros';
 
-import { mockClientes } from "../../utils/mockDataClientes";
 import { esEmpresa } from "../../types/client";
 
 import { CustomerFilterType, emptyCustomerFilter, CUSTOMER_FILTER_OPTIONS, CUSTOMER_TYPE } from "../../types/filtros/filtrosClientes";
@@ -12,6 +11,7 @@ import { CustomerFilterType, emptyCustomerFilter, CUSTOMER_FILTER_OPTIONS, CUSTO
 import { PanelLateral } from "../utilidades/PanelLateral";
 import { ListFilter } from "lucide-react";
 import { BotonBase } from "./BotonBase";
+import { useClientsStore } from '../../store/clientStore';
 
 //COMPONENTE
 type PropFiltroTabla = {
@@ -19,6 +19,8 @@ type PropFiltroTabla = {
 }
 
 export function FiltroTablaClientes({onAplicar}:PropFiltroTabla) {
+
+    const { clients } = useClientsStore()
 
     const { filtros, handleChange, limpiar } = useFiltros(emptyCustomerFilter, onAplicar)
 
@@ -62,7 +64,7 @@ export function FiltroTablaClientes({onAplicar}:PropFiltroTabla) {
                 <div className="my-5">
                     <h1 className="text-lg font-semibold text-gray-100">Actividad económica</h1>
                     <SelectForm name="economicActivity" value={filtros.economicActivity} onChange={handleChange} label="Todos" options={[...new Set(
-                        mockClientes
+                        clients
                             .map(c => esEmpresa(c) ? String(c.actividad_economica) : null)
                             .filter(Boolean) as string[]
                     )]}/>
@@ -70,7 +72,7 @@ export function FiltroTablaClientes({onAplicar}:PropFiltroTabla) {
                 <div className="my-5">
                     <h1 className="text-lg font-semibold text-gray-100">Cargo</h1>
                     <SelectForm name="cargo" value={filtros.cargo} onChange={handleChange} label="Todos" options={[...new Set(
-                        mockClientes
+                        clients
                             .map(c => !esEmpresa(c) ? String(c.cargo) : null)
                             .filter(Boolean) as string[]
                     )]}/>

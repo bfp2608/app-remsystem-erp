@@ -3,8 +3,9 @@ import { ClienteNormalizado } from "../../types/client"
 import { CustomerColumnType } from "../../types/filtros/filtrosClientes"
 import { Header_th } from "../tabla/Header_th"
 import { CirculoAvatar } from "./CirculoAvatar"
-import { RUTAS } from "../../constans"
-import { Pencil } from "lucide-react"
+import { ROLE_TYPES, RUTAS } from "../../constans"
+import { Eye, Pencil } from "lucide-react"
+import { useAuth } from "../../auth/useAuth"
 
 type CustomerTableProps = {
     contacts : ClienteNormalizado[]
@@ -14,6 +15,10 @@ type CustomerTableProps = {
 }
 
 export const CustomerTable = ({ contacts, visibleColumns, order, onOrderChange}: CustomerTableProps) =>{
+
+    const { user } = useAuth()
+    const isAdmin = user?.tipoUsuario === ROLE_TYPES.admin
+
     return(
         <div className="overflow-auto flex-1 min-h-0">
             <table className="w-full bg-gray-700/60 rounded-lg">
@@ -82,10 +87,10 @@ export const CustomerTable = ({ contacts, visibleColumns, order, onOrderChange}:
                                     <Link 
                                         to={RUTAS.EDIT_CLIENTE.replace(':id', client.id.toString())}
                                         className="edit-button"
-                                        title="Editar"
+                                        title={isAdmin ? 'Editar' : 'Ver Detalles'}
                                     >
-                                        <Pencil width={20} />
-                                        <span>Editar</span>
+                                        {isAdmin ? <Pencil width={20} /> : <Eye width={20}/>}
+                                        <span>{isAdmin ? 'Editar' : 'Ver Detalles'}</span>
                                     </Link>
                                 </div>
                             </td>

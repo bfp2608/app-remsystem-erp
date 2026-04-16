@@ -8,6 +8,8 @@ import { CustomerForm } from '../pages/customerForm/CustomerForm';
 import { Toaster } from 'sonner';
 import { UserPage } from '../pages/usuario/UserPage';
 import { UserForm } from '../pages/usuario/UserForm';
+import { RegisterTenantPage } from '../pages/RegisterTenantPage';
+import { DashboardPage } from '../pages/DashboardPage';
 
 function App() {
     return (
@@ -15,6 +17,7 @@ function App() {
             <BrowserRouter>
             <Routes>
                 <Route path="/" element={<LoginPage />} />
+                <Route path={RUTAS.REGISTRO} element={<RegisterTenantPage />} />
                 <Route
                     path= {RUTAS.DASHBOARD}
                     element={
@@ -24,7 +27,7 @@ function App() {
                     }
                 >
                 {/*Por el momento los edit asi para verlos*/}
-                <Route index element={<h1 className='text-3xl font-bold'>Página de inicio del Dashboard</h1>}></Route>
+                <Route index element={<DashboardPage />}></Route>
                 <Route path={ RUTAS.CLIENTES } element={<ClientesPage />} />
                 <Route path={ RUTAS.NEW_CLIENTE } element={<CustomerForm />} />
                 <Route path={ RUTAS.EDIT_CLIENTE} element={<CustomerForm />} />
@@ -34,7 +37,7 @@ function App() {
                 </ Route>
             </Routes>
             </BrowserRouter>
-            <Toaster richColors />
+            <Toaster richColors position='top-right' expand={true}/>
         </>
     )
 }

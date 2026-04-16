@@ -102,5 +102,29 @@
 
 .delete-button:hover {
   background: #E7000B;
+  transform: scale(1.1);
+}
+
+.delete-button:active{
+  transform: scale(0.95);
+}
+
+.activate-button {
+  display: flex;
+  background: #00A63E;
+  padding: 6px;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.activate-button:hover {
+  background: #008235;
+  transform: scale(1.1);
+}
+
+.activate-button:active{
+  transform: scale(0.95);
 }
 

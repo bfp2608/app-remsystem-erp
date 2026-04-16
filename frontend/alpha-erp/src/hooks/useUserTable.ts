@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { useUserStore } from "../store/userStore"
 import { Usuario } from "../types/usuario"
 
@@ -6,13 +6,7 @@ const ITEMS_PER_PAGE = 20
 
 export const useUserTable = () =>{
     //Conexión al Store
-    const { users, isLoading, fetchUsers} = useUserStore()
-
-    useEffect(() =>{
-        if(users.length === 0){
-            fetchUsers()
-        }
-    },[users.length, fetchUsers])
+    const { users, isLoading} = useUserStore()
 
     const [searchText, setSearchText] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
@@ -37,8 +31,13 @@ export const useUserTable = () =>{
         return [...filteredUsers].sort((a, b) =>{
             if(!order) return 0
 
-            const valA = a[order.campo] ?? null
-            const valB = b[order.campo] ?? null
+            let valA = a[order.campo] ?? null
+            let valB = b[order.campo] ?? null
+            
+            if(order.campo === 'tipo_usuario'){
+                valA = a.tipo_usuario?.tipo || ''
+                valB = b.tipo_usuario?.tipo || ''
+            }
 
             if(!valA && !valB) return 0
             if(!valA) return 1

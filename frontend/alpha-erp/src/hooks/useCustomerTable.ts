@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { useClientsStore } from "../store/clientStore"
 import { ClienteNormalizado } from "../types/client"
 import { normalizar } from "../utils/normalizarClientes"
@@ -8,13 +8,7 @@ const ITEMS_PER_PAGE = 20
 
 export const useCustomerTable = () =>{
     //Conexión al Store
-    const { clients, isLoading, fetchClients} = useClientsStore()
-
-    useEffect(() =>{
-        if(clients.length === 0){
-            fetchClients()
-        }
-    },[clients.length, fetchClients])
+    const { clients, isLoading} = useClientsStore()
 
     //Solo se ejecuta si clients cambia en la BD
     const normalizedClients = useMemo(() => normalizar(clients), [clients])
@@ -44,7 +38,7 @@ export const useCustomerTable = () =>{
         const searchLower = searchText.toLocaleLowerCase()
 
         return normalizedClients.filter(client =>{
-            const matchesName = client.nombre.toLocaleLowerCase().includes(searchLower)
+            const matchesName = (client.nombre || '').toLocaleLowerCase().includes(searchLower)
 
             const matchesFilters = 
                 applyCustomerFilter(activeFilters.email, client.correo) &&

@@ -16,6 +16,7 @@ export function normalizar(clientes: Cliente[]): ClienteNormalizado[] {
                 direccion: cliente.direccion,
                 sucursal: cliente.sucursal,
                 fechaInicioActividades: cliente.fecha_inicio_actividades,
+                actividadEconomica: cliente.actividad_economica,
                 sitioWeb: cliente.sitio_web,
                 condicion: cliente.condicion_ruc,
                 pais: cliente.pais,
@@ -31,12 +32,14 @@ export function normalizar(clientes: Cliente[]): ClienteNormalizado[] {
                 cargo: cliente.cargo,
                 correo: cliente.correo_personal,
                 telefono: cliente.celular_personal,
-                ruc: cliente.ruc,
+                ruc: cliente.documento_identidad,
                 direccion: cliente.direccion,
                 pais: cliente.pais,
                 departamento: cliente.departamento,
                 provincia: cliente.provincia,
-                idDistrito: cliente.id_distrito
+                idDistrito: cliente.id_distrito,
+                idEmpresa: cliente.id_empresa,
+                actividadEconomica: cliente.actividad_economica
             }
         }
     })

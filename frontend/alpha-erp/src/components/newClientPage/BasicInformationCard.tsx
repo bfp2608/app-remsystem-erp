@@ -1,6 +1,7 @@
 import { Building2, User } from "lucide-react"
 import { FormState } from "../../utils/mapFormToBackend"
 import { useParams } from "react-router-dom"
+import { handlePressKey } from "../../utils/validators"
 
 interface BasicInformationCardProps {
     data: FormState
@@ -122,6 +123,9 @@ export const BasicInformationCard = ({data, onChange}: BasicInformationCardProps
                     <input 
                     id="taxId"
                     type="text"
+                    maxLength={11}
+                    pattern="\d*"
+                    onKeyDown={handlePressKey}
                     value={taxId}
                     onChange={(e) =>onChange('taxId', e.target.value)}
                     className="w-full bg-slate-900 border border-slate-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
@@ -150,6 +154,9 @@ export const BasicInformationCard = ({data, onChange}: BasicInformationCardProps
                     <input 
                     id="phoneNumber"
                     type="text"
+                    maxLength={9}
+                    pattern="\d*"
+                    onKeyDown={handlePressKey}
                     value={phoneNumber}
                     onChange={(e) =>onChange('phoneNumber', e.target.value)}
                     className="w-full bg-slate-900 border border-slate-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
