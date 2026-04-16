@@ -6,17 +6,23 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { LogOut, Menu } from "lucide-react"
 import { useAuth } from "../../auth/useAuth"
+import { ModalConfirmacion } from "../ModalConfirmacion"
 
 export const Sidebar = (() =>{
 
     const navigate = useNavigate()
     const { logout, user } = useAuth()
     const location = useLocation()
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
     const [isCollapsed, setIsCollapsed] = useState(() =>{
         const savedState = localStorage.getItem('sidebarIsCollapsed')
         return savedState ? JSON.parse(savedState) : false
     })
 
+    const handleConfirmLogout = () => {
+        logout()
+        navigate(RUTAS.LOGIN)
+    }
     // useEffect(() =>{
     //     localStorage.setItem('sidebarIsCollapsed', JSON.stringify(isCollapsed))
     // }, [isCollapsed])
@@ -102,13 +108,11 @@ export const Sidebar = (() =>{
                     avatarUrl="https://unavatar.io/github/github"
                     isCollapsed={isCollapsed}
                 />
+                {/* Botón de Cerrar Sesión */}
                 <div className={`px-2 py-2.5 mb-2 shrink-0`}>
                     <button 
                         className="flex items-center w-full py-2.5 hover:bg-gray-800 p-1 rounded-md transition-colors cursor-pointer overflow-hidden"
-                        onClick = {() => {
-                            logout()
-                            navigate(RUTAS.LOGIN)
-                        }}
+                        onClick={() => setIsLogoutModalOpen(true)}
                         title="Cerrar Sesión"
                     >   
                         <div className="w-10 flex justify-center shrink-0">
@@ -120,6 +124,16 @@ export const Sidebar = (() =>{
                     </button>
                 </div>
             </aside>
+            {/* Componente Modal */}
+            <ModalConfirmacion 
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                onConfirm={handleConfirmLogout}
+                titulo="¿Cerrar Sesión?"
+                mensaje="Estás a punto de salir del sistema. ¿Deseas continuar?"
+                textoConfirmar="Cerrar Sesión"
+                variante="primary"
+            />
         </div>
     )
 })
