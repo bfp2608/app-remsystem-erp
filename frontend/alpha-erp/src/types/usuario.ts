@@ -4,6 +4,10 @@ export type Usuario = {
     nombre_usuario : string;
     email : string;
     contrasenia : string;
+    tipo_usuario?:{
+        tipo: string
+    }
     
     telefono? : string
+    activo?: boolean
 }

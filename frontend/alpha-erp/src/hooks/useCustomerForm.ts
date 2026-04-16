@@ -7,12 +7,16 @@ import { useNavigate } from "react-router-dom"
 import { RUTAS } from "../constans"
 import { toast } from "sonner"
 import { Cliente } from "../types/client"
+import { emailValidator, requiredValidator } from "../utils/validators"
+import { useLocationStore } from "../store/locationStore"
+import { useAuth } from "../auth/useAuth"
 
 export const useCustomerForm = (clientId?: string) =>{
 
     const navigate = useNavigate() 
-
+    const { user: currentAdmin } = useAuth()
     const { clients, fetchClients, getClient, addClient, updateClient } = useClientsStore()
+    const { distritos, provincias, departamentos, fetchLocations} = useLocationStore()
 
     const [formData, setFormData] = useState<FormState>({
         customerType: 'COMPANY',
@@ -38,15 +42,15 @@ export const useCustomerForm = (clientId?: string) =>{
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     useEffect(() =>{
-        if(clients.length === 0){
-            fetchClients()
-        }
-    },[clients.length, fetchClients])
+        if(clients.length === 0 && currentAdmin?.id_organizacion) fetchClients(currentAdmin.id_organizacion)
+        if(distritos.length === 0) fetchLocations()
+        
+    },[clients.length, distritos.length, fetchClients, fetchLocations, currentAdmin?.id_organizacion])
 
     useEffect(()=>{
 
         const fillFormWithClientData = async () =>{
-            if(clientId && clients.length > 0){
+            if(clientId && clients.length > 0 && distritos.length > 0){
                 const rawClients = getClient(clientId)
     
                 if(rawClients){
@@ -54,6 +58,27 @@ export const useCustomerForm = (clientId?: string) =>{
                     const normalizedClient = normalizedArray[0]
     
                     const englishFormData = mapNormalizedToForm(normalizedClient)
+
+                    if(englishFormData.district){
+
+                        const distId = Number(englishFormData.district)
+
+                        const districtObj = distritos.find(d => d.id_distrito === distId)
+
+                        if(districtObj){
+                            const provObj = provincias.find(p => p.id_provincia === districtObj.id_provincia)
+
+                            const deptoObj = provObj
+                                ? departamentos.find(d => d.id_departamento === provObj.id_departamento)
+                                : null
+                            
+                            if(provObj && deptoObj){
+                                englishFormData.province = String(provObj.id_provincia)
+                                englishFormData.department = String(deptoObj.id_departamento)
+                                englishFormData.country = String(deptoObj.id_pais)
+                            }
+                        }
+                    }
     
                     setFormData(prev =>({
                         ... prev,
@@ -65,7 +90,7 @@ export const useCustomerForm = (clientId?: string) =>{
 
         fillFormWithClientData()
 
-    },[clientId, clients, getClient])
+    },[clientId, clients, distritos, provincias, departamentos, getClient])
 
     const handleInputChange = <K extends keyof FormState>(field: K, value: FormState[K]) =>{
         setFormData((prevData) =>({
@@ -74,42 +99,58 @@ export const useCustomerForm = (clientId?: string) =>{
         }))
     }
 
+    const validateForm = (): string | null =>{
+        const isCompany = formData.customerType === "COMPANY"
+
+        const specificErrors = isCompany ? [
+            requiredValidator(formData.businessName, 'Razon Social'),
+            requiredValidator(formData.taxId, 'RUC'),
+            requiredValidator(formData.activityStartDate, 'F. de Inicio de Actividad')
+        ] : [
+            requiredValidator(formData.fullName, "Nombre y Apellido"),
+            requiredValidator(formData.taxId, 'RUC')
+        ]
+
+        const commonErrors = [
+            formData.emailAddress ? emailValidator(formData.emailAddress) : null,
+            requiredValidator(formData.streetAddress, 'Dirección'),
+            requiredValidator(formData.district, 'Distrito'),
+            (formData.phoneNumber && formData.phoneNumber.length < 9) 
+            ? "El teléfono debe tener al menos 9 dígitos" : null 
+        ]
+
+        const allErrors = [...specificErrors, ...commonErrors]
+
+        return allErrors.find(error => error !== null) || null
+    }
+
     const handleSubmit = async (e:FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
 
         setIsSubmitting(true)
 
-        if(formData.customerType === 'COMPANY'){
-            if(!formData.businessName || !formData.taxId){
-                toast.error("Por favor, ingresa la Razón social y el RUC")
-                setIsSubmitting(false)
-                return
-            }
-        }else{
-            if(!formData.fullName || !formData.taxId){
-                toast.error("Por favor, ingrese el Nombre Completo y el DNI")
-                setIsSubmitting(false)
-                return
-            }
+        const validationError = validateForm()
+        if(validationError) {
+            toast.error(validationError)
+            setIsSubmitting(false)
+            return
         }
-
+        
         try{
-            await new Promise(resolve => setTimeout(resolve, 800))
+            await new Promise(resolve => setTimeout(resolve, 500))
 
-            const payloadToAPI = mapFormToBackend(formData)
+            const datosMapeados = mapFormToBackend(formData)
+
+            const payloadToAPI = {
+                ...datosMapeados,
+                id_organizacion: currentAdmin?.id_organizacion
+            }
 
             if(clientId){
-                updateClient(clientId, payloadToAPI as Partial<Cliente>)
+                await updateClient(clientId, payloadToAPI as Partial<Cliente>)
                 toast.success('Cliente actualizado correctamente')
             }else{
-                const fakeId = Math.floor(Math.random() * 100000)
-
-                const newClient = {
-                    ...payloadToAPI,
-                    ...(formData.customerType === 'COMPANY' ? { id_empresa : fakeId } : { id_persona: fakeId})
-                }
-
-                addClient(newClient as Cliente)
+                await addClient(payloadToAPI as Omit<Cliente, 'id_empresa' | "id_persona">)
                 toast.success('Cliente registrado correctamente')
             }
 

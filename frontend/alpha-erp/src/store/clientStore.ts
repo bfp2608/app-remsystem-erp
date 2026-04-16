@@ -1,92 +1,83 @@
 import { create } from "zustand";
-import { Cliente, esEmpresa } from "../types/client";
+import { Cliente, esEmpresa} from "../types/client";
 import { CUSTOMER_ID_TYPE } from "../types/filtros/filtrosClientes";
+import { clientService } from "../services/clientService";
 
 interface ClientStore {
     clients: Cliente[]
     isLoading: boolean
-    fetchClients: () => Promise<void>
+    fetchClients: (id_organizacion: number) => Promise<void>
     getClient:(id:string) => Cliente | undefined
-    addClient: (newClient: Cliente) => void
-    updateClient: (id: string, updatedClient: Partial<Cliente>) => void
-    deleteClient: (id: string) => void
+    addClient: (newClient: Omit<Cliente, 'id_empresa' | 'id_persona'>) => Promise<void>
+    updateClient: (id: string, updatedClient: Partial<Cliente>) => Promise<void>
+    deleteClient: (id: string) => Promise<void>
+}
+
+const getClientID = (client: Cliente) =>{
+    return esEmpresa(client)
+        ? `${CUSTOMER_ID_TYPE.COMPANY}${client.id_empresa}`
+        : `${CUSTOMER_ID_TYPE.PERSON}${client.id_persona}`
 }
 
 export const useClientsStore = create<ClientStore>((set, get) => ({
     clients: [],
     isLoading: false,
-    fetchClients: async () =>{
+    fetchClients: async (id_organizacion) =>{
         set({isLoading: true})
 
-        const localData = localStorage.getItem("clientesDB")
-        if(localData){
-            set({ clients: JSON.parse(localData), isLoading: false})
-            return
-        }
-
         try{
-            const response = await fetch("/mockClients.json")
+            const allClients = await clientService.fetchClients(id_organizacion)
+            set({ clients: allClients, isLoading: false})
 
-            if(!response.ok){
-                throw new Error(`HTTP error¡ status: ${response.status}`)
-            }
-
-            const data = await response.json()
-
-            await new Promise(res => setTimeout(res, 500))
-
-            set({clients: data, isLoading: false})
         } catch(error){
             console.error("Error cargando los clientes", error)
             set({isLoading:false})
         }
     },
     getClient: (id) =>{
-        return get().clients.find(client =>{
-            const clientId = esEmpresa(client)
-            ? `${CUSTOMER_ID_TYPE.COMPANY}${client.id_empresa}`
-            : `${CUSTOMER_ID_TYPE.PERSON}${client.id_persona}`
-
-            return clientId === id
-        })
+        return get().clients.find(client => getClientID(client) === id)
     },
-    addClient: (newClient) =>{
-        const currentClients = get().clients
 
-        const updateClients = [newClient, ...currentClients]
-
-        set({ clients: updateClients })
-
-        localStorage.setItem("clientesDB", JSON.stringify(updateClients))
+    addClient: async (newClient) =>{
+        try{
+            const addedClient = await clientService.createClient(newClient)
+            set({ clients: [addedClient, ...get().clients]})
+        }catch(error){
+            console.log("Error agregando al cliente", error)
+            throw error
+        }
     },
-    updateClient: (id, updatedClientData) =>{
-        const currentClients = get().clients
+    updateClient: async (id, updatedClientData) =>{
+        try{
+            const isCompany = 'razon_social' in updatedClientData
+            const numericId = Number(id.replace(isCompany ? CUSTOMER_ID_TYPE.COMPANY : CUSTOMER_ID_TYPE.PERSON, ''))
 
-        const updatedClients = currentClients.map(client =>{
-            const clientId = esEmpresa(client)
-            ? `${CUSTOMER_ID_TYPE.COMPANY}${client.id_empresa}`
-            : `${CUSTOMER_ID_TYPE.PERSON}${client.id_persona}`
+            const updatedClient = await clientService.updateClient(numericId, isCompany, updatedClientData)
 
-            if(clientId === id){
-                return {...client, ...updatedClientData } as Cliente
-            }
-            return client
-        })
+            const updatedClients = get().clients.map(client =>
+                getClientID(client) === id ? updatedClient : client
+            )
 
-        set({ clients: updatedClients })
-
-        localStorage.setItem("clientesDB", JSON.stringify(updatedClients))
+            set({ clients: updatedClients })
+            
+        }catch(error){
+            console.error('Error actualizando el cliente', error)
+            throw error
+        }
+    
     },
-    deleteClient: (id) =>{
-        const currentClients = get().clients
-        const updatedClients = currentClients.filter(client =>{
-            const clientId = esEmpresa(client)
-            ? `${CUSTOMER_ID_TYPE.COMPANY}${client.id_empresa}`
-            : `${CUSTOMER_ID_TYPE.PERSON}${client.id_persona}`
-            return clientId !== id
-        })
+    deleteClient: async (id) =>{
+        try{
+            const isCompany = id.startsWith(CUSTOMER_ID_TYPE.COMPANY)
+            const numericId = Number(id.replace(isCompany ? CUSTOMER_ID_TYPE.COMPANY : CUSTOMER_ID_TYPE.PERSON, ''))
 
-        set({ clients: updatedClients })
-        localStorage.setItem("clientesDB", JSON.stringify(updatedClients))
+            await clientService.deleteClient(numericId, isCompany)
+
+            const updateClients = get().clients.filter(client => getClientID(client) !== id)
+
+            set({ clients: updateClients})
+        }catch(error){
+            console.log("Error eliminando al cliente", error)
+        }
     }
 }))

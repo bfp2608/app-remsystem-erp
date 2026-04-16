@@ -1,7 +1,7 @@
-import { Map, MapPin, Plus } from "lucide-react"
+import { Map, MapPin, Minus, Plus } from "lucide-react"
 import { FormState } from "../../utils/mapFormToBackend"
 import { useLocationStore } from "../../store/locationStore"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 interface BranchLocationCardProps {
     data:FormState
@@ -14,11 +14,17 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
 
     const isCompany = data.customerType === "COMPANY"
 
+    const [showBranch, setShowBranch] = useState(!!data.branchName)
+
     useEffect(() =>{
-        if(departamentos.length === 0){
+        if(data.branchName) setShowBranch(true)
+    },[data.branchName])
+
+    useEffect(() =>{
+        if(paises.length === 0){
             fetchLocations()
         }
-    },[departamentos.length, fetchLocations])
+    },[paises.length, fetchLocations])
 
     const {
         branchName= '',
@@ -29,30 +35,23 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
         country= ''
     } = data || {}
 
-    const currentCountryId = Number(country)
-    const currentDeptId = department
-    const currentProvId = province
+    const departamentosFiltrados = departamentos.filter(d => d.id_pais === Number(country))
+    const provinciasFiltradas = provincias.filter(p => p.id_departamento === Number(department))
+    const distritosFiltrados = distritos.filter(d => d.id_provincia === Number(province))
 
-    const departamentosFiltrados = departamentos.filter(d => d.id_pais === currentCountryId)
-    const provinciasFiltradas = provincias.filter(p => p.id_departamento === currentDeptId)
-    const distritosFiltrados = distritos.filter(d => d.id_provincia === currentProvId)
-
-    const handleCountryChange = (val: string) =>{
-        onChange('country', val)
-        onChange('department', '')
-        onChange('province', '')
-        onChange('district', '')
+    const handleLocationChange = (level: 'country' | 'department' | 'province', val: string) =>{
+        onChange(level, val)
+        if(level === 'country') { onChange('department', ''); onChange('province', ''); onChange('district', '')}
+        if(level === 'department') { onChange('province', ''); onChange('district', '')}
+        if(level === 'province') onChange('district', '')
     }
 
-    const handleDepartmentChange = (val: string) =>{
-        onChange('department', val)
-        onChange('province', '')
-        onChange('district', '')
-    }
-
-    const handleProvinceChange = (val: string) =>{
-        onChange('province', val)
-        onChange('district', '')
+    const toggleBranch = () =>{
+        if(showBranch){
+            // Si se oculta, limpiamos el dato para no mandar basura a la BD
+            onChange('branchName', '');
+        }
+        setShowBranch(!showBranch)
     }
 
     return(
@@ -64,30 +63,18 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                     Ubicación de la Sucursal
                 </h3>
 
-                <button 
-                type="button"
-                className="text-xs flex items-center gap-1 text-teal-400 hover:text-teal-300 font-semibold transition-colors">
-                    <Plus className="h4 w-4"/>
-                    Añadir Sucursal
-                </button>
+                {isCompany &&
+                    <button 
+                    type="button"
+                    onClick={toggleBranch}
+                    className="text-xs flex items-center gap-1 text-teal-400 hover:text-teal-300 font-semibold transition-colors cursor-pointer">
+                        {showBranch ? <><Minus className="h-4 w-4"/> Quitar Sucursal</> : <><Plus className="h4 w-4"/> Añadir Sucursal</>}
+                    </button>
+                }
             </div>
 
             <div className="flex flex-col gap-5 mt-2">
-                {isCompany &&
-                    <div className="flex flex-col gap-1.5">
-                        <label htmlFor="branchName" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            Sucursal
-                        </label>
-                        <input
-                        id="branchName"
-                        type="text"
-                        value={branchName}
-                        onChange={(e)=> onChange('branchName', e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-700 text-white text-lg px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
-                        placeholder="Jr. Puno 250, Lima"
-                        />
-                    </div>
-                }
+                
                 <div className="flex flex-col gap-1.5">
                     <label htmlFor="streetAddress" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                         Dirección
@@ -105,6 +92,22 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                     </div>
                 </div>
 
+                {isCompany && showBranch &&
+                    <div className="flex flex-col gap-1.5 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <label htmlFor="branchName" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                            Sucursal
+                        </label>
+                        <input
+                        id="branchName"
+                        type="text"
+                        value={branchName}
+                        onChange={(e)=> onChange('branchName', e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-700 text-white text-lg px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+                        placeholder="Ej: Sede Norte, Almacén Central..."
+                        />
+                    </div>
+                }
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     
                     <div className="flex flex-col gap-1.5">
@@ -115,7 +118,7 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                         name="country" 
                         id="country"
                         value={country}
-                        onChange= {(e) => handleCountryChange(e.target.value)}
+                        onChange= {(e) => handleLocationChange('country',e.target.value)}
                         disabled={isLoading}
                         className="w-full bg-slate-900 border border-slate-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all appearance-none"
                         >
@@ -133,7 +136,7 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                         id="department"
                         value={department}
                         disabled={!country || isLoading}
-                        onChange={(e) => handleDepartmentChange(e.target.value)}
+                        onChange={(e) => handleLocationChange('department', e.target.value)}
                         className="w-full bg-slate-900 border border-slate-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all appearance-none"
                         >
                             <option value="">Seleccionar</option>
@@ -150,7 +153,7 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
                         id="province"
                         value={province}
                         disabled={!department || isLoading}
-                        onChange={(e) => handleProvinceChange(e.target.value)}
+                        onChange={(e) => handleLocationChange('province', e.target.value)}
                         className="w-full bg-slate-900 border border-slate-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all appearance-none"
                         >
                             <option value="">Seleccionar</option>

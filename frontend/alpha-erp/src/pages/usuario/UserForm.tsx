@@ -3,6 +3,7 @@ import { useUserForm } from "../../hooks/useUserForm"
 import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 import { ROLE_TYPES, RUTAS } from "../../constans"
+import { handlePressKey } from "../../utils/validators"
 
 export const UserForm = () =>{
     const { id } = useParams()
@@ -65,6 +66,9 @@ export const UserForm = () =>{
                         <input 
                             type="telefono" 
                             name="telefono"
+                            maxLength={9}
+                            pattern="\d*"
+                            onKeyDown={handlePressKey}
                             value={formData.telefono}
                             onChange={e => handleInputChange("telefono", e.target.value)}
                             className="bg-gray-900 border border-gray-600 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors"

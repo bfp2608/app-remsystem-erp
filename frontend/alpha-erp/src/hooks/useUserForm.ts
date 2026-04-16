@@ -3,11 +3,14 @@ import { useUserStore } from "../store/userStore"
 import { FormEvent, useEffect, useState } from "react"
 import { RUTAS } from "../constans"
 import { toast } from "sonner"
+import { emailValidator, passwordValidator } from "../utils/validators"
+import { useAuth } from "../auth/useAuth"
 
 export const useUserForm = (userId?: string) =>{
     const navigate = useNavigate()
 
     const { users, fetchUsers, addUser, updateUser, getUser } = useUserStore()
+    const { user: userAdmin } = useAuth()
 
     const [formData, setFormData] = useState({
         id_tipo_usuario: '' as string | number,
@@ -21,10 +24,10 @@ export const useUserForm = (userId?: string) =>{
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     useEffect(() =>{
-        if(users.length === 0){
-            fetchUsers()
+        if(users.length === 0 && userAdmin?.id_organizacion){
+            fetchUsers(userAdmin.id_organizacion)
         }
-    },[users.length, fetchUsers])
+    },[users.length, fetchUsers, userAdmin?.id_organizacion])
 
     useEffect(() =>{
         if(userId && users.length > 0){
@@ -37,7 +40,7 @@ export const useUserForm = (userId?: string) =>{
                     email: user.email,
                     contrasenia: user.contrasenia,
                     confirmar_contrasenia:user.contrasenia,
-                    telefono: user.telefono || ''
+                    telefono: user.telefono || '',
                 })
             }
         }
@@ -50,45 +53,48 @@ export const useUserForm = (userId?: string) =>{
         }))
     }
 
+    const validateForm = () : string | null =>{
+        const { nombre_usuario, email, contrasenia, id_tipo_usuario, confirmar_contrasenia } = formData
+
+        const validations = [
+            (!nombre_usuario || !email || !contrasenia || !id_tipo_usuario)
+            ? "Por favor completa los campos obligatorios" : null,
+            (contrasenia !== confirmar_contrasenia) ? "Las contraseñas no coinciden" : null,
+            emailValidator(email),
+            passwordValidator(contrasenia)
+        ]
+
+        return validations.find(error => error !== null) || null
+    }
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) =>{
         e.preventDefault()
         setIsSubmitting(true)
 
-        if(!formData.nombre_usuario || !formData.email || !formData.contrasenia || !formData.id_tipo_usuario){
-            toast.error("Por favor, completa los campos obligatorios")
-            setIsSubmitting(false)
-            return
-        }
-
-        if(formData.contrasenia !== formData.confirmar_contrasenia){
-            toast.error("Las contraseñas no coinciden")
+        const validationError = validateForm()
+        if(validationError){
+            toast.error(validationError)
             setIsSubmitting(false)
             return
         }
 
         try{
-            await new Promise(resolve => setTimeout(resolve, 800))
-
             const { confirmar_contrasenia, ...restoDeDatos } = formData
 
             const payloadToApi = {
                 ...restoDeDatos,
-                id_tipo_usuario: Number(restoDeDatos.id_tipo_usuario)
+                id_tipo_usuario: Number(restoDeDatos.id_tipo_usuario),
+                id_organizacion: userAdmin?.id_organizacion
             }
 
             if(userId){
-                updateUser(userId, payloadToApi)
+                await updateUser(userId, payloadToApi)
                 toast.success("Usuario actualizado correctamente")
             }else{
-                const fakeId = Math.floor(Math.random() * 1000)
-                const newUser = {
-                    ...payloadToApi,
-                    id_usuario: fakeId
-                }
-                addUser(newUser)
+                await addUser(payloadToApi)
                 toast.success("Usuario registrado correctamente")
 
-                console.log("NUEVO USUARIO LISTO PARA ENVIAR", newUser)
+                console.log("NUEVO USUARIO LISTO PARA ENVIAR", payloadToApi)
             }
 
             navigate(RUTAS.USUARIOS)

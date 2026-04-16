@@ -3,40 +3,43 @@ import { NavDropdown } from "./NavDropdown"
 import { UserProfile } from "./UserProfile"
 import { NAVIGATION_DATA, RUTAS } from "../../constans"
 import { Link, useLocation, useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { LogOut, Menu } from "lucide-react"
 import { useAuth } from "../../auth/useAuth"
 
 export const Sidebar = (() =>{
 
     const navigate = useNavigate()
-    const { logout } = useAuth()
+    const { logout, user } = useAuth()
     const location = useLocation()
     const [isCollapsed, setIsCollapsed] = useState(() =>{
         const savedState = localStorage.getItem('sidebarIsCollapsed')
         return savedState ? JSON.parse(savedState) : false
     })
 
-    useEffect(() =>{
-        localStorage.setItem('sidebarIsCollapsed', JSON.stringify(isCollapsed))
-    }, [isCollapsed])
+    // useEffect(() =>{
+    //     localStorage.setItem('sidebarIsCollapsed', JSON.stringify(isCollapsed))
+    // }, [isCollapsed])
     
     return(
         <div className="flex h-screen overflow-hidden bg-gray-900 text-white">
-            <aside className={`flex flex-col bg-dark-900 border-r border-gray-600 h-full transition-all duration-400 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-16' : 'w-64'}`}>
+            <aside 
+            className={`flex flex-col bg-dark-900 border-r border-gray-600 h-full transition-all duration-200 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-16' : 'w-56'}`}
+            onMouseEnter={() => setIsCollapsed(false)}
+            onMouseLeave={() => setIsCollapsed(true)}
+            >
                 <div 
                 className={`h-16 flex items-center gap-1 px-3 shrink-0 border-b border-gray-800`}
                 >   
                     <button
-                    onClick={() => setIsCollapsed(!isCollapsed)}
                     className="p-2 hover:bg-gray-800 rounded-md transition-colors text-gray-400 hover:text-white"
                     >
                         <Menu />
                     </button>
 
-                    <span className={`text-lg font-medium transition-opacity duration-300 whitespace-nowrap ${isCollapsed ? 'opacity-0' : 'opacity-100'}`}
+                    <span className={`text-lg font-medium transition-opacity duration-300 whitespace-nowrap uppercase ${isCollapsed ? 'opacity-0' : 'opacity-100'}`}
                     >
-                        REMSYSTEMS S.A.C
+                        {user?.organizacion_nombre || "CARGANDO..."}
                     </span>
                 </div>
 
@@ -95,7 +98,7 @@ export const Sidebar = (() =>{
                     })}
                 </nav>
                 <UserProfile 
-                    name="Nombre de usuario"
+                    name={user?.nombres || "Cargando..."}
                     avatarUrl="https://unavatar.io/github/github"
                     isCollapsed={isCollapsed}
                 />

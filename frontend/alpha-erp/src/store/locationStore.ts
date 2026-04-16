@@ -1,4 +1,5 @@
 import { create } from "zustand"
+import { supabase } from "../config/supabaseClient"
 
 export interface Pais {
     id_pais: number
@@ -7,20 +8,20 @@ export interface Pais {
 }
 
 export interface Departamento {
-    id_departamento: string
+    id_departamento: number
     id_pais: number
     departamento: string
 }
 
 export interface Provincia {
-    id_provincia: string
-    id_departamento: string
+    id_provincia: number
+    id_departamento: number
     provincia: string
 }
 
 export interface Distrito {
-    id_distrito: string
-    id_provincia: string
+    id_distrito: number
+    id_provincia: number
     distrito: string
 }
 
@@ -34,7 +35,7 @@ interface LocationStore {
 }
 
 export const useLocationStore = create<LocationStore> ((set) =>({
-    paises: [{id_pais: 1, nombre: "Perú", codigo_iso:"PE"}],
+    paises: [],
     departamentos: [],
     provincias: [],
     distritos: [],
@@ -43,58 +44,29 @@ export const useLocationStore = create<LocationStore> ((set) =>({
     fetchLocations: async () =>{
         set({ isLoading: true })
         try{
-            const response = await fetch('https://free.e-api.net.pe/ubigeos.json')
-            if(!response.ok) throw new Error("Error al cargar ubicaciones")
-            
-            const rawData = await response.json()
+            const [paisesRes, deptosRes, provsRes, distritoRes] = await Promise.all([
+                supabase.from('pais').select('*'),
+                supabase.from('departamento').select('*').order('departamento'),
+                supabase.from('provincia').select('*').order('provincia'),
+                supabase.from('distrito').select('*').limit(2000).order('distrito')
+            ])
 
-            const tempDepartamentos: Departamento[] = []
-            const tempPronvicas: Provincia[] = []
-            const tempDistritos: Distrito[] = []
+            if(paisesRes.error) throw paisesRes.error
+            if(deptosRes.error) throw deptosRes.error
+            if(provsRes.error) throw provsRes.error
+            if(distritoRes.error) throw distritoRes.error
 
-            //Se recorre el objeto principal (Departamentos)
-            Object.entries(rawData).forEach(([nombreDepto, provinciasObj]: [string, any]) =>{
-                const idDepto = nombreDepto
-
-                tempDepartamentos.push({
-                    id_departamento: idDepto,
-                    id_pais: 1,
-                    departamento: nombreDepto
-                })
-
-                Object.entries(provinciasObj).forEach(([nombreProvincia, distritosObj] : [string, any])=>{
-                    const idProv = `${idDepto}-${nombreProvincia}`
-
-                    tempPronvicas.push({
-                        id_provincia: idProv,
-                        id_departamento: idDepto,
-                        provincia: nombreProvincia
-                    })
-
-                    Object.entries(distritosObj).forEach(([nombreDistrito, infoDistrito] : [string, any])=>{
-                        tempDistritos.push({
-                            id_distrito: infoDistrito.ubigeo,
-                            id_provincia: idProv,
-                            distrito: nombreDistrito
-                        })
-                    })
-                })
-            })
-
-            //Filtro alfabético
-            tempDepartamentos.sort((a, b) => a.departamento.localeCompare(b.departamento))
-            tempPronvicas.sort((a, b) => a.provincia.localeCompare(b.provincia))
-            tempDistritos.sort((a, b) => a.distrito.localeCompare(b.distrito))
-
-            set({
-                departamentos: tempDepartamentos,
-                provincias: tempPronvicas,
-                distritos: tempDistritos,
+            set({ 
+                paises: paisesRes.data as Pais[],
+                departamentos: deptosRes.data as Departamento[],
+                provincias: provsRes.data as Provincia[],
+                distritos: distritoRes.data as Distrito[],
                 isLoading: false
             })
-        } catch(error){
-            console.error("Error cargando API de ubigeos", error)
+        }catch(error){
+            console.error("Error cargando ubicaciones", error)
             set({ isLoading: false })
         }
+            
     }
 }))

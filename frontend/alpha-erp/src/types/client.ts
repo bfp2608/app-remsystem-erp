@@ -3,7 +3,7 @@
 
 export type Empresa = {
     id_empresa: number;
-    tipo_entidad: 'Empresa';
+    tipo_entidad?: 'Empresa';
     ruc: string;
     razon_social: string;
     nombre_comercial?: string;
@@ -11,20 +11,21 @@ export type Empresa = {
     telefono: string;
     sucursal?: string;
     direccion: string;
-    pais: string;
-    departamento: string;
-    provincia: string;
-    id_distrito: string;
-    fecha_inicio_actividades: string;
+    pais?: string;
+    departamento?: string;
+    provincia?: string;
+    id_distrito: number | null;
+    fecha_inicio_actividades: string | null;
     sitio_web?: string;
-    actividad_economica: string;
+    actividad_economica?: string;
     condicion_ruc: string;
 }
 
 export type Persona = {
     id_persona: number;
-    tipo_entidad: 'Persona';
-    ruc: string;
+    tipo_entidad?: 'Persona';
+    documento_identidad: string
+    //ruc: string;
     nombres_completos: string;
 
     //Relación opcional con empresa
@@ -35,14 +36,14 @@ export type Persona = {
     correo_personal: string;
     celular_personal: string;
     direccion?: string;
-    pais: string;
-    departamento: string;
-    provincia: string;
-    id_distrito: string;
+    pais?: string;
+    departamento?: string;
+    provincia?: string;
+    id_distrito: number | null;
     //fecha_inicio_actividades?: string;
     sitio_web?: string;
-    etiqueta?: string
-    //actividad_economica: string;
+    //etiqueta?: string
+    actividad_economica: string;
 }
 
 
@@ -65,12 +66,14 @@ export type ClienteNormalizado = {
     pais?: string
     departamento?: string;
     provincia?: string;
-    idDistrito?: string;
+    idDistrito?: number | null;
     sitioWeb?: string;
-    fechaInicioActividades?: string
+    fechaInicioActividades?: string | null
     actividadEconomica?: string;
     cargo?: string;
     condicion?: string;
+    idEmpresa?: number
+    //etiqueta?: string
 }
 
 //Para diferenciar entre Persona y Empresa

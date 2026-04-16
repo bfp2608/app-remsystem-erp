@@ -10,7 +10,8 @@ export const ROLE_TYPES = {
 
 //Diccionario de rutas - única fuente de la verdad
 export const RUTAS = {
-    LOGIN: '/login',
+    LOGIN: '/',
+    REGISTRO: '/registro',
     DASHBOARD: '/dashboard',
     CLIENTES: '/dashboard/clientes',
     USUARIOS: '/dashboard/usuario',
