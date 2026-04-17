@@ -19,9 +19,12 @@ type UserTableProps = {
 export const UserTable = ({ users, order, onOrderChange, onToggleStatus }: UserTableProps) =>{
 
     const { user } = useAuth()
-
     const isAdmin = user?.tipoUsuario === ROLE_TYPES.admin
 
+    // Administradores activos en lista
+    const activeAdminsCount = users.filter(u => 
+        (u.activo !== false) && (u.tipo_usuario?.tipo === 'ADMINISTRADOR')).length;
+    
     // Estados para el Modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [userToToggle, setUserToToggle] = useState<{ id: number, nombre: string, status: boolean } | null>(null);
@@ -71,48 +74,70 @@ export const UserTable = ({ users, order, onOrderChange, onToggleStatus }: UserT
                 </thead>
 
                 <tbody className="divide-y divide-gray-600">
-                    {users.map((user, index) => {
-                        const isActive = user.activo !== false
+                    {users.map((u, index) => {
+                        const rowIsActive = u.activo !== false;
+                        // LOGICA DE PROTECCIÓN
+                        // ¿Es el mismo usuario que está navegando?
+                        const isSelf = u.id_usuario === user?.id_usuario;
+                        // ¿Es el último administrador activo?
+                        const isLastAdmin = u.tipo_usuario?.tipo === 'ADMINISTRADOR' && activeAdminsCount <= 1;
+                        // Regla final
+                        const canDeactivate = !isSelf && !isLastAdmin;
+
                         return (
-                        <tr key={`${user.id_usuario}-${index}`} className={`transition-colors ${isActive ? 'hover:bg-gray-700/80' : 'bg-slate-900/50 opacity-60'}  `}>
-                            <td className="px-6 py-4 text-gray-300">
-                                <div className="flex items-center uppercase">
-                                    <CirculoAvatar nombre={user.nombre_usuario} />
-                                    <span className={!isActive ? 'line-through text-slate-500' : ''}>
-                                        {user.nombre_usuario}
-                                    </span>
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 text-gray-300">{user.email}</td>
-                            <td className="px-6 py-4 text-gray-300">{user.telefono || 'N/A'}</td>
-                            <td className="px-6 py-4 text-gray-300">
-                                <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${isActive ? 'bg-teal-500/20 text-teal-300' : 'bg-slate-600/50 text-slate-400'}`}>
-                                    {user.tipo_usuario?.tipo}
-                                </span>
-                            </td>
-                            {isAdmin &&
-                                <td className="px-6 py-4 text-gray-300 max-w-[100px]">
-                                    <div className="flex gap-2 items-center">
-                                        <Link 
-                                            to={RUTAS.EDIT_USUARIO.replace(':id',user.id_usuario.toString())}
-                                            className="edit-button "
-                                            title="Editar"
-                                        >
-                                            <Pencil size={20}/>
-                                        </Link>
-                                        <button
-                                                type="button"
-                                                onClick={() => handleStatusClick(user.id_usuario, user.nombre_usuario, isActive)}
-                                                className={isActive ? 'delete-button' : 'activate-button'}
-                                                title={isActive ? "Desactivar" : "Activar"}
-                                            >
-                                                {isActive ? <UserMinus size={20}/> : <UserCheck size={20}/>}
-                                            </button>
+                            <tr key={`${u.id_usuario}-${index}`} className={`transition-colors ${rowIsActive ? 'hover:bg-gray-700/80' : 'bg-slate-900/50 opacity-60'}`}>
+                                <td className="px-6 py-4 text-gray-300">
+                                    <div className="flex items-center uppercase">
+                                        <CirculoAvatar nombre={u.nombre_usuario} />
+                                        <span className={!rowIsActive ? 'line-through text-slate-50' : ''}>
+                                            {u.nombre_usuario}
+                                        </span>
                                     </div>
                                 </td>
-                            }
-                        </tr>
-                    )})}
+                                <td className="px-6 py-4 text-gray-300">{u.email}</td>
+                                <td className="px-6 py-4 text-gray-300">{u.telefono || 'N/A'}</td>
+                                <td className="px-6 py-4 text-gray-300">
+                                    <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase ${rowIsActive ? 'bg-teal-500/20 text-teal-300' : 'bg-slate-600/50 text-slate-400'}`}>
+                                        {u.tipo_usuario?.tipo}
+                                    </span>
+                                </td>
+                                {isAdmin && (
+                                    <td className="px-6 py-4 text-gray-300 max-w-[100px]">
+                                        <div className="flex gap-2 items-center">
+                                            <Link 
+                                                to={RUTAS.EDIT_USUARIO.replace(':id', u.id_usuario.toString())}
+                                                className="edit-button"
+                                                title="Editar"
+                                            >
+                                                <Pencil size={20}/>
+                                            </Link>
+                                            
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    if (!rowIsActive) {
+                                                        // Si está inactivo, siempre se puede activar
+                                                        onToggleStatus(u.id_usuario, rowIsActive);
+                                                    } else if (canDeactivate) {
+                                                        // Si está activo, solo si pasa la regla de seguridad
+                                                        handleStatusClick(u.id_usuario, u.nombre_usuario, rowIsActive);
+                                                    }
+                                                }}
+                                                className={rowIsActive ? 'delete-button' : 'activate-button'}
+                                                style={{ 
+                                                    opacity: (rowIsActive && !canDeactivate) ? 0.3 : 1,
+                                                    cursor: (rowIsActive && !canDeactivate) ? 'not-allowed' : 'pointer' 
+                                                }}
+                                                title={rowIsActive && !canDeactivate ? "No puedes desactivar a este usuario" : (rowIsActive ? "Desactivar" : "Activar")}
+                                            >
+                                                {rowIsActive ? <UserMinus size={20}/> : <UserCheck size={20}/>}
+                                            </button>
+                                        </div>
+                                    </td>
+                                )}
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
 
