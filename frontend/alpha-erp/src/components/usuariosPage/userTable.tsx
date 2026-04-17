@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Pencil, UserCheck, UserMinus } from "lucide-react";
 import { Usuario } from "../../types/usuario";
 import { CirculoAvatar } from "../clientPage/CirculoAvatar";
@@ -5,6 +6,8 @@ import { Header_th } from "../tabla/Header_th";
 import { Link } from "react-router-dom";
 import { ROLE_TYPES, RUTAS } from "../../constans";
 import { useAuth } from "../../auth/useAuth";
+import { ModalConfirmacion } from "../ModalConfirmacion";
+
 
 type UserTableProps = {
     users: Usuario[]
@@ -18,6 +21,30 @@ export const UserTable = ({ users, order, onOrderChange, onToggleStatus }: UserT
     const { user } = useAuth()
 
     const isAdmin = user?.tipoUsuario === ROLE_TYPES.admin
+
+    // Estados para el Modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [userToToggle, setUserToToggle] = useState<{ id: number, nombre: string, status: boolean } | null>(null);
+
+    // Manejador del click en el botón de estado
+    const handleStatusClick = (id: number, nombre: string, currentStatus: boolean) => {
+        if (currentStatus) {
+            // Si está activo (true), abrimos modal para confirmar desactivación
+            setUserToToggle({ id, nombre, status: currentStatus });
+            setIsModalOpen(true);
+        } else {
+            // Si está inactivo, lo activamos directamente sin preguntar
+            onToggleStatus(id, currentStatus);
+        }
+    };
+
+    const confirmToggle = () => {
+        if (userToToggle) {
+            onToggleStatus(userToToggle.id, userToToggle.status);
+            setIsModalOpen(false);
+            setUserToToggle(null);
+        }
+    };
 
     return(
         <div className="overflow-auto flex-1 min-h-0">
@@ -75,7 +102,7 @@ export const UserTable = ({ users, order, onOrderChange, onToggleStatus }: UserT
                                         </Link>
                                         <button
                                                 type="button"
-                                                onClick={() => onToggleStatus(user.id_usuario, isActive)}
+                                                onClick={() => handleStatusClick(user.id_usuario, user.nombre_usuario, isActive)}
                                                 className={isActive ? 'delete-button' : 'activate-button'}
                                                 title={isActive ? "Desactivar" : "Activar"}
                                             >
@@ -88,6 +115,19 @@ export const UserTable = ({ users, order, onOrderChange, onToggleStatus }: UserT
                     )})}
                 </tbody>
             </table>
+
+            {/* Modal de Confirmación */}
+            <ModalConfirmacion 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={confirmToggle}
+                titulo="Confirmar Desactivación"
+                mensaje={
+                    <p>¿Estás seguro de que deseas desactivar al usuario <b>{userToToggle?.nombre}</b>? No podrá acceder al sistema hasta que sea reactivado.</p>
+                }
+                textoConfirmar="Desactivar Usuario"
+                variante="danger"
+            />
         </div>
     )
 }

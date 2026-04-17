@@ -61,11 +61,12 @@ export const DashboardPage = () =>{
                         <div className="mt-4 flex gap-4 text-sm text-slate-400">
                             <div className="flex items-center gap-1">
                                 <Building2 size={16} className="text-slate-500" />
-                                {stats.totalCompanys} Empresas
+                                {stats.totalCompanys} {stats.totalCompanys === 1 ? "Empresa" : "Empresas"}
                             </div>
+                            
                             <div className="flex items-center gap-1">
                                 <User size={16} className="text-slate-500" />
-                                {stats.totalPersons} Personas
+                                {stats.totalPersons} {stats.totalPersons === 1 ? "Persona" : "Personas"}
                             </div>
                         </div>
 
@@ -121,7 +122,7 @@ export const DashboardPage = () =>{
                             className="flex items-center gap-3 w-full p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-teal-500 hover:bg-teal-500/10 text-slate-300 hover:text-white transition-all group"
                         >
                             <PlusCircle size={20} className="text-teal-400 group-hover:scale-110 transition-transform" />
-                            <span className="font-medium">Resgistrar Nuevo Cliente</span>
+                            <span className="font-medium">Registrar Nuevo Cliente</span>
                         </Link>
 
                         {isAdmin &&
