@@ -17,8 +17,8 @@ El repositorio está organizado en las siguientes carpetas:
 | `main` | Rama estable, código revisado |
 | `develop` | Rama de desarrollo, se prueba antes de pasar a main |
 
-Ambas ramas principales están protegidas, solo se pueden modificar mediante Pull Request.
 ---
+Ambas ramas principales están protegidas, solo se pueden modificar mediante Pull Request.
 
 
 ## frontend/alpha-erp
