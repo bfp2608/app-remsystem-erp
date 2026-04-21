@@ -75,38 +75,46 @@ export const BranchLocationCard = ({ data, onChange }:BranchLocationCardProps) =
 
             <div className="flex flex-col gap-5 mt-2">
                 
-                <div className="flex flex-col gap-1.5">
-                    <label htmlFor="streetAddress" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                        Dirección
-                    </label>
-                    <div className="relative">
-                        <input
-                        id="streetAddress"
-                        type="text"
-                        value={streetAddress}
-                        onChange={(e)=> onChange('streetAddress', e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-700 text-white text-lg px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all pl-10"
-                        placeholder="Calle, Número, etc."
-                        />
-                        <Map className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 w-4 h-4"/>
-                    </div>
-                </div>
-
-                {isCompany && showBranch &&
-                    <div className="flex flex-col gap-1.5 animate-in fade-in slide-in-from-top-2 duration-300">
-                        <label htmlFor="branchName" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            Sucursal
+                <div>
+                    <div className="flex flex-col gap-1.5">
+                        <label htmlFor="streetAddress" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                            Dirección
                         </label>
-                        <input
-                        id="branchName"
-                        type="text"
-                        value={branchName}
-                        onChange={(e)=> onChange('branchName', e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-700 text-white text-lg px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
-                        placeholder="Ej: Sede Norte, Almacén Central..."
-                        />
+                        <div className="relative">
+                            <input
+                            id="streetAddress"
+                            type="text"
+                            value={streetAddress}
+                            onChange={(e)=> onChange('streetAddress', e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-700 text-white text-lg px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all pl-10"
+                            placeholder="Calle, Número, etc."
+                            />
+                            <Map className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 w-4 h-4"/>
+                        </div>
                     </div>
-                }
+
+                    {isCompany && (
+                        <div 
+                            className={`transition-all duration-300 ease-in-out overflow-hidden flex flex-col ${
+                                showBranch ? "max-h-24 opacity-100 mt-5" : "max-h-0 opacity-0 mt-0"
+                            }`}
+                        >
+                            <div className="flex flex-col gap-1.5 pb-1"> 
+                                <label htmlFor="branchName" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                    Sucursal
+                                </label>
+                                <input
+                                    id="branchName"
+                                    type="text"
+                                    value={branchName}
+                                    onChange={(e)=> onChange('branchName', e.target.value)}
+                                    className="w-full bg-slate-900 border border-slate-700 text-white text-lg px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+                                    placeholder="Ej: Sede Norte, Almacén Central..."
+                                />
+                            </div>
+                        </div>
+                    )}
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     

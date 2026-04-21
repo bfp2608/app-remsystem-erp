@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useUserForm } from "../../hooks/useUserForm"
 import { useState } from "react"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { ROLE_TYPES, RUTAS } from "../../constans"
 import { handlePressKey } from "../../utils/validators"
 
@@ -169,6 +169,7 @@ export const UserForm = () =>{
                             : 'bg-teal-500 text-white cursor-pointer hover:bg-teal-400 active:scale-95'
                         }`}
                 >
+                    {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" /> }
                     {isSubmitting ? 'Guardando...' : 'Guardar Usuario'}
                 </button>
             </div>

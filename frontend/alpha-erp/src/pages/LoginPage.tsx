@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import { useAuth } from "../auth/useAuth"
 import { ROLE_TYPES, RUTAS } from "../constans"
 import { toast } from "sonner"
-import { Eye, EyeOff, Mail, Lock } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react"
 
 export const LoginPage = () => {
 
@@ -109,6 +109,7 @@ export const LoginPage = () => {
                         type="submit"
                         disabled={isLoading}
                     >
+                        {isLoading && <Loader2 className="w-5 h-5 animate-spin" /> }
                         {isLoading ? "Ingresando..." : "Ingresar"}
                     </button>
                 </form>

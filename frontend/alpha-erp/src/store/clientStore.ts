@@ -11,6 +11,7 @@ interface ClientStore {
     addClient: (newClient: Omit<Cliente, 'id_empresa' | 'id_persona'>) => Promise<void>
     updateClient: (id: string, updatedClient: Partial<Cliente>) => Promise<void>
     deleteClient: (id: string) => Promise<void>
+    clearClients: () => void
 }
 
 const getClientID = (client: Cliente) =>{
@@ -79,5 +80,9 @@ export const useClientsStore = create<ClientStore>((set, get) => ({
         }catch(error){
             console.log("Error eliminando al cliente", error)
         }
+    },
+
+    clearClients: () =>{
+        set({ clients: [], isLoading: false})
     }
 }))

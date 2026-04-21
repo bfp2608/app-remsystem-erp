@@ -32,12 +32,12 @@ export const ModalConfirmacion = ({
         <div className="text-gray-400 mb-6">{mensaje}</div>
         
         <div className="flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-gray-400 hover:text-white transition-colors">
+          <button onClick={onClose} className="px-4 py-2 text-gray-400 hover:text-white transition-colors cursor-pointer">
             Cancelar
           </button>
           <button 
             onClick={onConfirm}
-            className={`px-4 py-2 ${btnColor} text-white rounded-lg transition-colors font-medium`}
+            className={`px-4 py-2 ${btnColor} text-white rounded-lg transition-colors font-medium cursor-pointer`}
           >
             {textoConfirmar}
           </button>
