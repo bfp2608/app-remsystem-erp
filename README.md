@@ -17,7 +17,9 @@ El repositorio está organizado en las siguientes carpetas:
 | `main` | Rama estable, código revisado |
 | `develop` | Rama de desarrollo, se prueba antes de pasar a main |
 
+Ambas ramas principales están protegidas, solo se pueden modificar mediante Pull Request.
 ---
+
 
 ## frontend/alpha-erp
 
@@ -35,7 +37,13 @@ cd frontend/alpha-erp
 
 # 2. Instalar dependencias
 npm install
+
+# 3. Configurar variables de entorno
 ```
+
+### Variables de entorno
+
+El proyecto utiliza archivos .env para gestionar credenciales de forma segura. Por seguridad, los archivos .env.* (excepto el example) están excluidos del repositorio.
 
 ### Correr el proyecto
 
