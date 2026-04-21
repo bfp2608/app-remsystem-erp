@@ -1,0 +1,13 @@
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\ApiAdminFormApplication.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\controllers\FormController.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\models\dto\FormRegisterRequest.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\models\dto\FormRegisterResponse.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\models\entities\Cliente.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\models\entities\Empresa.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\models\entities\Persona.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\models\entities\Usuario.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\repositories\ClienteRepository.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\repositories\EmpresaRepository.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\repositories\PersonaRepository.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\repositories\UsuarioRepository.java
+C:\Users\aaron\Desktop\Prácticas REMSYSTEM\app-remsystem-erp\backend\API-AdminForm\src\main\java\admin\form\services\FormService.java
