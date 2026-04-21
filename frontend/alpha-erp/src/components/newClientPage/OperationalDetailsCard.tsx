@@ -53,7 +53,7 @@ export const OperationDetailsCard = ({ data, onChange }: OperationDetailsCardPro
     }
 
     return(
-        <div className=" bg-slate-800 rounded-xl p-6 shadow-lg border border-slate-700 flex flex-col gap-6">
+        <div className=" bg-slate-800 rounded-xl p-6 shadow-lg border border-slate-700 flex flex-col gap-6 h-full">
             <div className="border-b border-b-slate-700 pb-3">
                 <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                     <Activity className="text-teal-500 w-5 h-5" />

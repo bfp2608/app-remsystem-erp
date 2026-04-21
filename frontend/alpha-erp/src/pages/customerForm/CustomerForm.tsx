@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useCustomerForm } from "../../hooks/useCustomerForm"
 import { ROLE_TYPES, RUTAS } from "../../constans"
 import { useAuth } from "../../auth/useAuth"
+import { Loader2 } from "lucide-react"
 
 export const CustomerForm = () => {
 
@@ -68,6 +69,7 @@ export const CustomerForm = () => {
                             : 'bg-teal-500 text-white cursor-pointer hover:bg-teal-400 hover:shadow-teal-500/25 active:scale-95'
                         }`}
                     >
+                        {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" /> }
                         {isSubmitting ? 'Guardando...' : 'Guardar Cliente'}
                     </button>
                 )}

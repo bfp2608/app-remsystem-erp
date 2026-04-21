@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect, ReactNode } from "react"
 import { meResponse, router, signIn } from "../api/authApi"
 import { saveToken, getToken, removeToken } from "./tokenStorage"
+import { useUserStore } from "../store/userStore"
+import { useClientsStore } from "../store/clientStore"
 
 interface AuthContextType {
     token: string | null
@@ -54,6 +56,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         removeToken() // ← eliminar
         setToken(null)
         setUser(null)
+        useUserStore.getState().clearUsers()
+        useClientsStore.getState().clearClients()
     }
 
     return (

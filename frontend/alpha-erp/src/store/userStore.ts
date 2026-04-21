@@ -10,6 +10,7 @@ interface UserStore {
     addUser: (newUser: Omit<Usuario, 'id_usuario'>) => Promise<void>
     updateUser: (id: string | number, updatedUser: Partial<Usuario>) => Promise<void>
     deleteUser: (id: string | number) => Promise<void>
+    clearUsers: () => void
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
@@ -65,6 +66,10 @@ export const useUserStore = create<UserStore>((set, get) => ({
             console.error("Delete error: ", error)
             throw error
         }
+    },
+
+    clearUsers: () =>{
+        set({ users: [], isLoading: false})
     }
 
 })) 

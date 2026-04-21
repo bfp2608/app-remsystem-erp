@@ -8,7 +8,6 @@ import { ROLE_TYPES, RUTAS } from "../../constans";
 import { useAuth } from "../../auth/useAuth";
 import { ModalConfirmacion } from "../ModalConfirmacion";
 
-
 type UserTableProps = {
     users: Usuario[]
     order: {campo: keyof Usuario, direccion: "up" | "down" }
@@ -148,7 +147,12 @@ export const UserTable = ({ users, order, onOrderChange, onToggleStatus }: UserT
                 onConfirm={confirmToggle}
                 titulo="Confirmar Desactivación"
                 mensaje={
-                    <p>¿Estás seguro de que deseas desactivar al usuario <b>{userToToggle?.nombre}</b>? No podrá acceder al sistema hasta que sea reactivado.</p>
+                    <div>
+                        <p>¿Desactivar a <b>{userToToggle?.nombre}</b>?</p>
+                        <p>
+                            El usuario no podrá acceder al sistema hasta reactivarlo.
+                        </p>
+                    </div>
                 }
                 textoConfirmar="Desactivar Usuario"
                 variante="danger"

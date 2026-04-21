@@ -19,6 +19,7 @@ export const CustomerTable = ({ contacts, visibleColumns, order, onOrderChange}:
     const { user } = useAuth()
     const isAdmin = user?.tipoUsuario === ROLE_TYPES.admin
 
+
     return(
         <div className="overflow-auto flex-1 min-h-0">
             <table className="w-full bg-gray-700/60 rounded-lg">
@@ -67,35 +68,44 @@ export const CustomerTable = ({ contacts, visibleColumns, order, onOrderChange}:
                 </thead>
 
                 <tbody className="divide-y divide-gray-600">
-                    {contacts.map((client, index) =>(
-                        <tr key={`${client.id}-${index}`} className="hover:bg-gray-700/80 transition-colors">
-                            <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate" title={client.nombre}>
-                                <div className="flex items-center uppercase">
-                                    <CirculoAvatar nombre={client.nombre} />
-                                    {client.nombre}
-                                </div>
-                            </td>
-                            {visibleColumns.email && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.correo}</td>}
-                            {visibleColumns.phone && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.telefono}</td>}
-                            {visibleColumns.taxId && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.ruc}</td>}
-                            {visibleColumns.type && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.tipo}</td>}
-                            {visibleColumns.website && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.sitioWeb}</td>}
-                            {visibleColumns.economicActivity && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.actividadEconomica}</td>}
-                            {visibleColumns.jobTitle && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.cargo}</td>}
-                            <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">
-                                <div className="flex gap-2 items-center">
-                                    <Link 
-                                        to={RUTAS.EDIT_CLIENTE.replace(':id', client.id.toString())}
-                                        className="edit-button"
-                                        title={isAdmin ? 'Editar' : 'Ver Detalles'}
-                                    >
-                                        {isAdmin ? <Pencil width={20} /> : <Eye width={20}/>}
-                                        <span>{isAdmin ? 'Editar' : 'Ver Detalles'}</span>
-                                    </Link>
-                                </div>
+                    {contacts.length === 0 ? (
+                        <tr>
+                            <td colSpan={10} className="text-center py-6 text-gray-300">
+                                No hay clientes registrados aún
                             </td>
                         </tr>
-                    ))}
+                    ) : (
+                        contacts.map((client, index) =>(
+                            <tr key={`${client.id}-${index}`} className="hover:bg-gray-700/80 transition-colors">
+                                <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate" title={client.nombre}>
+                                    <div className="flex items-center uppercase">
+                                        <CirculoAvatar nombre={client.nombre} />
+                                        {client.nombre}
+                                    </div>
+                                </td>
+                                {visibleColumns.email && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.correo}</td>}
+                                {visibleColumns.phone && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.telefono}</td>}
+                                {visibleColumns.taxId && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.ruc}</td>}
+                                {visibleColumns.type && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.tipo}</td>}
+                                {visibleColumns.website && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.sitioWeb}</td>}
+                                {visibleColumns.economicActivity && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.actividadEconomica}</td>}
+                                {visibleColumns.jobTitle && <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">{client.cargo}</td>}
+                                <td className="px-6 py-4 text-gray-300 max-w-[100px] truncate">
+                                    <div className="flex gap-2 items-center">
+                                        <Link 
+                                            to={RUTAS.EDIT_CLIENTE.replace(':id', client.id.toString())}
+                                            className="edit-button"
+                                            title={isAdmin ? 'Editar' : 'Ver Detalles'}
+                                        >
+                                            {isAdmin ? <Pencil width={20} /> : <Eye width={20}/>}
+                                            <span>{isAdmin ? 'Editar' : 'Ver Detalles'}</span>
+                                        </Link>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                    
                 </tbody>
 
             </table>

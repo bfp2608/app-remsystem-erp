@@ -130,7 +130,7 @@ export const Sidebar = (() =>{
                 onClose={() => setIsLogoutModalOpen(false)}
                 onConfirm={handleConfirmLogout}
                 titulo="¿Cerrar Sesión?"
-                mensaje="Estás a punto de salir del sistema. ¿Deseas continuar?"
+                mensaje="Vas a cerrar sesión. ¿Continuar?"
                 textoConfirmar="Cerrar Sesión"
                 variante="primary"
             />
